@@ -1,10 +1,31 @@
 import { useRef, useState, useEffect } from 'react'
+import MediaPopup from './MediaPopup'
 import './ContentCarousel.css'
+
+const getGenreFromCategory = (categoryTitle = '') => {
+  const match = categoryTitle.match(/\bin\s+(.+)$/i)
+  return match?.[1]?.trim() || ''
+}
 
 export default function ContentCarousel({ title, desc, movies }) {
   const trackRef = useRef(null)
   const [showPrev, setShowPrev] = useState(false)
   const [showNext, setShowNext] = useState(true)
+  const [selectedMovieIndex, setSelectedMovieIndex] = useState(null)
+
+  const selectedMovie =
+    selectedMovieIndex === null
+      ? null
+      : (() => {
+        const selected = movies[selectedMovieIndex]
+        if (!selected) return null
+        const inferredGenre = getGenreFromCategory(title)
+        return {
+          ...selected,
+          genres: inferredGenre ? [inferredGenre] : undefined,
+          plot: desc,
+        }
+      })()
 
   const updateArrows = () => {
     const el = trackRef.current
@@ -20,6 +41,12 @@ export default function ContentCarousel({ title, desc, movies }) {
     updateArrows()
     return () => el.removeEventListener('scroll', updateArrows)
   }, [])
+
+  useEffect(() => {
+    if (selectedMovieIndex === null) return
+    if (selectedMovieIndex < movies.length) return
+    setSelectedMovieIndex(movies.length > 0 ? movies.length - 1 : null)
+  }, [movies.length, selectedMovieIndex])
 
   const scroll = (dir) => {
     const el = trackRef.current
@@ -49,8 +76,21 @@ export default function ContentCarousel({ title, desc, movies }) {
         </button>
 
         <div className="content-carousel__track" ref={trackRef}>
-          {movies.map((m) => (
-            <div className="movie-card" key={`${m.rank}-${m.title}`}>
+          {movies.map((m, index) => (
+            <div
+              className="movie-card"
+              key={`${m.rank}-${m.title}`}
+              onClick={() => setSelectedMovieIndex(index)}
+              onKeyDown={(event) => {
+                if (event.key === 'Enter' || event.key === ' ') {
+                  event.preventDefault()
+                  setSelectedMovieIndex(index)
+                }
+              }}
+              role="button"
+              tabIndex={0}
+              aria-label={`Open details for ${m.title}`}
+            >
               <div className="movie-card__rank">{m.rank}</div>
               <img
                 className="movie-card__poster"
@@ -73,6 +113,28 @@ export default function ContentCarousel({ title, desc, movies }) {
           </svg>
         </button>
       </div>
+
+      <MediaPopup
+        isOpen={Boolean(selectedMovie)}
+        onClose={() => setSelectedMovieIndex(null)}
+        item={selectedMovie}
+        hasPrev={selectedMovieIndex !== null && movies.length > 1}
+        hasNext={selectedMovieIndex !== null && movies.length > 1}
+        onPrev={() =>
+          setSelectedMovieIndex((prev) => (
+            prev === null || movies.length === 0
+              ? prev
+              : (prev - 1 + movies.length) % movies.length
+          ))
+        }
+        onNext={() =>
+          setSelectedMovieIndex((prev) => (
+            prev === null || movies.length === 0
+              ? prev
+              : (prev + 1) % movies.length
+          ))
+        }
+      />
     </section>
   )
 }

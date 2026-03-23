@@ -1,11 +1,16 @@
-import { bannerCards } from '../data/movies'
-import './BannerRow.css'
+import { bannerCards } from "../data/movies";
+import "./BannerRow.css";
 
-export default function BannerRow() {
+export default function BannerRow({ bannerCards: apiBannerCards }) {
+  const cardsToRender =
+    Array.isArray(apiBannerCards) && apiBannerCards.length > 0
+      ? apiBannerCards
+      : bannerCards;
+
   return (
     <section className="banner-section">
       <div className="banner-row">
-        {bannerCards.map((card) => (
+        {cardsToRender.map((card) => (
           <div
             className="banner-card"
             key={card.title}
@@ -17,5 +22,5 @@ export default function BannerRow() {
         ))}
       </div>
     </section>
-  )
+  );
 }

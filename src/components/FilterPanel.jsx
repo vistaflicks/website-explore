@@ -1,21 +1,105 @@
-import { useState, useRef, useEffect, useCallback } from 'react'
+import { useState, useRef, useEffect, useCallback, useMemo } from 'react'
 import { providerLogos } from '../data/movies'
+import { buildApiUrl } from '../config/api'
 import './FilterPanel.css'
 
 const CONTENT_TYPES = ['All', 'Movies', 'TV Shows']
 
 const FILTERS = {
-  genres: [
-    'Action', 'Adventure', 'Animation', 'Comedy', 'Crime', 'Documentary',
-    'Drama', 'Fantasy', 'Horror', 'Mystery', 'Romance', 'Sci-Fi',
-    'Thriller', 'War', 'Western',
-  ],
   releaseYear: [
     '2026', '2025', '2024', '2023', '2022', '2021', '2020',
     '2019', '2018', '2017', '2016', '2015', 'Older',
   ],
-  rating: ['9+', '8+', '7+', '6+', '5+'],
-  ageRating: ['U', 'U/A 7+', 'U/A 13+', 'U/A 16+', 'A'],
+}
+
+const createDefaultSelectedFilters = () => ({
+  genres: new Set(),
+  releaseYear: new Set(),
+  rating: new Set(),
+  ageRating: new Set(),
+})
+
+const getApiResults = (payload) => {
+  if (Array.isArray(payload?.data?.results)) return payload.data.results
+  if (Array.isArray(payload?.data)) return payload.data
+  if (Array.isArray(payload?.results)) return payload.results
+  return []
+}
+
+const isObjectId = (value) =>
+  typeof value === 'string' && /^[a-fA-F0-9]{24}$/.test(value.trim())
+
+const mapMasterOptions = (items) => {
+  if (!Array.isArray(items)) return []
+  return items
+    .map((item) => ({
+      id: item?.id || item?._id || '',
+      name: item?.name || '',
+    }))
+    .filter((item) => item.id && item.name)
+}
+
+const mapImdbMinOptions = (items) => {
+  if (!Array.isArray(items)) return []
+
+  const mins = [...new Set(
+    items
+      .map((item) => Number.parseFloat(item?.min))
+      .filter((value) => Number.isFinite(value)),
+  )].sort((a, b) => a - b)
+
+  return mins.map((min) => ({
+    id: String(min),
+    name: `${Number.isInteger(min) ? min : min.toFixed(1)}+`,
+  }))
+}
+
+const mapContentDistributorPlatforms = (items) => {
+  if (!Array.isArray(items)) return []
+
+  const unique = new Map()
+
+  items.forEach((item) => {
+    const ottApp = item?.ottAppMasterId
+    if (!ottApp) return
+
+    const id =
+      (typeof ottApp === 'object' ? ottApp?.id || ottApp?._id : ottApp) || ''
+    if (!id) return
+
+    if (!unique.has(id)) {
+      unique.set(id, {
+        id,
+        name:
+          (typeof ottApp === 'object' ? ottApp?.name : '') ||
+          item?.name ||
+          'Platform',
+        src: typeof ottApp === 'object' ? ottApp?.icon || '' : '',
+      })
+    }
+  })
+
+  return [...unique.values()]
+}
+
+const normalize = (value = '') => String(value).toLowerCase().trim()
+
+const getContentTypeTabMap = (contentTypes) => {
+  const movieType = contentTypes.find((type) => {
+    const name = normalize(type.name)
+    return name.includes('movie') || name.includes('film')
+  })
+
+  const tvType = contentTypes.find((type) => {
+    const name = normalize(type.name)
+    return name.includes('tv') || name.includes('show') || name.includes('series')
+  })
+
+  return {
+    All: '',
+    Movies: movieType?.id || '',
+    'TV Shows': tvType?.id || '',
+  }
 }
 
 const ChevronDown = () => (
@@ -30,15 +114,31 @@ const CheckIcon = () => (
   </svg>
 )
 
-export default function FilterPanel() {
+export default function FilterPanel({
+  onFiltersChange,
+  resultsCount = 0,
+  platformOptions = [],
+}) {
   const [selectedProviders, setSelectedProviders] = useState(new Set())
   const [activeTab, setActiveTab] = useState('All')
   const [openDropdown, setOpenDropdown] = useState(null)
-  const [selectedFilters, setSelectedFilters] = useState({
-    genres: new Set(),
-    releaseYear: new Set(),
-    rating: new Set(),
-    ageRating: new Set(),
+  const [selectedFilters, setSelectedFilters] = useState(createDefaultSelectedFilters)
+  const [genres, setGenres] = useState([])
+  const [ageRatings, setAgeRatings] = useState([])
+  const [imdbRatings, setImdbRatings] = useState([])
+  const [platforms, setPlatforms] = useState(
+    Array.isArray(platformOptions) && platformOptions.length > 0
+      ? platformOptions
+      : providerLogos.map((provider) => ({
+          id: provider.name,
+          name: provider.name,
+          src: provider.src,
+        })),
+  )
+  const [contentTypeTabMap, setContentTypeTabMap] = useState({
+    All: '',
+    Movies: '',
+    'TV Shows': '',
   })
 
   const scrollRef = useRef(null)
@@ -56,6 +156,131 @@ export default function FilterPanel() {
     document.addEventListener('mousedown', handleClick)
     return () => document.removeEventListener('mousedown', handleClick)
   }, [])
+
+  useEffect(() => {
+    const controller = new AbortController()
+
+    const fetchOptions = async () => {
+      const query = { sortBy: 'name:asc', page: '-1' }
+      const imdbQuery = { sortBy: 'min:asc', page: '-1' }
+      const distributorQuery = {
+        page: '-1',
+        fields: 'name,ottAppMasterId',
+        populate: 'ottAppMasterId:name,icon',
+      }
+      const shouldFetchPlatforms =
+        !Array.isArray(platformOptions) || platformOptions.length === 0
+
+      try {
+        const [
+          genresRes,
+          ageRatingsRes,
+          contentTypesRes,
+          imdbRatingsRes,
+          contentDistributorsRes,
+        ] = await Promise.all([
+          fetch(buildApiUrl('/api/v1/website/content/genres', query), {
+            signal: controller.signal,
+          }),
+          fetch(buildApiUrl('/api/v1/website/content/ageRatings', query), {
+            signal: controller.signal,
+          }),
+          fetch(buildApiUrl('/api/v1/website/content/contentTypes', query), {
+            signal: controller.signal,
+          }),
+          fetch(buildApiUrl('/api/v1/website/content/imdbRatings', imdbQuery), {
+            signal: controller.signal,
+          }),
+          shouldFetchPlatforms
+            ? fetch(
+                buildApiUrl(
+                  '/api/v1/website/content/contentDistributors',
+                  distributorQuery,
+                ),
+                {
+                  signal: controller.signal,
+                },
+              )
+            : Promise.resolve(null),
+        ])
+
+        const [
+          genresPayload,
+          ageRatingsPayload,
+          contentTypesPayload,
+          imdbRatingsPayload,
+          contentDistributorsPayload,
+        ] = await Promise.all([
+          genresRes.ok ? genresRes.json() : Promise.resolve(null),
+          ageRatingsRes.ok ? ageRatingsRes.json() : Promise.resolve(null),
+          contentTypesRes.ok ? contentTypesRes.json() : Promise.resolve(null),
+          imdbRatingsRes.ok ? imdbRatingsRes.json() : Promise.resolve(null),
+          contentDistributorsRes?.ok
+            ? contentDistributorsRes.json()
+            : Promise.resolve(null),
+        ])
+
+        const mappedGenres = mapMasterOptions(getApiResults(genresPayload))
+        const mappedAgeRatings = mapMasterOptions(getApiResults(ageRatingsPayload))
+        const mappedContentTypes = mapMasterOptions(getApiResults(contentTypesPayload))
+        const mappedImdbRatings = mapImdbMinOptions(
+          getApiResults(imdbRatingsPayload),
+        )
+        const mappedPlatforms = mapContentDistributorPlatforms(
+          getApiResults(contentDistributorsPayload),
+        )
+
+        setGenres(mappedGenres)
+        setAgeRatings(mappedAgeRatings)
+        setImdbRatings(mappedImdbRatings)
+        if (mappedPlatforms.length > 0) {
+          setPlatforms(mappedPlatforms)
+        }
+        setContentTypeTabMap(getContentTypeTabMap(mappedContentTypes))
+      } catch (error) {
+        // Keep static UI usable if filter APIs are unavailable.
+      }
+    }
+
+    fetchOptions()
+    return () => controller.abort()
+  }, [platformOptions])
+
+  useEffect(() => {
+    if (Array.isArray(platformOptions) && platformOptions.length > 0) {
+      setPlatforms(platformOptions)
+    }
+  }, [platformOptions])
+
+  useEffect(() => {
+    if (typeof onFiltersChange !== 'function') return
+
+    const genreIds = [...selectedFilters.genres]
+    const imdbMinRatings = [...selectedFilters.rating]
+    const releaseYears = [...selectedFilters.releaseYear]
+    const ageRatingIds = [...selectedFilters.ageRating]
+    const ottPlatformIds = [...selectedProviders].filter((id) => isObjectId(id))
+    const contentTypeId =
+      activeTab === 'All' ? '' : contentTypeTabMap[activeTab] || ''
+
+    onFiltersChange({
+      contentTypeId,
+      genreIds,
+      imdbMinRatings,
+      releaseYears,
+      ageRatingIds,
+      ottPlatformIds,
+    })
+  }, [
+    activeTab,
+    contentTypeTabMap,
+    selectedProviders,
+    selectedFilters.genres,
+    selectedFilters.releaseYear,
+    selectedFilters.rating,
+    selectedFilters.ageRating,
+    onFiltersChange,
+  ])
 
   const updateScrollArrows = useCallback(() => {
     const el = scrollRef.current
@@ -78,11 +303,11 @@ export default function FilterPanel() {
     el.scrollBy({ left: dir === 'right' ? 200 : -200, behavior: 'smooth' })
   }
 
-  const toggleProvider = (name) => {
+  const toggleProvider = (providerId) => {
     setSelectedProviders((prev) => {
       const next = new Set(prev)
-      if (next.has(name)) next.delete(name)
-      else next.add(name)
+      if (next.has(providerId)) next.delete(providerId)
+      else next.add(providerId)
       return next
     })
   }
@@ -99,12 +324,7 @@ export default function FilterPanel() {
   const resetAll = () => {
     setSelectedProviders(new Set())
     setActiveTab('All')
-    setSelectedFilters({
-      genres: new Set(),
-      releaseYear: new Set(),
-      rating: new Set(),
-      ageRating: new Set(),
-    })
+    setSelectedFilters(createDefaultSelectedFilters())
     setOpenDropdown(null)
   }
 
@@ -112,6 +332,11 @@ export default function FilterPanel() {
     selectedProviders.size > 0 ||
     activeTab !== 'All' ||
     Object.values(selectedFilters).some((s) => s.size > 0)
+
+  const formattedResultsCount = useMemo(
+    () => Number(resultsCount || 0).toLocaleString(),
+    [resultsCount],
+  )
 
   return (
     <section className="filter-panel" id="filter-panel">
@@ -142,14 +367,20 @@ export default function FilterPanel() {
         </button>
 
         <div className="filter-panel__provider-scroll" ref={scrollRef}>
-          {providerLogos.map((p) => (
+          {platforms.map((p) => (
             <button
-              key={p.name}
-              className={`filter-panel__provider-btn${selectedProviders.has(p.name) ? ' selected' : ''}`}
-              onClick={() => toggleProvider(p.name)}
+              key={p.id}
+              className={`filter-panel__provider-btn${selectedProviders.has(p.id) ? ' selected' : ''}`}
+              onClick={() => toggleProvider(p.id)}
               title={p.name}
             >
-              <img src={p.src} alt={p.name} />
+              {p.src ? (
+                <img src={p.src} alt={p.name} />
+              ) : (
+                <span className="filter-panel__provider-fallback">
+                  {p.name.charAt(0).toUpperCase()}
+                </span>
+              )}
             </button>
           ))}
         </div>
@@ -192,11 +423,13 @@ export default function FilterPanel() {
         <div className="filter-panel__dropdowns">
           <FilterDropdown
             label="Genres"
-            items={FILTERS.genres}
+            items={genres}
             selected={selectedFilters.genres}
             isOpen={openDropdown === 'genres'}
             onToggle={() => setOpenDropdown(openDropdown === 'genres' ? null : 'genres')}
-            onSelect={(v) => toggleFilter('genres', v)}
+            onSelect={(id) => toggleFilter('genres', id)}
+            getItemKey={(item) => item.id}
+            getItemLabel={(item) => item.name}
           />
           <FilterDropdown
             label="Release year"
@@ -204,23 +437,27 @@ export default function FilterPanel() {
             selected={selectedFilters.releaseYear}
             isOpen={openDropdown === 'releaseYear'}
             onToggle={() => setOpenDropdown(openDropdown === 'releaseYear' ? null : 'releaseYear')}
-            onSelect={(v) => toggleFilter('releaseYear', v)}
+            onSelect={(value) => toggleFilter('releaseYear', value)}
           />
           <FilterDropdown
-            label="Rating"
-            items={FILTERS.rating}
+            label="IMDb rating"
+            items={imdbRatings}
             selected={selectedFilters.rating}
             isOpen={openDropdown === 'rating'}
             onToggle={() => setOpenDropdown(openDropdown === 'rating' ? null : 'rating')}
-            onSelect={(v) => toggleFilter('rating', v)}
+            onSelect={(min) => toggleFilter('rating', min)}
+            getItemKey={(item) => item.id}
+            getItemLabel={(item) => item.name}
           />
           <FilterDropdown
             label="Age rating"
-            items={FILTERS.ageRating}
+            items={ageRatings}
             selected={selectedFilters.ageRating}
             isOpen={openDropdown === 'ageRating'}
             onToggle={() => setOpenDropdown(openDropdown === 'ageRating' ? null : 'ageRating')}
-            onSelect={(v) => toggleFilter('ageRating', v)}
+            onSelect={(id) => toggleFilter('ageRating', id)}
+            getItemKey={(item) => item.id}
+            getItemLabel={(item) => item.name}
           />
         </div>
 
@@ -237,7 +474,7 @@ export default function FilterPanel() {
       {/* Results info */}
       <div className="filter-panel__results">
         <span className="filter-panel__results-count">
-          <strong>65,321</strong> titles&ensp;·&ensp;sorted by&ensp;
+          <strong>{formattedResultsCount}</strong> titles&ensp;·&ensp;sorted by&ensp;
           <span className="filter-panel__sort-value">
             Popularity <ChevronDown />
           </span>
@@ -248,7 +485,16 @@ export default function FilterPanel() {
 }
 
 /* ─── Filter Dropdown Sub-component ──────── */
-function FilterDropdown({ label, items, selected, isOpen, onToggle, onSelect }) {
+function FilterDropdown({
+  label,
+  items,
+  selected,
+  isOpen,
+  onToggle,
+  onSelect,
+  getItemKey = (item) => (typeof item === 'string' ? item : item?.id),
+  getItemLabel = (item) => (typeof item === 'string' ? item : item?.name),
+}) {
   const hasSelection = selected.size > 0
 
   return (
@@ -265,17 +511,22 @@ function FilterDropdown({ label, items, selected, isOpen, onToggle, onSelect }) 
       {isOpen && (
         <div className="filter-panel__dropdown-menu">
           {items.map((item) => {
-            const isSelected = selected.has(item)
+            const key = getItemKey(item)
+            const text = getItemLabel(item)
+            if (!key || !text) return null
+
+            const isSelected = selected.has(key)
+
             return (
               <button
-                key={item}
+                key={key}
                 className={`filter-panel__dropdown-item${isSelected ? ' selected' : ''}`}
-                onClick={() => onSelect(item)}
+                onClick={() => onSelect(key)}
               >
                 <span className="check">
                   {isSelected && <CheckIcon />}
                 </span>
-                {item}
+                {text}
               </button>
             )
           })}

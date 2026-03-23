@@ -2,7 +2,18 @@ import { useState, useEffect, useRef, useCallback } from 'react'
 import { heroSlides, providerLogos } from '../data/movies'
 import './Hero.css'
 
-export default function Hero() {
+const mapProviderLogos = (providers) => {
+  if (!Array.isArray(providers)) return []
+
+  return providers
+    .map((provider) => ({
+      name: provider?.name || '',
+      src: provider?.src || provider?.icon || '',
+    }))
+    .filter((provider) => provider.name && provider.src)
+}
+
+export default function Hero({ providers = [] }) {
   const [activeIndex, setActiveIndex] = useState(0)
   const [slideKey, setSlideKey] = useState(0)
   const intervalRef = useRef(null)
@@ -37,8 +48,10 @@ export default function Hero() {
     startRotation()
   }
 
+  const logos = mapProviderLogos(providers)
+  const providerSource = logos.length > 0 ? logos : providerLogos
   // Duplicate provider logos for seamless marquee
-  const marqueeLogos = [...providerLogos, ...providerLogos]
+  const marqueeLogos = [...providerSource, ...providerSource]
 
   return (
     <section
