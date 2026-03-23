@@ -1,64 +1,140 @@
-import { useEffect } from 'react'
-import './MediaPopup.css'
+import { useEffect, useRef, useState } from "react";
+import { buildApiUrl } from "../config/api";
+import "./MediaPopup.css";
 
-const FALLBACK_GENRES = ['Crime', 'Drama', 'Mystery', 'Romance', 'Thriller']
+const FALLBACK_GENRES = ["Crime", "Drama", "Mystery", "Romance", "Thriller"];
 const FALLBACK_CAST = [
-  { name: 'Hrithik Roshan' },
-  { name: 'Abhay Deol' },
-  { name: 'Farhan Akhtar' },
-  { name: 'Katrina Kaif' },
-]
+  { name: "Hrithik Roshan" },
+  { name: "Abhay Deol" },
+  { name: "Farhan Akhtar" },
+  { name: "Katrina Kaif" },
+];
+
+const normalizeCastAvatar = (value) => {
+  if (!value || typeof value !== "string") return "";
+  if (value.startsWith("http")) return value;
+  if (value.startsWith("/")) {
+    return `https://image.tmdb.org/t/p/w500${value}`;
+  }
+  return value;
+};
 
 const getValueName = (value) => {
-  if (!value) return ''
-  if (typeof value === 'string') return value
-  if (typeof value === 'object') return value.name || ''
-  return ''
-}
+  if (!value) return "";
+  if (typeof value === "string") return value;
+  if (typeof value === "object") return value.name?.toUpperCase() || "";
+  return "";
+};
 
 const getGenres = (item) => {
   if (Array.isArray(item?.genres) && item.genres.length > 0) {
     const cleaned = item.genres
       .map((value) => getValueName(value))
-      .filter(Boolean)
-    if (cleaned.length > 0) return cleaned.slice(0, 5)
+      .filter(Boolean);
+    if (cleaned.length > 0) return cleaned.slice(0, 5);
   }
 
-  if (item?.genre) return [item.genre]
-  return FALLBACK_GENRES
-}
+  if (item?.genre) return [item.genre];
+  return FALLBACK_GENRES;
+};
 
 const getCast = (item) => {
   if (Array.isArray(item?.cast) && item.cast.length > 0) {
     return item.cast
       .map((member) => {
-        if (typeof member === 'string') return { name: member, image: '' }
+        if (typeof member === "string") return { name: member, image: "" };
+
+        const castRef =
+          member?.id && typeof member.id === "object" ? member.id : null;
+        const castName =
+          member?.name ||
+          castRef?.name ||
+          castRef?.title ||
+          member?.characterName ||
+          "Unknown";
+
+        const castImage = normalizeCastAvatar(
+          member?.avatar ||
+            member?.image ||
+            member?.profilePath ||
+            castRef?.avatar ||
+            castRef?.image ||
+            castRef?.profilePath ||
+            "",
+        );
+
         return {
-          name: member?.name || 'Unknown',
-          image: member?.image || member?.profilePath || '',
-        }
+          name: castName,
+          image: castImage,
+        };
       })
-      .slice(0, 6)
+      .slice(0, 6);
   }
 
-  return FALLBACK_CAST
-}
+  return FALLBACK_CAST;
+};
+
+const formatReleaseDate = (value) => {
+  if (!value) return "";
+
+  if (typeof value === "number" && Number.isFinite(value)) {
+    return `01 Jan, ${Math.trunc(value)}`;
+  }
+
+  if (typeof value === "string") {
+    const trimmed = value.trim();
+    if (!trimmed) return "";
+    if (/^\d{4}$/.test(trimmed)) return `01 Jan, ${trimmed}`;
+  }
+
+  const parsed = new Date(value);
+  if (Number.isNaN(parsed.getTime())) {
+    return typeof value === "string" ? value : "";
+  }
+
+  const day = String(parsed.getUTCDate()).padStart(2, "0");
+  const month = parsed.toLocaleString("en-US", {
+    month: "short",
+    timeZone: "UTC",
+  });
+  const year = parsed.getUTCFullYear();
+  return `${day} ${month}, ${year}`;
+};
 
 const getMetaParts = (item, genres) => {
-  const duration = item?.duration || item?.runtime || item?.durationText || '2h 34m'
-  const certificate = item?.certificate || item?.certification || 'UA (IN)'
-  const leadGenre = genres[0] || 'Drama'
-  const releaseText = item?.releaseDateText || item?.releaseDate || (item?.year ? `01 Jan, ${item.year}` : '15 July, 2011')
-  return [duration, `${certificate}/${leadGenre}`, releaseText]
-}
+  const duration =
+    item?.duration || item?.runtime || item?.durationText || "2h 34m";
+  const certificate = item?.certificate || item?.certification || "UA (IN)";
+  const leadGenre = genres[0] || "Drama";
+  const releaseText =
+    formatReleaseDate(item?.releaseDateText || item?.releaseDate || item?.year) ||
+    (item?.year ? `01 Jan, ${item.year}` : "15 July, 2011");
+  return [duration, `${certificate}/${leadGenre}`, releaseText];
+};
 
 const getInitials = (name) =>
   name
-    .split(' ')
-    .map((part) => part?.[0] || '')
-    .join('')
+    .split(" ")
+    .map((part) => part?.[0] || "")
+    .join("")
     .slice(0, 2)
-    .toUpperCase()
+    .toUpperCase();
+
+const getApiResults = (payload) => {
+  if (Array.isArray(payload?.data?.results)) return payload.data.results;
+  if (Array.isArray(payload?.data)) return payload.data;
+  if (Array.isArray(payload?.results)) return payload.results;
+  return [];
+};
+
+const isObjectId = (value) =>
+  typeof value === "string" && /^[a-fA-F0-9]{24}$/.test(value.trim());
+
+const getContentId = (item) => {
+  const candidates = [item?.contentId, item?.id, item?._id];
+  const contentId = candidates.find((value) => isObjectId(value));
+  return contentId || "";
+};
 
 export default function MediaPopup({
   isOpen,
@@ -68,36 +144,200 @@ export default function MediaPopup({
   onNext,
   hasPrev = false,
   hasNext = false,
-  prevLabel = 'Previous',
-  nextLabel = 'Next',
+  prevLabel = "Previous",
+  nextLabel = "Next",
 }) {
-  useEffect(() => {
-    if (!isOpen) return undefined
+  const [reels, setReels] = useState([]);
+  const [activeReelIndex, setActiveReelIndex] = useState(0);
+  const [isLoadingReels, setIsLoadingReels] = useState(false);
+  const [tapIndicator, setTapIndicator] = useState(null);
+  const wheelLockRef = useRef(false);
+  const wheelUnlockTimerRef = useRef(null);
+  const tapIndicatorTimerRef = useRef(null);
+  const videoRef = useRef(null);
+  const activeReel = reels[activeReelIndex] || null;
+  const reelVideoUrl = activeReel?.videoUrl || "";
 
-    const previousOverflow = document.body.style.overflow
-    document.body.style.overflow = 'hidden'
+  useEffect(() => {
+    if (!isOpen) return undefined;
+
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
 
     const handleKeyDown = (event) => {
-      if (event.key === 'Escape') {
-        onClose?.()
+      if (event.key === "Escape") {
+        onClose?.();
       }
-    }
+    };
 
-    window.addEventListener('keydown', handleKeyDown)
+    window.addEventListener("keydown", handleKeyDown);
 
     return () => {
-      document.body.style.overflow = previousOverflow
-      window.removeEventListener('keydown', handleKeyDown)
+      document.body.style.overflow = previousOverflow;
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [isOpen, onClose]);
+
+  useEffect(() => {
+    if (!isOpen || !item) return undefined;
+
+    const contentId = getContentId(item);
+
+    if (!contentId) {
+      setReels([]);
+      setActiveReelIndex(0);
+      setIsLoadingReels(false);
+      return undefined;
     }
-  }, [isOpen, onClose])
 
-  if (!isOpen || !item) return null
+    const controller = new AbortController();
 
-  const poster = item.poster || item.image || ''
-  const plot = item.plot || item.overview || item.description || 'Three friends who were inseparable in childhood decide to go on a road trip to rediscover themselves and repair old bonds before one of them gets married.'
-  const genres = getGenres(item)
-  const cast = getCast(item)
-  const metaParts = getMetaParts(item, genres)
+    const loadReels = async () => {
+      setIsLoadingReels(true);
+      try {
+        const response = await fetch(
+          buildApiUrl("/api/v1/website/reels/website-reels", {
+            contentId,
+            limit: 15,
+          }),
+          { signal: controller.signal },
+        );
+
+        if (!response.ok) return;
+
+        const payload = await response.json();
+        const mappedReels = getApiResults(payload).filter(
+          (reel) => typeof reel?.videoUrl === "string" && reel.videoUrl.trim(),
+        );
+
+        setReels(mappedReels);
+        setActiveReelIndex(0);
+      } catch (error) {
+        setReels([]);
+        setActiveReelIndex(0);
+      } finally {
+        setIsLoadingReels(false);
+      }
+    };
+
+    loadReels();
+
+    return () => controller.abort();
+  }, [isOpen, item]);
+
+  useEffect(() => {
+    if (!isOpen || !videoRef.current || !reelVideoUrl) return;
+
+    const video = videoRef.current;
+    video.currentTime = 0;
+
+    const tryPlay = () => {
+      video.muted = false;
+      video
+        .play()
+        .catch(() => {
+          // Fallback for browsers that block autoplay with sound.
+          video.muted = true;
+          video.play().catch(() => {});
+        });
+    };
+
+    if (video.readyState >= 2) {
+      tryPlay();
+      return;
+    }
+
+    const onLoadedData = () => {
+      tryPlay();
+    };
+
+    video.addEventListener("loadeddata", onLoadedData, { once: true });
+
+    return () => {
+      video.removeEventListener("loadeddata", onLoadedData);
+    };
+  }, [isOpen, activeReelIndex, reels, reelVideoUrl]);
+
+  useEffect(
+    () => () => {
+      if (wheelUnlockTimerRef.current) {
+        clearTimeout(wheelUnlockTimerRef.current);
+      }
+      if (tapIndicatorTimerRef.current) {
+        clearTimeout(tapIndicatorTimerRef.current);
+      }
+    },
+    [],
+  );
+
+  if (!isOpen || !item) return null;
+
+  const reelCountText =
+    reels.length > 0 ? `${activeReelIndex + 1} / ${reels.length}` : "";
+  const poster = item.poster || item.image || "";
+  const plot =
+    item.plot ||
+    item.overview ||
+    item.description ||
+    "Three friends who were inseparable in childhood decide to go on a road trip to rediscover themselves and repair old bonds before one of them gets married.";
+  const genres = getGenres(item);
+  const cast = getCast(item);
+  const metaParts = getMetaParts(item, genres);
+
+  const goToNextReel = () => {
+    if (reels.length <= 1) return;
+    setActiveReelIndex((prev) => (prev + 1) % reels.length);
+  };
+
+  const goToPrevReel = () => {
+    if (reels.length <= 1) return;
+    setActiveReelIndex((prev) => (prev - 1 + reels.length) % reels.length);
+  };
+
+  const handleReelWheel = (event) => {
+    if (reels.length <= 1) return;
+    if (Math.abs(event.deltaY) < 14) return;
+
+    event.preventDefault();
+    if (wheelLockRef.current) return;
+    wheelLockRef.current = true;
+
+    if (event.deltaY > 0) goToNextReel();
+    else goToPrevReel();
+
+    if (wheelUnlockTimerRef.current) {
+      clearTimeout(wheelUnlockTimerRef.current);
+    }
+    wheelUnlockTimerRef.current = setTimeout(() => {
+      wheelLockRef.current = false;
+    }, 280);
+  };
+
+  const toggleVideoPlayback = () => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    if (video.paused) {
+      setTapIndicator("play");
+      video.play().catch(() => {});
+      if (tapIndicatorTimerRef.current) {
+        clearTimeout(tapIndicatorTimerRef.current);
+      }
+      tapIndicatorTimerRef.current = setTimeout(() => {
+        setTapIndicator(null);
+      }, 420);
+      return;
+    }
+
+    setTapIndicator("pause");
+    video.pause();
+    if (tapIndicatorTimerRef.current) {
+      clearTimeout(tapIndicatorTimerRef.current);
+    }
+    tapIndicatorTimerRef.current = setTimeout(() => {
+      setTapIndicator(null);
+    }, 420);
+  };
 
   return (
     <div
@@ -106,20 +346,67 @@ export default function MediaPopup({
       aria-modal="true"
       aria-labelledby="media-popup-title"
       onMouseDown={(event) => {
-        if (event.target === event.currentTarget) onClose?.()
+        if (event.target === event.currentTarget) onClose?.();
       }}
     >
-      <div className="media-popup__panel" onMouseDown={(event) => event.stopPropagation()}>
-        <div className="media-popup__media">
-          {poster ? (
+      <div
+        className="media-popup__panel"
+        onMouseDown={(event) => event.stopPropagation()}
+      >
+        <div className="media-popup__media" onWheel={handleReelWheel}>
+          {isLoadingReels ? (
+            <div className="media-popup__poster-placeholder">
+              Loading reels...
+            </div>
+          ) : reelVideoUrl ? (
+            <>
+              <video
+                ref={videoRef}
+                key={reelVideoUrl}
+                className="media-popup__reel-video"
+                src={reelVideoUrl}
+                autoPlay
+                playsInline
+                preload="metadata"
+                onEnded={goToNextReel}
+                onClick={toggleVideoPlayback}
+              />
+              <div className="media-popup__reel-badge">
+                <span>Reels</span>
+                <span>{reelCountText}</span>
+              </div>
+              {tapIndicator && (
+                <div className="media-popup__tap-indicator" aria-hidden="true">
+                  {tapIndicator === "play" ? (
+                    <span className="media-popup__tap-icon media-popup__tap-icon--play" />
+                  ) : (
+                    <span className="media-popup__tap-icon media-popup__tap-icon--pause" />
+                  )}
+                </div>
+              )}
+            </>
+          ) : poster ? (
             <img
               className="media-popup__poster"
               src={poster}
-              alt={item.title || 'Selected title'}
+              alt={item.title || "Selected title"}
             />
           ) : (
-            <div className="media-popup__poster-placeholder">No image available</div>
+            <div className="media-popup__poster-placeholder">
+              No image available
+            </div>
           )}
+
+          <button
+            type="button"
+            className="media-popup__close media-popup__close--media"
+            onClick={onClose}
+            aria-label="Close popup"
+          >
+            <svg className="media-popup__close-icon" viewBox="0 0 20 20" aria-hidden="true">
+              <path d="M5 5l10 10M15 5L5 15" />
+            </svg>
+          </button>
 
           <div className="media-popup__nav">
             <button
@@ -148,14 +435,19 @@ export default function MediaPopup({
             onClick={onClose}
             aria-label="Close popup"
           >
-            x
+            <svg className="media-popup__close-icon" viewBox="0 0 20 20" aria-hidden="true">
+              <path d="M5 5l10 10M15 5L5 15" />
+            </svg>
           </button>
 
           <h3 className="media-popup__title" id="media-popup-title">
-            {item.title || 'Untitled'}
+            {item.title || "Untitled"}
           </h3>
 
-          <div className="media-popup__meta-line" aria-label={metaParts.join(' • ')}>
+          <div
+            className="media-popup__meta-line"
+            aria-label={metaParts.join(" • ")}
+          >
             {metaParts.map((part, index) => (
               <div className="media-popup__meta-item" key={`${index}-${part}`}>
                 {index > 0 ? <span className="media-popup__meta-dot" /> : null}
@@ -176,7 +468,7 @@ export default function MediaPopup({
             <h4 className="media-popup__section-title">Genres</h4>
             <div className="media-popup__genre-list">
               {genres.map((genre) => (
-                <span className="media-popup__genre-chip" key={genre}>
+                <span className="media-popup__genre-chip first-letter" key={genre}>
                   {genre}
                 </span>
               ))}
@@ -211,5 +503,5 @@ export default function MediaPopup({
         </div>
       </div>
     </div>
-  )
+  );
 }

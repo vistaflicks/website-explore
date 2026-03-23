@@ -38,11 +38,21 @@ const mapResultsToCategories = (results) => {
     .map((item) => ({
       title: item.categoryName || '',
       desc: item.description || item.desc || categoryDescFallbacks[item.categoryName] || '',
-      movies: (item.movieSequence || []).map((movie, index) => ({
-        rank: movie?.position ?? index + 1,
-        title: movie?.id?.title || '',
-        poster: movie?.id?.posterPath || '',
-      })),
+      movies: (item.movieSequence || []).map((movie, index) => {
+        const movieData =
+          movie?.id && typeof movie.id === 'object' ? movie.id : {}
+
+        return {
+          ...movieData,
+          rank: movie?.position ?? index + 1,
+          title: movieData?.title || movie?.title || '',
+          poster:
+            movieData?.posterPath ||
+            movieData?.poster ||
+            movie?.posterPath ||
+            '',
+        }
+      }),
     }))
 }
 

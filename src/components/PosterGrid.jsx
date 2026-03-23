@@ -14,7 +14,7 @@ const CONTENT_BASE_QUERY_PARAMS = {
   fields:
     'title,posterPath,backdropPath,releaseDate,runtime,overview,genres,cast,rating,type,status,imdbRating,avgUserRating,watchForFree,watchForFreeLinks,ottAvailability,imdbLink,seasonCount',
   populate:
-    'genres:name;type:name;imdbRating:name;rating:name,shortName;cast-id:name,profilePath,image;ottAvailability-id:name',
+    'genres:name;type:name;imdbRating:name;rating:name,shortName;cast-id:name,profilePath,avatar;ottAvailability-id:name',
 }
 
 const buildContentUrl = (filters = {}, pagination = {}) => {
@@ -218,6 +218,8 @@ const mapCast = (cast) => {
         ''
       const image = normalizeImageUrl(
         member?.image ||
+        member?.avatar ||
+        castRef?.avatar ||
         member?.profilePath ||
         (typeof castRef === 'object'
           ? castRef?.image || castRef?.profilePath

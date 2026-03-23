@@ -20,10 +20,20 @@ export default function ContentCarousel({ title, desc, movies }) {
         const selected = movies[selectedMovieIndex]
         if (!selected) return null
         const inferredGenre = getGenreFromCategory(title)
+        const derivedGenres =
+          Array.isArray(selected.genres) && selected.genres.length > 0
+            ? selected.genres
+            : selected.genre
+              ? [selected.genre]
+              : inferredGenre
+                ? [inferredGenre]
+                : undefined
+
         return {
           ...selected,
-          genres: inferredGenre ? [inferredGenre] : undefined,
-          plot: desc,
+          genres: derivedGenres,
+          plot: selected.plot || selected.overview || desc,
+          platform: selected.platform || title,
         }
       })()
 
