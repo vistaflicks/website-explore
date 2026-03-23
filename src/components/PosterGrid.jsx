@@ -12,8 +12,9 @@ const CONTENT_BASE_QUERY_PARAMS = {
   page: 1,
   limit: CONTENT_ITEMS_PER_PAGE,
   fields:
-    'title,posterPath,releaseDate,genres,type,status,imdbRating,avgUserRating,watchForFree,watchForFreeLinks,ottAvailability,imdbLink,seasonCount',
-  populate: 'genres:name;type:name;imdbRating:name;ottAvailability-id:name',
+    'title,posterPath,backdropPath,releaseDate,runtime,overview,genres,cast,rating,type,status,imdbRating,avgUserRating,watchForFree,watchForFreeLinks,ottAvailability,imdbLink,seasonCount',
+  populate:
+    'genres:name;type:name;imdbRating:name;rating:name,shortName;cast-id:name,profilePath,image;ottAvailability-id:name',
 }
 
 const buildContentUrl = (filters = {}, pagination = {}) => {
@@ -157,6 +158,79 @@ const getWatchLink = (content) => {
   return content?.imdbLink || ''
 }
 
+const formatReleaseDate = (releaseDate) => {
+  if (!releaseDate) return ''
+  const parsed = new Date(releaseDate)
+  if (Number.isNaN(parsed.getTime())) return ''
+  return new Intl.DateTimeFormat('en-GB', {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+    timeZone: 'UTC',
+  }).format(parsed)
+}
+
+const formatRuntime = (runtime, seasonCount) => {
+  if (typeof runtime === 'string' && /^\d{1,2}:\d{2}$/.test(runtime)) {
+    const [hoursRaw, minsRaw] = runtime.split(':')
+    const hours = Number.parseInt(hoursRaw, 10)
+    const mins = Number.parseInt(minsRaw, 10)
+
+    if ((hours || 0) > 0 || (mins || 0) > 0) {
+      const parts = []
+      if ((hours || 0) > 0) parts.push(`${hours}h`)
+      if ((mins || 0) > 0) parts.push(`${mins}m`)
+      return parts.join(' ')
+    }
+  }
+
+  if ((seasonCount || 0) > 0) {
+    return `${seasonCount} Season${seasonCount > 1 ? 's' : ''}`
+  }
+
+  return ''
+}
+
+const normalizeImageUrl = (path) => {
+  if (!path || typeof path !== 'string') return ''
+  if (path.startsWith('http')) return path
+  if (path.startsWith('/')) return `https://image.tmdb.org/t/p/w500${path}`
+  return path
+}
+
+const getCertification = (content) => {
+  const rating = content?.rating
+  if (rating && typeof rating === 'object') {
+    return rating.shortName || rating.name || ''
+  }
+  return getValueName(rating) || getValueName(content?.ageRating) || ''
+}
+
+const mapCast = (cast) => {
+  if (!Array.isArray(cast) || cast.length === 0) return []
+
+  return cast
+    .map((member) => {
+      const castRef = member?.id
+      const name =
+        member?.name ||
+        (typeof castRef === 'object' ? castRef?.name : '') ||
+        ''
+      const image = normalizeImageUrl(
+        member?.image ||
+        member?.profilePath ||
+        (typeof castRef === 'object'
+          ? castRef?.image || castRef?.profilePath
+          : ''),
+      )
+
+      if (!name) return null
+      return { name, image }
+    })
+    .filter(Boolean)
+    .slice(0, 6)
+}
+
 const mapContentToPoster = (content, index) => {
   const fallbackPoster = dummyPosters[index % dummyPosters.length]
 
@@ -170,6 +244,14 @@ const mapContentToPoster = (content, index) => {
     rating: getRating(content),
     type: getTypeLabel(content?.type, content?.seasonCount),
     watchLink: getWatchLink(content),
+    plot: content?.overview || content?.description || '',
+    overview: content?.overview || content?.description || '',
+    genres: Array.isArray(content?.genres) ? content.genres : [],
+    cast: mapCast(content?.cast),
+    durationText: formatRuntime(content?.runtime, content?.seasonCount),
+    certification: getCertification(content),
+    releaseDateText: formatReleaseDate(content?.releaseDate),
+    backdrop: content?.backdropPath || '',
   }
 }
 

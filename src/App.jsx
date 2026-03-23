@@ -223,7 +223,7 @@ export default function App() {
         onTotalResultsChange={setPosterTotalResults}
       />
       <CallToAction />
-      {/* <Footer /> */}
+      <Footer />
     </>
   )
 }

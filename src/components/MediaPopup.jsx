@@ -157,7 +157,7 @@ export default function MediaPopup({
 
           <div className="media-popup__meta-line" aria-label={metaParts.join(' • ')}>
             {metaParts.map((part, index) => (
-              <div className="media-popup__meta-item" key={part}>
+              <div className="media-popup__meta-item" key={`${index}-${part}`}>
                 {index > 0 ? <span className="media-popup__meta-dot" /> : null}
                 <span>{part}</span>
               </div>
