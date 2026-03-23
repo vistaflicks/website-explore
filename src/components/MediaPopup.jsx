@@ -143,7 +143,12 @@ export default function MediaPopup({
   const [showPlaybackControl, setShowPlaybackControl] = useState(false);
   const wheelLockRef = useRef(false);
   const wheelUnlockTimerRef = useRef(null);
+  const wheelAccumulatorRef = useRef(0);
+  const wheelAccumulatorResetTimerRef = useRef(null);
   const playbackControlTimerRef = useRef(null);
+  const touchStartYRef = useRef(null);
+  const touchStartXRef = useRef(null);
+  const ignoreNextTapRef = useRef(false);
   const videoRef = useRef(null);
   const activeReel = reels[activeReelIndex] || null;
   const reelVideoUrl = activeReel?.videoUrl || "";
@@ -218,13 +223,24 @@ export default function MediaPopup({
   }, [isOpen, item]);
 
   const startAutoplay = () => {
-    if (!videoRef.current) return;
-    videoRef.current.muted = true;
-    videoRef.current.defaultMuted = true;
-    videoRef.current
-      .play()
+    const video = videoRef.current;
+    if (!video) return;
+
+    // Try autoplay with sound first; fall back to muted playback if blocked.
+    video.muted = false;
+    video.defaultMuted = false;
+    video.volume = 1;
+
+    video.play()
       .then(() => setIsVideoPlaying(true))
-      .catch(() => setIsVideoPlaying(false));
+      .catch(() => {
+        video.muted = true;
+        video.defaultMuted = true;
+        video
+          .play()
+          .then(() => setIsVideoPlaying(true))
+          .catch(() => setIsVideoPlaying(false));
+      });
   };
 
   const revealPlaybackControl = () => {
@@ -250,6 +266,9 @@ export default function MediaPopup({
     () => () => {
       if (wheelUnlockTimerRef.current) {
         clearTimeout(wheelUnlockTimerRef.current);
+      }
+      if (wheelAccumulatorResetTimerRef.current) {
+        clearTimeout(wheelAccumulatorResetTimerRef.current);
       }
       if (playbackControlTimerRef.current) {
         clearTimeout(playbackControlTimerRef.current);
@@ -279,15 +298,13 @@ export default function MediaPopup({
     setActiveReelIndex((prev) => (prev - 1 + reels.length) % reels.length);
   };
 
-  const handleReelWheel = (event) => {
+  const stepReelFromDelta = (delta) => {
     if (reels.length <= 1) return;
-    if (Math.abs(event.deltaY) < 14) return;
-
-    event.preventDefault();
+    if (!delta) return;
     if (wheelLockRef.current) return;
-    wheelLockRef.current = true;
 
-    if (event.deltaY > 0) goToNextReel();
+    wheelLockRef.current = true;
+    if (delta > 0) goToNextReel();
     else goToPrevReel();
 
     if (wheelUnlockTimerRef.current) {
@@ -295,12 +312,51 @@ export default function MediaPopup({
     }
     wheelUnlockTimerRef.current = setTimeout(() => {
       wheelLockRef.current = false;
-    }, 280);
+    }, 180);
+  };
+
+  const handleReelWheel = (event) => {
+    if (reels.length <= 1) return;
+    event.preventDefault();
+    event.stopPropagation();
+
+    const dominantDelta =
+      Math.abs(event.deltaY) >= Math.abs(event.deltaX)
+        ? event.deltaY
+        : event.deltaX;
+
+    if (!Number.isFinite(dominantDelta) || dominantDelta === 0) return;
+
+    // Keep wheel navigation smooth on trackpads by accumulating tiny deltas.
+    if (
+      wheelAccumulatorRef.current !== 0 &&
+      Math.sign(wheelAccumulatorRef.current) !== Math.sign(dominantDelta)
+    ) {
+      wheelAccumulatorRef.current = 0;
+    }
+    wheelAccumulatorRef.current += dominantDelta;
+
+    if (wheelAccumulatorResetTimerRef.current) {
+      clearTimeout(wheelAccumulatorResetTimerRef.current);
+    }
+    wheelAccumulatorResetTimerRef.current = setTimeout(() => {
+      wheelAccumulatorRef.current = 0;
+    }, 120);
+
+    if (Math.abs(wheelAccumulatorRef.current) < 55) return;
+
+    const reelStepDelta = wheelAccumulatorRef.current;
+    wheelAccumulatorRef.current = 0;
+    stepReelFromDelta(reelStepDelta);
   };
 
   const toggleVideoPlayback = () => {
     const video = videoRef.current;
     if (!video) return;
+
+    // User interaction: enable audio for subsequent playback.
+    video.muted = false;
+    video.defaultMuted = false;
 
     if (video.paused) {
       video
@@ -331,9 +387,41 @@ export default function MediaPopup({
         <div
           className="media-popup__media"
           onWheel={handleReelWheel}
+          onTouchStart={(event) => {
+            const touch = event.touches?.[0];
+            if (!touch) return;
+            touchStartYRef.current = touch.clientY;
+            touchStartXRef.current = touch.clientX;
+          }}
+          onTouchEnd={(event) => {
+            if (reels.length <= 1) return;
+            const touch = event.changedTouches?.[0];
+            const startY = touchStartYRef.current;
+            const startX = touchStartXRef.current;
+
+            touchStartYRef.current = null;
+            touchStartXRef.current = null;
+            if (!touch || startY === null || startX === null) return;
+
+            const deltaY = startY - touch.clientY;
+            const deltaX = startX - touch.clientX;
+
+            // Treat as vertical swipe only when clearly dominant.
+            if (
+              Math.abs(deltaY) > Math.abs(deltaX) * 1.2 &&
+              Math.abs(deltaY) > 28
+            ) {
+              ignoreNextTapRef.current = true;
+              stepReelFromDelta(deltaY);
+            }
+          }}
           onClick={(event) => {
             if (!reelVideoUrl) return;
             if (event.target.closest("button, a")) return;
+            if (ignoreNextTapRef.current) {
+              ignoreNextTapRef.current = false;
+              return;
+            }
             revealPlaybackControl();
             toggleVideoPlayback();
           }}
@@ -350,7 +438,6 @@ export default function MediaPopup({
                 className="media-popup__reel-video"
                 src={reelVideoUrl}
                 autoPlay
-                muted
                 playsInline
                 preload="metadata"
                 onLoadedMetadata={startAutoplay}
