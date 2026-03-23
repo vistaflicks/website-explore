@@ -1,0 +1,193 @@
+/* ─── Netflix Spotlight ─────────────────────────── */
+.netflix-spotlight-wrapper {
+  padding: 16px 30px;
+  max-width: var(--container-max);
+  margin: 0 auto;
+}
+
+.netflix-spotlight {
+  position: relative;
+  width: 100%;
+  border-radius: 16px;
+  overflow: hidden;
+  background-color: #1a1a1a;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.5);
+  min-height: auto;
+}
+
+@media (max-width: 767px) {
+  .netflix-spotlight-wrapper {
+    padding: 24px 20px;
+  }
+}
+
+.netflix-spotlight__background {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: top center;
+  z-index: 1;
+}
+
+.netflix-spotlight__overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(229, 9, 20, 0.15) 0%, rgba(10, 10, 12, 0.7) 40%, #0a0a0c 100%),
+              linear-gradient(90deg, rgba(10, 10, 12, 0.95) 0%, rgba(10, 10, 12, 0.3) 50%, rgba(229, 9, 20, 0.1) 100%);
+}
+
+.netflix-spotlight__content {
+  position: relative;
+  z-index: 2;
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  height: 100%;
+  padding-top: 40px;
+}
+
+.netflix-spotlight__logo-wrapper {
+  background: rgba(0, 0, 0, 0.6);
+  border-radius: 12px;
+  padding: 10px 16px;
+  display: inline-flex;
+  margin-bottom: 24px;
+  width: fit-content;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.netflix-spotlight__logo {
+  height: 28px;
+  width: auto;
+  object-fit: contain;
+}
+
+.netflix-spotlight__header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.netflix-spotlight__title {
+  font-size: 24px;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0;
+}
+
+/* Carousel */
+.netflix-spotlight__carousel {
+  position: relative;
+  margin: 0 -40px;
+  padding: 0 40px;
+}
+
+.netflix-spotlight__track {
+  display: flex;
+  gap: 16px;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  padding: 10px 0 20px 0;
+}
+
+.netflix-spotlight__track::-webkit-scrollbar {
+  display: none;
+}
+
+.spotlight-card {
+  flex-shrink: 0;
+  width: 160px;
+  cursor: pointer;
+  border-radius: 8px;
+  overflow: hidden;
+  position: relative;
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.spotlight-card:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.6);
+  z-index: 2;
+}
+
+.spotlight-card__poster {
+  width: 100%;
+  aspect-ratio: 2/3;
+  object-fit: cover;
+  display: block;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Navigation Arrows */
+.spotlight-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  backdrop-filter: blur(8px);
+}
+
+.spotlight-arrow:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.8);
+  transform: translateY(-50%) scale(1.1);
+}
+
+.spotlight-arrow.prev {
+  left: 16px;
+}
+
+.spotlight-arrow.next {
+  right: 16px;
+}
+
+.spotlight-arrow.hidden {
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-50%) scale(0.9);
+}
+
+.spotlight-arrow svg {
+  width: 14px;
+  height: 14px;
+}
+
+@media (max-width: 767px) {
+  .netflix-spotlight__content {
+    padding: 30px 20px;
+  }
+  
+  .netflix-spotlight__carousel {
+    margin: 0 -20px;
+    padding: 0 20px;
+  }
+  
+  .netflix-spotlight__title {
+    font-size: 20px;
+  }
+
+  .spotlight-card {
+    width: 130px;
+  }
+  
+  .spotlight-arrow {
+    display: none;
+  }
+}

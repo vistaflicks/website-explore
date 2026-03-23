@@ -1,0 +1,940 @@
+.elementor-5990 .elementor-element.elementor-element-6976d0eb{--display:flex;--min-height:85vh;--flex-direction:column;--container-widget-width:100%;--container-widget-height:initial;--container-widget-flex-grow:0;--container-widget-align-self:initial;--flex-wrap-mobile:wrap;--justify-content:center;--overflow:hidden;--margin-top:0px;--margin-bottom:0px;--margin-left:0px;--margin-right:0px;--padding-top:100px;--padding-bottom:0px;--padding-left:0px;--padding-right:0px;}.elementor-5990 .elementor-element.elementor-element-996ff8c{--display:flex;--flex-direction:column;--container-widget-width:calc( ( 1 - var( --container-widget-flex-grow ) ) * 100% );--container-widget-height:initial;--container-widget-flex-grow:0;--container-widget-align-self:initial;--flex-wrap-mobile:wrap;--justify-content:center;--align-items:center;--gap:100px 100px;--row-gap:100px;--column-gap:100px;--margin-top:0px;--margin-bottom:0px;--margin-left:0px;--margin-right:0px;}.elementor-5990 .elementor-element.elementor-element-7bdc9914{--display:flex;}.elementor-widget-heading .elementor-heading-title{font-family:var( --e-global-typography-primary-font-family ), Sans-serif;font-weight:var( --e-global-typography-primary-font-weight );color:var( --e-global-color-primary );}.elementor-5990 .elementor-element.elementor-element-7fdecfbc.elementor-element{--align-self:center;}.elementor-5990 .elementor-element.elementor-element-7fdecfbc{text-align:center;}.elementor-5990 .elementor-element.elementor-element-7fdecfbc .elementor-heading-title{font-family:var( --e-global-typography-f5ea98d-font-family ), Sans-serif;font-size:var( --e-global-typography-f5ea98d-font-size );font-weight:var( --e-global-typography-f5ea98d-font-weight );line-height:var( --e-global-typography-f5ea98d-line-height );}.elementor-widget-text-editor{font-family:var( --e-global-typography-text-font-family ), Sans-serif;font-weight:var( --e-global-typography-text-font-weight );color:var( --e-global-color-text );}.elementor-widget-text-editor.elementor-drop-cap-view-stacked .elementor-drop-cap{background-color:var( --e-global-color-primary );}.elementor-widget-text-editor.elementor-drop-cap-view-framed .elementor-drop-cap, .elementor-widget-text-editor.elementor-drop-cap-view-default .elementor-drop-cap{color:var( --e-global-color-primary );border-color:var( --e-global-color-primary );}.elementor-5990 .elementor-element.elementor-element-7282d43d{text-align:center;font-family:var( --e-global-typography-cf101ea-font-family ), Sans-serif;font-size:var( --e-global-typography-cf101ea-font-size );font-weight:var( --e-global-typography-cf101ea-font-weight );line-height:var( --e-global-typography-cf101ea-line-height );color:var( --e-global-color-985a1b9 );}.elementor-5990 .elementor-element.elementor-element-411fdf7d{--display:flex;--flex-direction:row;--container-widget-width:calc( ( 1 - var( --container-widget-flex-grow ) ) * 100% );--container-widget-height:100%;--container-widget-flex-grow:1;--container-widget-align-self:stretch;--flex-wrap-mobile:wrap;--justify-content:center;--align-items:center;--gap:10px 10px;--row-gap:10px;--column-gap:10px;}.elementor-widget-image .widget-image-caption{color:var( --e-global-color-text );font-family:var( --e-global-typography-text-font-family ), Sans-serif;font-weight:var( --e-global-typography-text-font-weight );}.elementor-5990 .elementor-element.elementor-element-785a1d90 img{width:92%;}.elementor-5990 .elementor-element.elementor-element-77c2782d img{width:100%;}.elementor-5990 .elementor-element.elementor-element-239f49c6{--display:flex;}.elementor-5990 .elementor-element.elementor-element-27d6aae2{text-align:center;font-family:var( --e-global-typography-cf101ea-font-family ), Sans-serif;font-size:var( --e-global-typography-cf101ea-font-size );font-weight:var( --e-global-typography-cf101ea-font-weight );line-height:var( --e-global-typography-cf101ea-line-height );color:var( --e-global-color-985a1b9 );}.elementor-5990 .elementor-element.elementor-element-17f6ede1{--display:flex;--flex-direction:row;--container-widget-width:calc( ( 1 - var( --container-widget-flex-grow ) ) * 100% );--container-widget-height:100%;--container-widget-flex-grow:1;--container-widget-align-self:stretch;--flex-wrap-mobile:wrap;--justify-content:space-between;--align-items:center;--gap:10px 10px;--row-gap:10px;--column-gap:10px;border-style:none;--border-style:none;--border-radius:8px 8px 8px 8px;--padding-top:10px;--padding-bottom:10px;--padding-left:10px;--padding-right:10px;}.elementor-5990 .elementor-element.elementor-element-770b9c96 img{width:60px;border-radius:10px 10px 10px 10px;}.elementor-5990 .elementor-element.elementor-element-13257417 img{width:60px;border-radius:10px 10px 10px 10px;}.elementor-5990 .elementor-element.elementor-element-242ec499 img{width:60px;border-radius:10px 10px 10px 10px;}.elementor-5990 .elementor-element.elementor-element-64267d86 img{width:60px;border-radius:10px 10px 10px 10px;}.elementor-5990 .elementor-element.elementor-element-143e9f1c img{width:60px;border-radius:10px 10px 10px 10px;}.elementor-5990 .elementor-element.elementor-element-7a3b8f06 img{width:60px;border-radius:10px 10px 10px 10px;}.elementor-5990 .elementor-element.elementor-element-420916a1 img{width:60px;border-radius:10px 10px 10px 10px;}.elementor-5990 .elementor-element.elementor-element-417085ab img{width:60px;border-radius:10px 10px 10px 10px;}.elementor-5990 .elementor-element.elementor-element-2650ff78 img{width:60px;border-radius:10px 10px 10px 10px;}.elementor-5990 .elementor-element.elementor-element-61def1b img{width:60px;height:60px;object-fit:cover;object-position:center center;border-radius:10px 10px 10px 10px;}.elementor-5990 .elementor-element.elementor-element-78b24dab{--display:flex;--flex-direction:row;--container-widget-width:initial;--container-widget-height:100%;--container-widget-flex-grow:1;--container-widget-align-self:stretch;--flex-wrap-mobile:wrap;--justify-content:space-between;--gap:0px 0px;--row-gap:0px;--column-gap:0px;--padding-top:60px;--padding-bottom:0px;--padding-left:120px;--padding-right:120px;}.elementor-5990 .elementor-element.elementor-element-2500532f{--display:flex;--flex-direction:column;--container-widget-width:100%;--container-widget-height:initial;--container-widget-flex-grow:0;--container-widget-align-self:initial;--flex-wrap-mobile:wrap;--gap:0px 0px;--row-gap:0px;--column-gap:0px;--border-radius:10px 10px 10px 10px;--padding-top:32px;--padding-bottom:30px;--padding-left:24px;--padding-right:24px;}.elementor-5990 .elementor-element.elementor-element-2500532f:not(.elementor-motion-effects-element-type-background), .elementor-5990 .elementor-element.elementor-element-2500532f > .elementor-motion-effects-container > .elementor-motion-effects-layer{background-color:transparent;background-image:linear-gradient(180deg, #11181F 0%, #11181F00 100%);}.elementor-5990 .elementor-element.elementor-element-672c0da5 img{height:190px;object-fit:contain;object-position:center center;}.elementor-5990 .elementor-element.elementor-element-42f075f0 > .elementor-widget-container{margin:24px 0px 20px 0px;}.elementor-5990 .elementor-element.elementor-element-42f075f0{text-align:center;}.elementor-5990 .elementor-element.elementor-element-42f075f0 .elementor-heading-title{font-family:var( --e-global-typography-7d77c78-font-family ), Sans-serif;font-size:var( --e-global-typography-7d77c78-font-size );font-weight:var( --e-global-typography-7d77c78-font-weight );line-height:var( --e-global-typography-7d77c78-line-height );color:var( --e-global-color-bb86574 );}.elementor-5990 .elementor-element.elementor-element-22ca209c > .elementor-widget-container{margin:0px 0px 20px 0px;}.elementor-5990 .elementor-element.elementor-element-22ca209c{text-align:center;}.elementor-5990 .elementor-element.elementor-element-22ca209c .elementor-heading-title{font-family:var( --e-global-typography-753a043-font-family ), Sans-serif;font-size:var( --e-global-typography-753a043-font-size );font-weight:var( --e-global-typography-753a043-font-weight );line-height:var( --e-global-typography-753a043-line-height );color:var( --e-global-color-985a1b9 );}.elementor-5990 .elementor-element.elementor-element-440dace{text-align:center;font-family:var( --e-global-typography-1ac2b95-font-family ), Sans-serif;font-size:var( --e-global-typography-1ac2b95-font-size );font-weight:var( --e-global-typography-1ac2b95-font-weight );line-height:var( --e-global-typography-1ac2b95-line-height );color:var( --e-global-color-c88239c );}.elementor-5990 .elementor-element.elementor-element-428cc52c{--display:flex;--flex-direction:column;--container-widget-width:100%;--container-widget-height:initial;--container-widget-flex-grow:0;--container-widget-align-self:initial;--flex-wrap-mobile:wrap;--gap:0px 0px;--row-gap:0px;--column-gap:0px;--border-radius:10px 10px 10px 10px;--padding-top:32px;--padding-bottom:30px;--padding-left:24px;--padding-right:24px;}.elementor-5990 .elementor-element.elementor-element-428cc52c:not(.elementor-motion-effects-element-type-background), .elementor-5990 .elementor-element.elementor-element-428cc52c > .elementor-motion-effects-container > .elementor-motion-effects-layer{background-color:transparent;background-image:linear-gradient(180deg, #11181F 0%, #11181F00 100%);}.elementor-5990 .elementor-element.elementor-element-2fd3bac1 img{height:190px;object-fit:contain;object-position:center center;}.elementor-5990 .elementor-element.elementor-element-4387422 > .elementor-widget-container{margin:24px 0px 20px 0px;}.elementor-5990 .elementor-element.elementor-element-4387422{text-align:center;}.elementor-5990 .elementor-element.elementor-element-4387422 .elementor-heading-title{font-family:var( --e-global-typography-7d77c78-font-family ), Sans-serif;font-size:var( --e-global-typography-7d77c78-font-size );font-weight:var( --e-global-typography-7d77c78-font-weight );line-height:var( --e-global-typography-7d77c78-line-height );color:var( --e-global-color-bb86574 );}.elementor-5990 .elementor-element.elementor-element-4d741878 > .elementor-widget-container{margin:0px 0px 20px 0px;}.elementor-5990 .elementor-element.elementor-element-4d741878{text-align:center;}.elementor-5990 .elementor-element.elementor-element-4d741878 .elementor-heading-title{font-family:var( --e-global-typography-753a043-font-family ), Sans-serif;font-size:var( --e-global-typography-753a043-font-size );font-weight:var( --e-global-typography-753a043-font-weight );line-height:var( --e-global-typography-753a043-line-height );color:var( --e-global-color-985a1b9 );}.elementor-5990 .elementor-element.elementor-element-5619632f{text-align:center;font-family:var( --e-global-typography-1ac2b95-font-family ), Sans-serif;font-size:var( --e-global-typography-1ac2b95-font-size );font-weight:var( --e-global-typography-1ac2b95-font-weight );line-height:var( --e-global-typography-1ac2b95-line-height );color:var( --e-global-color-c88239c );}.elementor-5990 .elementor-element.elementor-element-632e74b0{--display:flex;--flex-direction:column;--container-widget-width:100%;--container-widget-height:initial;--container-widget-flex-grow:0;--container-widget-align-self:initial;--flex-wrap-mobile:wrap;--gap:0px 0px;--row-gap:0px;--column-gap:0px;--border-radius:10px 10px 10px 10px;--padding-top:32px;--padding-bottom:30px;--padding-left:24px;--padding-right:24px;}.elementor-5990 .elementor-element.elementor-element-632e74b0:not(.elementor-motion-effects-element-type-background), .elementor-5990 .elementor-element.elementor-element-632e74b0 > .elementor-motion-effects-container > .elementor-motion-effects-layer{background-color:transparent;background-image:linear-gradient(180deg, #11181F 0%, #11181F00 100%);}.elementor-5990 .elementor-element.elementor-element-5ee72201 img{height:190px;object-fit:contain;object-position:center center;}.elementor-5990 .elementor-element.elementor-element-5e7d835f > .elementor-widget-container{margin:24px 0px 20px 0px;}.elementor-5990 .elementor-element.elementor-element-5e7d835f{text-align:center;}.elementor-5990 .elementor-element.elementor-element-5e7d835f .elementor-heading-title{font-family:var( --e-global-typography-7d77c78-font-family ), Sans-serif;font-size:var( --e-global-typography-7d77c78-font-size );font-weight:var( --e-global-typography-7d77c78-font-weight );line-height:var( --e-global-typography-7d77c78-line-height );color:var( --e-global-color-bb86574 );}.elementor-5990 .elementor-element.elementor-element-2dd4686e > .elementor-widget-container{margin:0px 0px 20px 0px;}.elementor-5990 .elementor-element.elementor-element-2dd4686e{text-align:center;}.elementor-5990 .elementor-element.elementor-element-2dd4686e .elementor-heading-title{font-family:var( --e-global-typography-753a043-font-family ), Sans-serif;font-size:var( --e-global-typography-753a043-font-size );font-weight:var( --e-global-typography-753a043-font-weight );line-height:var( --e-global-typography-753a043-line-height );color:var( --e-global-color-985a1b9 );}.elementor-5990 .elementor-element.elementor-element-2b5fae70{text-align:center;font-family:var( --e-global-typography-1ac2b95-font-family ), Sans-serif;font-size:var( --e-global-typography-1ac2b95-font-size );font-weight:var( --e-global-typography-1ac2b95-font-weight );line-height:var( --e-global-typography-1ac2b95-line-height );color:var( --e-global-color-c88239c );}.elementor-5990 .elementor-element.elementor-element-1af2d5e6{--display:flex;--flex-direction:column;--container-widget-width:100%;--container-widget-height:initial;--container-widget-flex-grow:0;--container-widget-align-self:initial;--flex-wrap-mobile:wrap;--overflow:hidden;--margin-top:120px;--margin-bottom:0px;--margin-left:0px;--margin-right:0px;--padding-top:0px;--padding-bottom:0px;--padding-left:0px;--padding-right:0px;}.elementor-5990 .elementor-element.elementor-element-6d1f1d7d > .elementor-widget-container{padding:0px 0px 0px 120px;}.elementor-5990 .elementor-element.elementor-element-6d1f1d7d{text-align:start;}.elementor-5990 .elementor-element.elementor-element-6d1f1d7d .elementor-heading-title{font-family:var( --e-global-typography-f5ea98d-font-family ), Sans-serif;font-size:var( --e-global-typography-f5ea98d-font-size );font-weight:var( --e-global-typography-f5ea98d-font-weight );line-height:var( --e-global-typography-f5ea98d-line-height );}@media(min-width:768px){.elementor-5990 .elementor-element.elementor-element-7bdc9914{--width:705px;}.elementor-5990 .elementor-element.elementor-element-239f49c6{--width:805px;}.elementor-5990 .elementor-element.elementor-element-2500532f{--width:27%;}.elementor-5990 .elementor-element.elementor-element-428cc52c{--width:27%;}.elementor-5990 .elementor-element.elementor-element-632e74b0{--width:27%;}}@media(max-width:1366px) and (min-width:768px){.elementor-5990 .elementor-element.elementor-element-7bdc9914{--width:557px;}.elementor-5990 .elementor-element.elementor-element-239f49c6{--width:557px;}}@media(max-width:1024px) and (min-width:768px){.elementor-5990 .elementor-element.elementor-element-7bdc9914{--width:100%;}.elementor-5990 .elementor-element.elementor-element-239f49c6{--width:100%;}}@media(max-width:1366px){.elementor-5990 .elementor-element.elementor-element-996ff8c{--justify-content:space-between;--margin-top:100px;--margin-bottom:0px;--margin-left:0px;--margin-right:0px;}.elementor-5990 .elementor-element.elementor-element-7fdecfbc .elementor-heading-title{font-size:var( --e-global-typography-f5ea98d-font-size );line-height:var( --e-global-typography-f5ea98d-line-height );}.elementor-5990 .elementor-element.elementor-element-7282d43d{font-size:var( --e-global-typography-cf101ea-font-size );line-height:var( --e-global-typography-cf101ea-line-height );}.elementor-5990 .elementor-element.elementor-element-27d6aae2{font-size:var( --e-global-typography-cf101ea-font-size );line-height:var( --e-global-typography-cf101ea-line-height );}.elementor-5990 .elementor-element.elementor-element-78b24dab{--padding-top:60px;--padding-bottom:0px;--padding-left:60px;--padding-right:60px;}.elementor-5990 .elementor-element.elementor-element-42f075f0 .elementor-heading-title{font-size:var( --e-global-typography-7d77c78-font-size );line-height:var( --e-global-typography-7d77c78-line-height );}.elementor-5990 .elementor-element.elementor-element-22ca209c .elementor-heading-title{font-size:var( --e-global-typography-753a043-font-size );line-height:var( --e-global-typography-753a043-line-height );}.elementor-5990 .elementor-element.elementor-element-440dace{font-size:var( --e-global-typography-1ac2b95-font-size );line-height:var( --e-global-typography-1ac2b95-line-height );}.elementor-5990 .elementor-element.elementor-element-4387422 .elementor-heading-title{font-size:var( --e-global-typography-7d77c78-font-size );line-height:var( --e-global-typography-7d77c78-line-height );}.elementor-5990 .elementor-element.elementor-element-4d741878 .elementor-heading-title{font-size:var( --e-global-typography-753a043-font-size );line-height:var( --e-global-typography-753a043-line-height );}.elementor-5990 .elementor-element.elementor-element-5619632f{font-size:var( --e-global-typography-1ac2b95-font-size );line-height:var( --e-global-typography-1ac2b95-line-height );}.elementor-5990 .elementor-element.elementor-element-5e7d835f .elementor-heading-title{font-size:var( --e-global-typography-7d77c78-font-size );line-height:var( --e-global-typography-7d77c78-line-height );}.elementor-5990 .elementor-element.elementor-element-2dd4686e .elementor-heading-title{font-size:var( --e-global-typography-753a043-font-size );line-height:var( --e-global-typography-753a043-line-height );}.elementor-5990 .elementor-element.elementor-element-2b5fae70{font-size:var( --e-global-typography-1ac2b95-font-size );line-height:var( --e-global-typography-1ac2b95-line-height );}.elementor-5990 .elementor-element.elementor-element-6d1f1d7d > .elementor-widget-container{padding:0px 0px 0px 60px;}.elementor-5990 .elementor-element.elementor-element-6d1f1d7d .elementor-heading-title{font-size:var( --e-global-typography-f5ea98d-font-size );line-height:var( --e-global-typography-f5ea98d-line-height );}}@media(max-width:1024px){.elementor-5990 .elementor-element.elementor-element-6976d0eb{--min-height:80vh;}.elementor-5990 .elementor-element.elementor-element-996ff8c{--margin-top:80px;--margin-bottom:0px;--margin-left:0px;--margin-right:0px;}.elementor-5990 .elementor-element.elementor-element-7fdecfbc .elementor-heading-title{font-size:var( --e-global-typography-f5ea98d-font-size );line-height:var( --e-global-typography-f5ea98d-line-height );}.elementor-5990 .elementor-element.elementor-element-7282d43d{font-size:var( --e-global-typography-cf101ea-font-size );line-height:var( --e-global-typography-cf101ea-line-height );}.elementor-5990 .elementor-element.elementor-element-27d6aae2{font-size:var( --e-global-typography-cf101ea-font-size );line-height:var( --e-global-typography-cf101ea-line-height );}.elementor-5990 .elementor-element.elementor-element-78b24dab{--padding-top:40px;--padding-bottom:0px;--padding-left:20px;--padding-right:20px;}.elementor-5990 .elementor-element.elementor-element-42f075f0 .elementor-heading-title{font-size:var( --e-global-typography-7d77c78-font-size );line-height:var( --e-global-typography-7d77c78-line-height );}.elementor-5990 .elementor-element.elementor-element-22ca209c .elementor-heading-title{font-size:var( --e-global-typography-753a043-font-size );line-height:var( --e-global-typography-753a043-line-height );}.elementor-5990 .elementor-element.elementor-element-440dace{font-size:var( --e-global-typography-1ac2b95-font-size );line-height:var( --e-global-typography-1ac2b95-line-height );}.elementor-5990 .elementor-element.elementor-element-4387422 .elementor-heading-title{font-size:var( --e-global-typography-7d77c78-font-size );line-height:var( --e-global-typography-7d77c78-line-height );}.elementor-5990 .elementor-element.elementor-element-4d741878 .elementor-heading-title{font-size:var( --e-global-typography-753a043-font-size );line-height:var( --e-global-typography-753a043-line-height );}.elementor-5990 .elementor-element.elementor-element-5619632f{font-size:var( --e-global-typography-1ac2b95-font-size );line-height:var( --e-global-typography-1ac2b95-line-height );}.elementor-5990 .elementor-element.elementor-element-5e7d835f .elementor-heading-title{font-size:var( --e-global-typography-7d77c78-font-size );line-height:var( --e-global-typography-7d77c78-line-height );}.elementor-5990 .elementor-element.elementor-element-2dd4686e .elementor-heading-title{font-size:var( --e-global-typography-753a043-font-size );line-height:var( --e-global-typography-753a043-line-height );}.elementor-5990 .elementor-element.elementor-element-2b5fae70{font-size:var( --e-global-typography-1ac2b95-font-size );line-height:var( --e-global-typography-1ac2b95-line-height );}.elementor-5990 .elementor-element.elementor-element-6d1f1d7d > .elementor-widget-container{padding:0px 0px 0px 20px;}.elementor-5990 .elementor-element.elementor-element-6d1f1d7d .elementor-heading-title{font-size:var( --e-global-typography-f5ea98d-font-size );line-height:var( --e-global-typography-f5ea98d-line-height );}}@media(max-width:767px){.elementor-5990 .elementor-element.elementor-element-6976d0eb{--padding-top:0px;--padding-bottom:0px;--padding-left:0px;--padding-right:0px;}.elementor-5990 .elementor-element.elementor-element-996ff8c{--gap:0px 0px;--row-gap:0px;--column-gap:0px;--margin-top:80px;--margin-bottom:0px;--margin-left:0px;--margin-right:0px;--padding-top:0px;--padding-bottom:0px;--padding-left:0px;--padding-right:0px;}.elementor-5990 .elementor-element.elementor-element-7bdc9914{--margin-top:30px;--margin-bottom:10px;--margin-left:0px;--margin-right:0px;--padding-top:0px;--padding-bottom:0px;--padding-left:0px;--padding-right:0px;}.elementor-5990 .elementor-element.elementor-element-7fdecfbc .elementor-heading-title{font-size:var( --e-global-typography-f5ea98d-font-size );line-height:var( --e-global-typography-f5ea98d-line-height );}.elementor-5990 .elementor-element.elementor-element-7282d43d{font-size:var( --e-global-typography-cf101ea-font-size );line-height:var( --e-global-typography-cf101ea-line-height );}.elementor-5990 .elementor-element.elementor-element-411fdf7d{--flex-wrap:nowrap;}.elementor-5990 .elementor-element.elementor-element-239f49c6{--margin-top:30px;--margin-bottom:90px;--margin-left:0px;--margin-right:0px;--padding-top:0px;--padding-bottom:0px;--padding-left:0px;--padding-right:0px;}.elementor-5990 .elementor-element.elementor-element-27d6aae2{font-size:var( --e-global-typography-cf101ea-font-size );line-height:var( --e-global-typography-cf101ea-line-height );}.elementor-5990 .elementor-element.elementor-element-17f6ede1{--justify-content:center;--flex-wrap:wrap;}.elementor-5990 .elementor-element.elementor-element-78b24dab{--gap:30px 30px;--row-gap:30px;--column-gap:30px;}.elementor-5990 .elementor-element.elementor-element-42f075f0 .elementor-heading-title{font-size:var( --e-global-typography-7d77c78-font-size );line-height:var( --e-global-typography-7d77c78-line-height );}.elementor-5990 .elementor-element.elementor-element-22ca209c .elementor-heading-title{font-size:var( --e-global-typography-753a043-font-size );line-height:var( --e-global-typography-753a043-line-height );}.elementor-5990 .elementor-element.elementor-element-440dace{font-size:var( --e-global-typography-1ac2b95-font-size );line-height:var( --e-global-typography-1ac2b95-line-height );}.elementor-5990 .elementor-element.elementor-element-4387422 .elementor-heading-title{font-size:var( --e-global-typography-7d77c78-font-size );line-height:var( --e-global-typography-7d77c78-line-height );}.elementor-5990 .elementor-element.elementor-element-4d741878 .elementor-heading-title{font-size:var( --e-global-typography-753a043-font-size );line-height:var( --e-global-typography-753a043-line-height );}.elementor-5990 .elementor-element.elementor-element-5619632f{font-size:var( --e-global-typography-1ac2b95-font-size );line-height:var( --e-global-typography-1ac2b95-line-height );}.elementor-5990 .elementor-element.elementor-element-5e7d835f .elementor-heading-title{font-size:var( --e-global-typography-7d77c78-font-size );line-height:var( --e-global-typography-7d77c78-line-height );}.elementor-5990 .elementor-element.elementor-element-2dd4686e .elementor-heading-title{font-size:var( --e-global-typography-753a043-font-size );line-height:var( --e-global-typography-753a043-line-height );}.elementor-5990 .elementor-element.elementor-element-2b5fae70{font-size:var( --e-global-typography-1ac2b95-font-size );line-height:var( --e-global-typography-1ac2b95-line-height );}.elementor-5990 .elementor-element.elementor-element-6d1f1d7d .elementor-heading-title{font-size:var( --e-global-typography-f5ea98d-font-size );line-height:var( --e-global-typography-f5ea98d-line-height );}}/* Start custom CSS for heading, class: .elementor-element-7fdecfbc */.gradientwhite {
+  background: linear-gradient(262.73deg, rgba(255, 255, 255, 0.38) -22.78%, #FFFFFF 77.45%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text; /* for non-webkit browsers */
+  color: transparent;
+}
+.red {
+  background: linear-gradient(0deg, #F1151D, #F1151D);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+
+  /* Important fixes */
+  text-shadow: 0 0 0 rgba(0, 0, 0, 0); /* explicitly zero shadow */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  /* Optional: set font-weight and letter-spacing to improve rendering */
+  font-weight: 600;
+  letter-spacing: -0.3px;
+}/* End custom CSS */
+/* Start custom CSS for container, class: .elementor-element-6976d0eb */.amain {
+  background: 
+    linear-gradient(0deg, rgba(8, 14, 18, 0.5), rgba(8, 14, 18, 0.5)),
+    linear-gradient(180deg, rgba(8, 14, 18, 0.6) 0%, rgba(100, 0, 4, 0.2) 49.4%, #080E12 99.08%),
+    radial-gradient(61.92% 61.92% at 50% 38.08%, rgba(186, 186, 186, 0.5) 0%, rgba(0, 0, 0, 0) 100%),
+    url('https://vistareels.com/wp-content/uploads/2025/06/image-102.png');
+    
+  background-blend-mode: normal, normal, normal, multiply;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+
+/*@media(max-width:1366px){*/
+/*    .amain{*/
+/*        padding-top: 200px !important;*/
+/*    }*/
+/*}*//* End custom CSS */
+/* Start custom CSS for container, class: .elementor-element-2500532f */.feature-box{
+    max-width: 384px;
+}/* End custom CSS */
+/* Start custom CSS for html, class: .elementor-element-3067e0fa *//* Hide scrollbar but keep scrolling */
+#mas-reel-player{
+  overflow-y: auto;
+
+  /* Firefox */
+  scrollbar-width: none;
+
+  /* IE / Edge (legacy) */
+  -ms-overflow-style: none;
+}
+
+/* Chrome, Safari, Edge */
+#mas-reel-player::-webkit-scrollbar{
+  display: none;
+}
+
+.box .close{
+    display: none;
+}
+
+
+
+
+
+/* =========================================================
+   3) REELS MODAL + POPUP (RESPONSIVE MOBILE FRAME)
+   ========================================================= */
+
+#mas-reel-modal{
+  position:fixed;
+  inset:0;
+  z-index:9999;
+  display:none;
+  overscroll-behavior: contain;
+}
+
+#mas-reel-modal .overlay{
+  position:absolute;
+  inset:0;
+}
+
+#mas-reel-modal .box{
+  width:100%;
+  height:100%;
+  background: rgba(0,0,0,.85);
+  position:relative;
+}
+
+/* =========================================================
+   POPUP WRAP
+   ========================================================= */
+
+.mas-popup-wrap{
+  padding:1.5px;
+  border-radius:25px;
+  border:1.5px solid;
+  width:calc(100% - 40px)!important;
+  max-width:340px!important;
+  background:linear-gradient(153.78deg,#CD0008 0%,#670004 100%);
+}
+
+/* =========================================================
+   CLOSE BUTTON (ANCHOR TO FRAME)
+   ========================================================= */
+
+.mas-frame {
+  position: relative;
+  overflow: visible!important;/* REQUIRED */
+}
+.mas-frame-close {
+  position: absolute;
+  z-index: 50;
+
+  top: -15px;
+  right: -15px;
+
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+
+  
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border: none;
+  padding: 0;
+  cursor: pointer;
+}
+
+/* 🔹 control SVG size explicitly */
+.mas-frame-close svg {
+  width: 16px;
+  height: 16px;
+  color: #F1151D;
+  pointer-events: none; /* prevents SVG blocking clicks */
+}
+
+.mas-frame-close:hover {
+  background: rgba(0, 0, 0, 0.75);
+  color: white;
+}
+
+
+
+/*#mas-reel-modal .close{*/
+/*  position:absolute;*/
+/*  top:0;*/
+/*  right:0;*/
+
+  /* push 50% outside frame */
+/*  transform: translate(50%, -50%);*/
+
+/*  width:44px;*/
+/*  height:44px;*/
+/*  display:flex;*/
+/*  align-items:center;*/
+/*  justify-content:center;*/
+
+/*  color:#fff;*/
+/*  font-size:26px;*/
+/*  cursor:pointer;*/
+/*  z-index:100;*/
+
+/*  background:rgba(255,255,255,.15);*/
+/*  backdrop-filter:blur(10px);*/
+/*  -webkit-backdrop-filter:blur(10px);*/
+/*  border-radius:50%;*/
+/*  border:1px solid rgba(255,255,255,.25);*/
+/*}*/
+
+/*#mas-reel-modal .close:hover{*/
+/*  background:rgba(255,255,255,.25);*/
+/*}*/
+
+
+/* =========================================================
+   REELS SCROLLER
+   ========================================================= */
+
+#mas-reel-player{
+  height:100vh;
+  overflow-y:auto;
+  scroll-snap-type:y mandatory;
+  -webkit-overflow-scrolling:touch;
+}
+
+.mas-reel{
+  min-height:100vh;
+  scroll-snap-align:start;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+}
+
+/* =========================================================
+   FRAME (BASE)
+   ========================================================= */
+
+.mas-frame{
+  position:relative;
+  aspect-ratio:9 / 19.5;
+  width:min(390px,80vw);
+  max-height:80vh;
+  border-radius:26px;
+  overflow:hidden;
+  background:#000;
+  box-shadow:0 0 30px rgba(0,0,0,.5);
+}
+
+.mas-frame video{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  border-radius: 26px;
+}
+
+/* =========================================================
+   UI LAYER
+   ========================================================= */
+
+.mas-ui{
+  position:absolute;
+  inset:0;
+}
+
+.mas-ui-overlay{
+  position:absolute;
+  inset:0;
+  background:rgba(0,0,0,.65);
+  opacity:0;
+  pointer-events:none;
+  transition:opacity .25s ease;
+  z-index:20;
+}
+
+.mas-ui.popup-open .mas-ui-overlay{
+  opacity:1;
+  pointer-events:auto;
+}
+
+/* =========================================================
+   POPUP
+   ========================================================= */
+
+.mas-app-popup{
+  position:absolute;
+  inset:0;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  z-index:60;
+}
+
+.mas-app-popup.active{
+  display:flex;
+}
+
+.mas-ui.popup-open .mas-actions,
+.mas-ui.popup-open .mas-meta{
+  opacity:.15;
+  pointer-events:none;
+  z-index:10;
+}
+
+.mas-popup-card{
+  background:url('https://vistareels.com/wp-content/uploads/2026/02/Frame-1.png') center/cover no-repeat;
+  border-radius:25px;
+  padding:20px 20px 0;
+  text-align:center;
+  position:relative;
+  animation:popupFade .4s ease;
+  z-index:70;
+}
+
+.mas-popup-inner{
+  color:#fff;
+  text-align:left;
+}
+
+.mas-popup-inner h2{
+  margin:0 0 8px;
+  font-family:Inter;
+  font-weight:700;
+  font-size:30px;
+  line-height:32px;
+}
+
+.mas-popup-inner p{
+  font-family:Inter;
+  font-size:14px;
+  line-height:18px;
+  margin-bottom:16px!important;
+}
+
+.mas-store-row{
+  display:flex;
+  gap:10px;
+  margin-bottom:14px;
+}
+
+.mas-store-row img{
+  width:100px;
+}
+
+.mas-popup-banner img{
+  width:100%;
+  margin-top:8px;
+}
+
+.mas-popup-close{
+  position:absolute;
+  top:-12px;
+  right:-12px;
+  width:30px;
+  height:30px;
+  background:#000;
+  color:#fff;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  cursor:pointer;
+  font-size:16px;
+  z-index:80;
+}
+
+@keyframes popupFade{
+  from{opacity:0;transform:scale(.9)}
+  to{opacity:1;transform:scale(1)}
+}
+
+/* =========================================================
+   ACTIONS
+   ========================================================= */
+
+.mas-actions{
+  position:absolute;
+  right:20px;
+  bottom:70px;
+  display:flex;
+  flex-direction:column;
+  gap:20px;
+  z-index:40;
+}
+
+.mas-btn{
+  cursor:pointer;
+}
+
+.mas-btn.like-btn{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+}
+
+/* =========================================================
+   META
+   ========================================================= */
+
+.mas-meta{
+  position:absolute;
+  left:18px;
+  bottom:40px;
+  max-width:70%;
+  color:#fff;
+  z-index:40;
+}
+
+.mas-meta h3{
+  margin:0 0 6px;
+  font-family:Inter;
+  font-size:17px;
+  line-height:24px;
+}
+
+.mas-meta p{
+  font-family:Inter;
+  font-size:14px;
+  line-height:20px;
+  display:-webkit-box;
+  -webkit-line-clamp:2;
+  -webkit-box-orient:vertical;
+  overflow:hidden;
+}
+
+.mas-meta .views{
+  margin-top:6px;
+  font-size:10px;
+}
+
+@media (max-width:1366px){
+  .mas-frame{
+    width:clamp(320px,26vw,380px);
+    max-height:calc(100vh - 60px);
+    border-radius:26px;
+  }
+
+  .mas-actions{
+    right:19px;
+    bottom:100px;
+    gap: 16px;
+  }
+  .mas-btn svg{
+      width: 25px;
+      height: 25px;
+  }
+
+  .mas-meta{
+    left:20px;
+    bottom:50px;
+  }
+  .mas-meta h3{
+          margin: 0 0 4px;
+    font-family: Inter;
+    font-size: 15px;
+    line-height: 21px;
+  }
+  .mas-meta p{
+    
+    font-size: 12px;
+    line-height: 17px;
+   
+  }
+  
+  .mas-popup-inner h2 {
+    margin: 0 0 6px;
+  
+    font-size: 26px;
+    line-height: 30px;
+}
+
+.mas-popup-wrap {
+   
+    width: calc(100% - 20px) !important;
+   
+}
+
+.mas-popup-inner p {
+  
+    font-size: 12px;
+    line-height: 16px;
+    margin-bottom: 12px !important;
+}
+}
+
+/* =========================================================
+   TABLET ≤1024px
+   ========================================================= */
+
+@media (max-width:1024px){
+  .mas-frame{
+    width:clamp(300px,45vw,360px);
+    max-height:calc(100vh - 90px);
+    border-radius:24px;
+  }
+
+  .mas-actions{
+    right:18px;
+    bottom:100px;
+  }
+
+  .mas-meta{
+    left:20px;
+    bottom:50px;
+  }
+}
+
+/* =========================================================
+   MOBILE ≤768px
+   ========================================================= */
+
+@media (max-width:768px){
+  .mas-frame{
+    width:clamp(240px,92vw,340px);
+    max-height:78vh;
+    border-radius:18px;
+  }
+
+  .mas-actions{
+    right:14px;
+    bottom:80px;
+    gap:14px;
+  }
+
+  .mas-meta{
+    left:16px;
+    bottom:42px;
+    max-width:78%;
+  }
+
+  #mas-reel-modal .close{
+    transform:translate(
+      calc(-50% + 150px),
+      calc(-50% - 230px)
+    );
+    width:38px;
+    height:38px;
+    font-size:20px;
+  }
+}/* End custom CSS */
+/* Start custom CSS for html, class: .elementor-element-7a532b92 */.mas-slider .number-inner{
+    overflow: visible!important;
+}
+
+
+
+/* =========================================================
+   1) EXPLORE SECTION + CAROUSEL (SEPARATE)
+   ========================================================= */
+.mas-explore-wrap{ width:100%; }
+
+.mas-section-row{
+  display:flex;
+  gap:40px;
+  align-items:flex-start;
+ 
+  padding-left: 120px;
+}
+
+.mas-left{
+  width:250px;
+  flex:0 0 250px;
+}
+
+.mas-cat-title{
+  margin:0;
+  color:#fff;
+  font-size: 40px;
+  line-height: 55px;
+  font-family: 'Inter', Sans-Serif;
+}
+
+.mas-cat-desc{
+    margin-top: 20px;
+    font-size: 16px;
+    color:#D1D0CF;
+    font-family: 'Inter', Sans-Serif;
+}
+
+.mas-right{
+  flex:1 1 auto;
+  min-width:0;
+  position:relative; /* ✅ for arrows */
+}
+
+.mas-explore-wrap {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 70px;
+}
+
+/* =========================================================
+   2) CAROUSEL CSS (SLICK) - SEPARATE  (FIXED)
+   ========================================================= */
+.mas-movies.mas-slider{ width:100%; }
+
+.mas-slider .slick-list{ overflow:hidden; }
+.mas-slider .slick-track{ display:flex; align-items:stretch; }
+
+/* ✅ GAP = 20px between slides */
+.mas-slider .slick-slide{
+  margin-right:20px;
+  flex:0 0 auto;               /* ✅ prevent slide shrink */
+}
+.mas-slider .slick-slide:last-child{ margin-right:0; }
+
+/* keep your slide layout */
+.mas-movie.slick-slide{
+  display:flex !important;
+  flex-direction:row !important;
+  align-items:flex-end !important;
+}
+
+/* slide card */
+.mas-slider .mas-movie{
+  position:relative;
+  cursor:pointer;
+  color:#fff;
+}
+
+/* ✅ FIX: number must NOT change layout on 10,11... */
+.mas-slider .number-inner{
+  display:flex;
+  align-items:flex-end;
+  height:100%;
+  line-height:100%;
+  font-size:180px;
+  letter-spacing:-20px;
+  font-weight:900;
+  color:#222c38;
+
+  flex:0 0 120px;              /* ✅ fixed block width */
+  width:120px;                 /* ✅ keep same as flex-basis */
+  overflow:hidden;
+  white-space:nowrap;
+  justify-content:flex-end;
+}
+
+/* ✅ FIX: poster container is stable (same size always) */
+.mas-slider .postercontainer{
+  flex:1 1 auto;
+  min-width:0;
+z-index: 999;
+  /* ✅ stable poster sizing (same for all) */
+  position:relative;
+  display:flex;
+  overflow:hidden;
+  aspect-ratio: 166 / 236;
+  background:#0a151f;
+  transition: opacity .1s ease;
+  border-radius:12px;          /* keep your 12px look */
+}
+
+/* image fills fixed-ratio container */
+.mas-slider .postercontainer img{
+  width:100%;
+  height:100%;
+  display:block;
+  object-fit:cover;
+  border-radius:12px;
+}
+
+.mas-slider .postercontainer p{
+  margin:10px 0 0;
+  font-size:12px;
+  line-height:16px;
+  display:none;
+}
+
+.mas-slider .slick-dots{ display:none !important; }
+
+
+/* =========================================================
+   CUSTOM FULL-HEIGHT ARROWS (SVG)
+   ========================================================= */
+/* Arrow base */
+.mas-arrow{
+  position:absolute;
+  top:0;
+  height:100%;
+  width:40px;
+
+  background: rgba(6, 13, 23, .8);
+  border:0;
+  padding:0;
+  cursor:pointer;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  z-index:30;
+
+  /* hidden by default */
+  opacity:0;
+  pointer-events:none;
+  transition:opacity .2s ease;
+}
+
+/* positioning */
+.mas-arrow.prev{ left:0; }
+.mas-arrow.next{ right:0; }
+
+/* show on hover of slider */
+.mas-right:hover .mas-arrow{
+  opacity:1;
+  pointer-events:auto;
+}
+
+/* hide logic */
+.mas-arrow.is-hidden{
+  display:none !important;
+}
+
+/* SVG */
+.mas-arrow svg{
+  pointer-events:none;
+}
+
+/* 🔒 FORCE SAME BACKGROUND FOR ALL STATES */
+.mas-arrow,
+.mas-arrow:hover,
+.mas-arrow:active,
+.mas-arrow:focus,
+.mas-arrow:focus-visible,
+.mas-arrow:visited{
+  background: rgba(6, 13, 23, .8) !important;
+  outline:none !important;
+  box-shadow:none !important;
+}
+
+/* optional stronger hover (remove if not needed) */
+.mas-right:hover .mas-arrow:hover{
+  background: rgba(6, 13, 23, .8) !important;
+}
+
+@media (max-width: 1366px){
+  .mas-section-row{
+    gap:28px;
+    padding-left:60px;
+  }
+
+  .mas-left{
+    width:220px;
+    flex:0 0 220px;
+  }
+
+  .mas-cat-title{
+    font-size:34px;
+    line-height:42px;
+  }
+
+  /* keep number slightly smaller so layout feels balanced */
+.mas-slider .number-inner {
+        font-size: 150px;
+        width: 115px;
+        flex: 0 0 115px;
+        overflow: visible;
+        letter-spacing: -12px;
+    }
+
+  /* arrows width a bit smaller */
+  .mas-arrow{
+    width:34px;
+  }
+}
+
+
+@media (max-width: 1024px){
+  .mas-section-row{
+    gap:22px;
+    padding-left:40px;
+  }
+
+  .mas-left{
+    width:160px;
+    flex:0 0 160px;
+  }
+
+  .mas-cat-title{
+    font-size:30px;
+    line-height:35px;
+  }
+
+  /* keep number slightly smaller so layout feels balanced */
+.mas-slider .number-inner {
+        font-size: 140px;
+        width: 120px;
+        flex: 0 0 120px;
+        letter-spacing: -12px;
+    }
+
+  /* arrows width a bit smaller */
+  .mas-arrow{
+    width:34px;
+  }
+}
+
+
+@media (max-width: 768px){
+    .mas-section-row {
+        gap: 22px;
+        padding-left: 20px;
+        flex-wrap: wrap;
+    }
+  .mas-left{
+    width:100%;
+    flex:1;
+  }
+
+  .mas-cat-title{
+    font-size:30px;
+    line-height:35px;
+  }
+
+  /* keep number slightly smaller so layout feels balanced */
+.mas-slider .number-inner {
+        font-size: 160px;
+        width: 160px;
+        flex: 0 0 160;
+        letter-spacing: -12px;
+    }
+
+  /* arrows width a bit smaller */
+  .mas-arrow{
+    width:34px;
+  }
+  .mas-frame{
+      border-radius: 20px!important;
+      border:1px solid #F1151D;
+  }
+  .mas-frame video{
+       border-radius: 20px!important;
+  }
+}/* End custom CSS */
+/* Start custom CSS *//* ============================
+   BANNER PARENT WRAP
+   ============================ */
+.mas-banner-wrap {
+    width: 100%;
+    display: flex;
+    margin: 50px 0;
+    padding: 0 120px;
+font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+    justify-content: center;
+}
+
+/* ============================
+   BANNERS ROW (2 horizontal)
+   ============================ */
+.mas-banner-row{
+  display:flex;
+  width:100%;
+  gap:60px;
+
+}
+
+/* individual banner */
+.mas-banner-card{
+  flex:1 1 0;
+  min-width:0;
+  height:350px;
+  border-radius:12px;
+  background-size:cover;
+  background-position: top center;
+  background-repeat:no-repeat;
+  position:relative;
+  overflow:hidden;
+}
+
+/* dark overlay */
+.mas-banner-overlay{
+  position:absolute;
+  inset:0;
+ background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, #000000 100%);
+}
+
+/* title */
+.mas-banner-title{
+  position:absolute;
+  left:14px;
+  bottom:14px;
+  right:14px;
+  color:#fff;
+  font-weight:700;
+  font-size:32px;
+  line-height:42px;
+  z-index:2;
+}
+
+/* ============================
+   BANNER (RESPONSIVE) — ADD THIS
+   ✅ keeps your design same
+   ✅ makes padding/gap/title responsive for laptop/tablet/mobile
+   ============================ */
+
+/* ---- Laptop (<= 1366px) ---- */
+@media (max-width:1366px){
+  .mas-banner-wrap{
+    padding:0 60px;
+    margin:40px 0;
+  }
+
+  .mas-banner-row{
+    gap:40px;
+  }
+
+  .mas-banner-card{
+    height:300px;
+  }
+
+  .mas-banner-title{
+    font-size:26px;
+    line-height:34px;
+  }
+}
+
+/* ---- Small laptop / Tablet (<= 1024px) ---- */
+@media (max-width:1024px){
+  .mas-banner-wrap{
+    padding:0 28px;
+    margin:34px 0;
+  }
+
+  .mas-banner-row{
+    gap:24px;
+  }
+
+  .mas-banner-card{
+    height:260px;
+  }
+
+  .mas-banner-title{
+    font-size:22px;
+    line-height:30px;
+  }
+}
+
+
+@media (max-width:768px){
+    .mas-banner-card{
+  height:auto;
+}
+
+  .mas-banner-wrap{
+    padding:0 18px;
+    margin:28px 0;
+       
+  }
+
+  .mas-banner-row{
+    gap:16px; flex-wrap: wrap!important;
+    display: flex;
+    height: 600px!important;
+    flex-direction: column;
+  }
+
+
+
+  .mas-banner-title{
+    font-size:20px;
+    line-height:26px;
+  }
+  
+  .mas-banner-card{
+      height: 500px;
+  }
+}/* End custom CSS */

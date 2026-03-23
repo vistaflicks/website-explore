@@ -1,0 +1,141 @@
+/* ─── Header ─────────────────────────── */
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  padding: 0 30px;
+  transition: transform 0.35s ease, background 0.35s ease;
+  background: rgba(8, 14, 18, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.header--hidden {
+  transform: translateY(-100%);
+}
+
+.header__inner {
+  max-width: var(--container-max);
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 72px;
+}
+
+.header__logo img {
+  height: 32px;
+  width: auto;
+}
+
+.header__nav {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+}
+
+.header__nav a {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  transition: color var(--transition-fast);
+  text-decoration: none;
+  position: relative;
+}
+
+.header__nav a:hover,
+.header__nav a.active {
+  color: var(--text-primary);
+}
+
+.header__nav a.active::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--accent-red);
+  border-radius: 1px;
+}
+
+.header__cta {
+  padding: 8px 20px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-primary);
+  transition: all var(--transition-fast);
+  text-decoration: none;
+}
+
+.header__cta:hover {
+  background: rgba(255, 255, 255, 0.14);
+  color: var(--text-primary);
+}
+
+/* Hamburger */
+.header__hamburger {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  padding: 4px;
+  z-index: 1001;
+}
+
+.header__hamburger span {
+  width: 22px;
+  height: 2px;
+  background: var(--text-primary);
+  border-radius: 1px;
+  transition: all var(--transition-fast);
+}
+
+/* Mobile nav overlay */
+.header__mobile-nav {
+  display: none;
+}
+
+@media (max-width: 1024px) {
+  .header__nav,
+  .header__cta-wrap {
+    display: none;
+  }
+
+  .header__hamburger {
+    display: flex;
+  }
+
+  .header__mobile-nav {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(8, 14, 18, 0.97);
+    backdrop-filter: blur(20px);
+    z-index: 999;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 24px;
+  }
+
+  .header__mobile-nav.open {
+    display: flex;
+  }
+
+  .header__mobile-nav a {
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    text-decoration: none;
+  }
+
+  .header__mobile-nav a:hover,
+  .header__mobile-nav a.active {
+    color: var(--text-primary);
+  }
+}
