@@ -1,0 +1,1 @@
+{"indexes":[{"v":{"$numberInt":"2"},"key":{"_id":{"$numberInt":"1"}},"name":"_id_"},{"v":{"$numberInt":"2"},"key":{"userName":{"$numberInt":"1"}},"name":"userName_1","background":true,"unique":true,"sparse":true}],"uuid":"0c4ebf2e53e14576b00b8fcd7c28dc68","collectionName":"deletedusers","type":"collection"}

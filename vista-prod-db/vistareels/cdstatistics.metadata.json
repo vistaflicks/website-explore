@@ -1,0 +1,1 @@
+{"indexes":[{"v":{"$numberInt":"2"},"key":{"_id":{"$numberInt":"1"}},"name":"_id_"},{"v":{"$numberInt":"2"},"key":{"contentId":{"$numberInt":"1"}},"name":"contentId_1","background":true}],"uuid":"84d178859aba4f69bf26487e92d28aa0","collectionName":"cdstatistics","type":"collection"}

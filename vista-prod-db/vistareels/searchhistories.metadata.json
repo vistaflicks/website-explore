@@ -1,0 +1,1 @@
+{"indexes":[{"v":{"$numberInt":"2"},"key":{"_id":{"$numberInt":"1"}},"name":"_id_"},{"v":{"$numberInt":"2"},"key":{"userId":{"$numberInt":"1"},"searchTerm":{"$numberInt":"1"}},"name":"userId_1_searchTerm_1","background":true}],"uuid":"10e4dd1cf8c341a8b0f6a26a857cb5fc","collectionName":"searchhistories","type":"collection"}
