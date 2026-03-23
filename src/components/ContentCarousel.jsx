@@ -47,10 +47,17 @@ export default function ContentCarousel({ title, desc, movies }) {
   useEffect(() => {
     const el = trackRef.current
     if (!el) return
+
+    const handleResize = () => updateArrows()
+
     el.addEventListener('scroll', updateArrows, { passive: true })
+    window.addEventListener('resize', handleResize)
     updateArrows()
-    return () => el.removeEventListener('scroll', updateArrows)
-  }, [])
+    return () => {
+      el.removeEventListener('scroll', updateArrows)
+      window.removeEventListener('resize', handleResize)
+    }
+  }, [movies.length])
 
   useEffect(() => {
     if (selectedMovieIndex === null) return

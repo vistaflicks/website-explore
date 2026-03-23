@@ -44,6 +44,23 @@
   text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
 }
 
+@media (max-width: 1024px) {
+  .banner-section {
+    padding: 18px 20px 18px;
+  }
+
+  .banner-row {
+    gap: 14px;
+  }
+
+  .banner-card__title {
+    font-size: 16px;
+    left: 18px;
+    right: 18px;
+    bottom: 16px;
+  }
+}
+
 @media (max-width: 767px) {
   .banner-section {
     padding: 16px 20px 24px;

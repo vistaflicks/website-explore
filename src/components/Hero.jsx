@@ -48,6 +48,11 @@ export default function Hero({ providers = [] }) {
     startRotation()
   }
 
+  const handleWatchReelsClick = () => {
+    const reelsSection = document.getElementById('popular-reels')
+    reelsSection?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  }
+
   const logos = mapProviderLogos(providers)
   const providerSource = logos.length > 0 ? logos : providerLogos
   // Duplicate provider logos for seamless marquee
@@ -95,12 +100,16 @@ export default function Hero({ providers = [] }) {
           </p>
 
           <div className="vr-hero__ctas">
-            <a href="#popular-reels" className="vr-btn vr-btn--primary">
+            <button
+              type="button"
+              className="vr-btn vr-btn--primary"
+              onClick={handleWatchReelsClick}
+            >
               <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
                 <path d="M8 5v14l11-7z" />
               </svg>
               Watch Reels
-            </a>
+            </button>
             <a
               href="https://play.google.com/store/apps/details?id=com.vistareels.app"
               className="vr-btn vr-btn--secondary"

@@ -181,21 +181,8 @@ export default function App() {
       <Hero providers={streamingPlatforms} />
 
       <section id="popular-reels-section">
-        <div style={{
-          maxWidth: 'var(--container-max, 1400px)',
-          margin: '0 auto',
-          padding: '40px 30px 0',
-        }}>
-          <h2 style={{
-            fontSize: 'clamp(1.5rem, 3vw, 2.2rem)',
-            fontWeight: 700,
-            background: 'linear-gradient(180deg, #FFFFFF 0%, rgba(255,255,255,0.6) 100%)',
-            WebkitBackgroundClip: 'text',
-            WebkitTextFillColor: 'transparent',
-            backgroundClip: 'text',
-            textAlign: 'center',
-            marginBottom: '8px',
-          }}>
+        <div className="popular-reels-section__heading-wrap">
+          <h2 className="popular-reels-section__heading">
             Popular OTT Platforms, Popular Movies
           </h2>
         </div>

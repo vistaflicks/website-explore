@@ -25,6 +25,7 @@
   display: flex;
   align-items: center;
   gap: 8px;
+  min-width: 0;
 }
 
 .poster-grid__page-btn,
@@ -355,6 +356,7 @@
   .poster-grid__pagination {
     margin-top: 20px;
     gap: 8px;
+    justify-content: space-between;
   }
 
   .poster-grid__page-btn,
@@ -368,13 +370,34 @@
 
   .poster-grid__page-numbers {
     gap: 6px;
+    flex: 1;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .poster-grid__page-numbers::-webkit-scrollbar {
+    display: none;
   }
 }
 
 /* ─── Responsive: Small Mobile ──────────── */
 @media (max-width: 480px) {
+  .poster-grid {
+    padding: 8px 12px 34px;
+  }
+
   .poster-grid__container {
     grid-template-columns: repeat(3, 1fr);
     gap: 12px 8px;
+  }
+
+  .poster-grid__pagination {
+    gap: 6px;
+  }
+
+  .poster-grid__page-nav {
+    padding: 0 8px;
+    font-size: 11px;
   }
 }

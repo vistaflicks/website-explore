@@ -409,18 +409,34 @@ export default function PosterGrid({ filters, onTotalResultsChange }) {
 
               {/* Hover overlay */}
               <div className="poster-grid__overlay">
-                <a
-                  href={item.watchLink || '#poster-grid'}
-                  target={item.watchLink ? '_blank' : undefined}
-                  rel={item.watchLink ? 'noreferrer' : undefined}
-                  className="poster-grid__play-btn"
-                  aria-label={`Play ${item.title}`}
-                  onClick={(event) => event.stopPropagation()}
-                >
-                  <svg viewBox="0 0 24 24" width="28" height="28">
-                    <path d="M8 5v14l11-7z" fill="white" />
-                  </svg>
-                </a>
+                {item.watchLink ? (
+                  <a
+                    href={item.watchLink}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="poster-grid__play-btn"
+                    aria-label={`Play ${item.title}`}
+                    onClick={(event) => event.stopPropagation()}
+                  >
+                    <svg viewBox="0 0 24 24" width="28" height="28">
+                      <path d="M8 5v14l11-7z" fill="white" />
+                    </svg>
+                  </a>
+                ) : (
+                  <button
+                    type="button"
+                    className="poster-grid__play-btn"
+                    aria-label={`Open details for ${item.title}`}
+                    onClick={(event) => {
+                      event.stopPropagation()
+                      setSelectedPoster(item)
+                    }}
+                  >
+                    <svg viewBox="0 0 24 24" width="28" height="28">
+                      <path d="M8 5v14l11-7z" fill="white" />
+                    </svg>
+                  </button>
+                )}
                 <div className="poster-grid__actions">
                   <button
                     className="poster-grid__action-btn"

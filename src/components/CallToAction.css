@@ -91,3 +91,50 @@
 .cta-store-btn:hover img {
   opacity: 0.9;
 }
+
+@media (max-width: 1024px) {
+  .cta-section {
+    padding: 64px 20px 84px;
+  }
+
+  .cta-logo {
+    margin-bottom: 24px;
+  }
+
+  .cta-logo img {
+    height: 42px;
+  }
+
+  .cta-heading {
+    margin-bottom: 30px;
+  }
+}
+
+@media (max-width: 767px) {
+  .cta-section {
+    padding: 48px 16px 64px;
+  }
+
+  .cta-section::before {
+    width: 92%;
+    height: 92%;
+  }
+
+  .cta-heading {
+    font-size: clamp(1.55rem, 7vw, 2.2rem);
+    margin-bottom: 24px;
+  }
+
+  .cta-heading .gradient-text {
+    font-size: clamp(0.78rem, 3.4vw, 0.92rem) !important;
+    margin-top: 12px !important;
+  }
+
+  .cta-stores {
+    gap: 10px;
+  }
+
+  .cta-store-btn img {
+    height: 38px;
+  }
+}

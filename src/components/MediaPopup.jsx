@@ -74,41 +74,30 @@ const getCast = (item) => {
   return FALLBACK_CAST;
 };
 
-const formatReleaseDate = (value) => {
-  if (!value) return "";
-
-  if (typeof value === "number" && Number.isFinite(value)) {
-    return `01 Jan, ${Math.trunc(value)}`;
-  }
-
-  if (typeof value === "string") {
-    const trimmed = value.trim();
-    if (!trimmed) return "";
-    if (/^\d{4}$/.test(trimmed)) return `01 Jan, ${trimmed}`;
-  }
-
-  const parsed = new Date(value);
-  if (Number.isNaN(parsed.getTime())) {
-    return typeof value === "string" ? value : "";
-  }
-
-  const day = String(parsed.getUTCDate()).padStart(2, "0");
-  const month = parsed.toLocaleString("en-US", {
-    month: "short",
-    timeZone: "UTC",
-  });
-  const year = parsed.getUTCFullYear();
-  return `${day} ${month}, ${year}`;
-};
-
 const getMetaParts = (item, genres) => {
+  const formatReleaseDate = (value) => {
+    if (!value) return "";
+
+    const parsed = new Date(value);
+    if (Number.isNaN(parsed.getTime())) {
+      return typeof value === "string" ? value : "";
+    }
+
+    return new Intl.DateTimeFormat("en-GB", {
+      day: "numeric",
+      month: "long",
+      year: "numeric",
+      timeZone: "UTC",
+    }).format(parsed);
+  };
+
   const duration =
     item?.duration || item?.runtime || item?.durationText || "2h 34m";
   const certificate = item?.certificate || item?.certification || "UA (IN)";
   const leadGenre = genres[0] || "Drama";
   const releaseText =
-    formatReleaseDate(item?.releaseDateText || item?.releaseDate || item?.year) ||
-    (item?.year ? `01 Jan, ${item.year}` : "15 July, 2011");
+    formatReleaseDate(item?.releaseDateText || item?.releaseDate) ||
+    (item?.year ? `1 January, ${item.year}` : "15 July, 2011");
   return [duration, `${certificate}/${leadGenre}`, releaseText];
 };
 
@@ -150,13 +139,16 @@ export default function MediaPopup({
   const [reels, setReels] = useState([]);
   const [activeReelIndex, setActiveReelIndex] = useState(0);
   const [isLoadingReels, setIsLoadingReels] = useState(false);
-  const [tapIndicator, setTapIndicator] = useState(null);
+  const [isVideoPlaying, setIsVideoPlaying] = useState(true);
+  const [showPlaybackControl, setShowPlaybackControl] = useState(false);
   const wheelLockRef = useRef(false);
   const wheelUnlockTimerRef = useRef(null);
-  const tapIndicatorTimerRef = useRef(null);
+  const playbackControlTimerRef = useRef(null);
   const videoRef = useRef(null);
   const activeReel = reels[activeReelIndex] || null;
   const reelVideoUrl = activeReel?.videoUrl || "";
+  const reelCountText =
+    reels.length > 0 ? `${activeReelIndex + 1} / ${reels.length}` : "";
 
   useEffect(() => {
     if (!isOpen) return undefined;
@@ -225,55 +217,48 @@ export default function MediaPopup({
     return () => controller.abort();
   }, [isOpen, item]);
 
+  const startAutoplay = () => {
+    if (!videoRef.current) return;
+    videoRef.current.muted = true;
+    videoRef.current.defaultMuted = true;
+    videoRef.current
+      .play()
+      .then(() => setIsVideoPlaying(true))
+      .catch(() => setIsVideoPlaying(false));
+  };
+
+  const revealPlaybackControl = () => {
+    if (!reelVideoUrl) return;
+    setShowPlaybackControl(true);
+    if (playbackControlTimerRef.current) {
+      clearTimeout(playbackControlTimerRef.current);
+    }
+    playbackControlTimerRef.current = setTimeout(() => {
+      setShowPlaybackControl(false);
+    }, 1200);
+  };
+
   useEffect(() => {
     if (!isOpen || !videoRef.current || !reelVideoUrl) return;
-
-    const video = videoRef.current;
-    video.currentTime = 0;
-
-    const tryPlay = () => {
-      video.muted = false;
-      video
-        .play()
-        .catch(() => {
-          // Fallback for browsers that block autoplay with sound.
-          video.muted = true;
-          video.play().catch(() => {});
-        });
-    };
-
-    if (video.readyState >= 2) {
-      tryPlay();
-      return;
-    }
-
-    const onLoadedData = () => {
-      tryPlay();
-    };
-
-    video.addEventListener("loadeddata", onLoadedData, { once: true });
-
-    return () => {
-      video.removeEventListener("loadeddata", onLoadedData);
-    };
-  }, [isOpen, activeReelIndex, reels, reelVideoUrl]);
+    videoRef.current.currentTime = 0;
+    setIsVideoPlaying(true);
+    setShowPlaybackControl(false);
+    startAutoplay();
+  }, [isOpen, activeReelIndex, reelVideoUrl]);
 
   useEffect(
     () => () => {
       if (wheelUnlockTimerRef.current) {
         clearTimeout(wheelUnlockTimerRef.current);
       }
-      if (tapIndicatorTimerRef.current) {
-        clearTimeout(tapIndicatorTimerRef.current);
+      if (playbackControlTimerRef.current) {
+        clearTimeout(playbackControlTimerRef.current);
       }
     },
     [],
   );
 
   if (!isOpen || !item) return null;
-
-  const reelCountText =
-    reels.length > 0 ? `${activeReelIndex + 1} / ${reels.length}` : "";
   const poster = item.poster || item.image || "";
   const plot =
     item.plot ||
@@ -318,25 +303,15 @@ export default function MediaPopup({
     if (!video) return;
 
     if (video.paused) {
-      setTapIndicator("play");
-      video.play().catch(() => {});
-      if (tapIndicatorTimerRef.current) {
-        clearTimeout(tapIndicatorTimerRef.current);
-      }
-      tapIndicatorTimerRef.current = setTimeout(() => {
-        setTapIndicator(null);
-      }, 420);
+      video
+        .play()
+        .then(() => setIsVideoPlaying(true))
+        .catch(() => {});
       return;
     }
 
-    setTapIndicator("pause");
     video.pause();
-    if (tapIndicatorTimerRef.current) {
-      clearTimeout(tapIndicatorTimerRef.current);
-    }
-    tapIndicatorTimerRef.current = setTimeout(() => {
-      setTapIndicator(null);
-    }, 420);
+    setIsVideoPlaying(false);
   };
 
   return (
@@ -353,7 +328,16 @@ export default function MediaPopup({
         className="media-popup__panel"
         onMouseDown={(event) => event.stopPropagation()}
       >
-        <div className="media-popup__media" onWheel={handleReelWheel}>
+        <div
+          className="media-popup__media"
+          onWheel={handleReelWheel}
+          onClick={(event) => {
+            if (!reelVideoUrl) return;
+            if (event.target.closest("button, a")) return;
+            revealPlaybackControl();
+            toggleVideoPlayback();
+          }}
+        >
           {isLoadingReels ? (
             <div className="media-popup__poster-placeholder">
               Loading reels...
@@ -366,24 +350,34 @@ export default function MediaPopup({
                 className="media-popup__reel-video"
                 src={reelVideoUrl}
                 autoPlay
+                muted
                 playsInline
                 preload="metadata"
+                onLoadedMetadata={startAutoplay}
                 onEnded={goToNextReel}
-                onClick={toggleVideoPlayback}
+                onPause={() => setIsVideoPlaying(false)}
+                onPlay={() => setIsVideoPlaying(true)}
               />
               <div className="media-popup__reel-badge">
                 <span>Reels</span>
                 <span>{reelCountText}</span>
               </div>
-              {tapIndicator && (
-                <div className="media-popup__tap-indicator" aria-hidden="true">
-                  {tapIndicator === "play" ? (
-                    <span className="media-popup__tap-icon media-popup__tap-icon--play" />
-                  ) : (
-                    <span className="media-popup__tap-icon media-popup__tap-icon--pause" />
-                  )}
-                </div>
-              )}
+              <button
+                type="button"
+                className={`media-popup__play-toggle${showPlaybackControl ? " media-popup__play-toggle--visible" : ""}`}
+                onClick={(event) => {
+                  event.stopPropagation();
+                  revealPlaybackControl();
+                  toggleVideoPlayback();
+                }}
+                aria-label={isVideoPlaying ? "Pause reel video" : "Play reel video"}
+              >
+                {isVideoPlaying ? (
+                  <span className="media-popup__pause-icon" aria-hidden="true" />
+                ) : (
+                  <span className="media-popup__play-icon" aria-hidden="true" />
+                )}
+              </button>
             </>
           ) : poster ? (
             <img
@@ -403,7 +397,11 @@ export default function MediaPopup({
             onClick={onClose}
             aria-label="Close popup"
           >
-            <svg className="media-popup__close-icon" viewBox="0 0 20 20" aria-hidden="true">
+            <svg
+              className="media-popup__close-icon"
+              viewBox="0 0 20 20"
+              aria-hidden="true"
+            >
               <path d="M5 5l10 10M15 5L5 15" />
             </svg>
           </button>
@@ -435,7 +433,11 @@ export default function MediaPopup({
             onClick={onClose}
             aria-label="Close popup"
           >
-            <svg className="media-popup__close-icon" viewBox="0 0 20 20" aria-hidden="true">
+            <svg
+              className="media-popup__close-icon"
+              viewBox="0 0 20 20"
+              aria-hidden="true"
+            >
               <path d="M5 5l10 10M15 5L5 15" />
             </svg>
           </button>
