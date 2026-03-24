@@ -140,11 +140,17 @@ export default function MediaPopup({
   const [activeReelIndex, setActiveReelIndex] = useState(0);
   const [isLoadingReels, setIsLoadingReels] = useState(false);
   const [isVideoPlaying, setIsVideoPlaying] = useState(true);
+  const [isReelVideoReady, setIsReelVideoReady] = useState(false);
   const [showPlaybackControl, setShowPlaybackControl] = useState(false);
   const wheelLockRef = useRef(false);
   const wheelUnlockTimerRef = useRef(null);
   const wheelAccumulatorRef = useRef(0);
   const wheelAccumulatorResetTimerRef = useRef(null);
+  const wheelLastEventTimeRef = useRef(0);
+  const wheelIgnoreUntilRef = useRef(0);
+  const reelTransitionInFlightRef = useRef(false);
+  const queuedReelDeltaRef = useRef(0);
+  const reelTransitionFailSafeTimerRef = useRef(null);
   const playbackControlTimerRef = useRef(null);
   const touchStartYRef = useRef(null);
   const touchStartXRef = useRef(null);
@@ -152,14 +158,23 @@ export default function MediaPopup({
   const videoRef = useRef(null);
   const activeReel = reels[activeReelIndex] || null;
   const reelVideoUrl = activeReel?.videoUrl || "";
+  const contentId = getContentId(item);
   const reelCountText =
     reels.length > 0 ? `${activeReelIndex + 1} / ${reels.length}` : "";
 
   useEffect(() => {
     if (!isOpen) return undefined;
 
-    const previousOverflow = document.body.style.overflow;
+    const previousBodyOverflow = document.body.style.overflow;
+    const previousBodyOverscrollBehavior = document.body.style.overscrollBehavior;
+    const previousHtmlOverflow = document.documentElement.style.overflow;
+    const previousHtmlOverscrollBehavior =
+      document.documentElement.style.overscrollBehavior;
+
     document.body.style.overflow = "hidden";
+    document.body.style.overscrollBehavior = "none";
+    document.documentElement.style.overflow = "hidden";
+    document.documentElement.style.overscrollBehavior = "none";
 
     const handleKeyDown = (event) => {
       if (event.key === "Escape") {
@@ -170,20 +185,23 @@ export default function MediaPopup({
     window.addEventListener("keydown", handleKeyDown);
 
     return () => {
-      document.body.style.overflow = previousOverflow;
+      document.body.style.overflow = previousBodyOverflow;
+      document.body.style.overscrollBehavior = previousBodyOverscrollBehavior;
+      document.documentElement.style.overflow = previousHtmlOverflow;
+      document.documentElement.style.overscrollBehavior =
+        previousHtmlOverscrollBehavior;
       window.removeEventListener("keydown", handleKeyDown);
     };
   }, [isOpen, onClose]);
 
   useEffect(() => {
-    if (!isOpen || !item) return undefined;
-
-    const contentId = getContentId(item);
+    if (!isOpen) return undefined;
 
     if (!contentId) {
       setReels([]);
       setActiveReelIndex(0);
       setIsLoadingReels(false);
+      setIsReelVideoReady(false);
       return undefined;
     }
 
@@ -209,9 +227,11 @@ export default function MediaPopup({
 
         setReels(mappedReels);
         setActiveReelIndex(0);
+        setIsReelVideoReady(false);
       } catch (error) {
         setReels([]);
         setActiveReelIndex(0);
+        setIsReelVideoReady(false);
       } finally {
         setIsLoadingReels(false);
       }
@@ -220,7 +240,7 @@ export default function MediaPopup({
     loadReels();
 
     return () => controller.abort();
-  }, [isOpen, item]);
+  }, [isOpen, contentId]);
 
   const startAutoplay = () => {
     const video = videoRef.current;
@@ -256,11 +276,9 @@ export default function MediaPopup({
 
   useEffect(() => {
     if (!isOpen || !videoRef.current || !reelVideoUrl) return;
-    videoRef.current.currentTime = 0;
     setIsVideoPlaying(true);
     setShowPlaybackControl(false);
-    startAutoplay();
-  }, [isOpen, activeReelIndex, reelVideoUrl]);
+  }, [isOpen, reelVideoUrl]);
 
   useEffect(
     () => () => {
@@ -269,6 +287,9 @@ export default function MediaPopup({
       }
       if (wheelAccumulatorResetTimerRef.current) {
         clearTimeout(wheelAccumulatorResetTimerRef.current);
+      }
+      if (reelTransitionFailSafeTimerRef.current) {
+        clearTimeout(reelTransitionFailSafeTimerRef.current);
       }
       if (playbackControlTimerRef.current) {
         clearTimeout(playbackControlTimerRef.current);
@@ -301,7 +322,24 @@ export default function MediaPopup({
   const stepReelFromDelta = (delta) => {
     if (reels.length <= 1) return;
     if (!delta) return;
+    if (reelTransitionInFlightRef.current) {
+      queuedReelDeltaRef.current = delta;
+      return;
+    }
     if (wheelLockRef.current) return;
+
+    reelTransitionInFlightRef.current = true;
+    if (reelTransitionFailSafeTimerRef.current) {
+      clearTimeout(reelTransitionFailSafeTimerRef.current);
+    }
+    reelTransitionFailSafeTimerRef.current = setTimeout(() => {
+      reelTransitionInFlightRef.current = false;
+      const queuedDelta = queuedReelDeltaRef.current;
+      queuedReelDeltaRef.current = 0;
+      if (queuedDelta) {
+        stepReelFromDelta(queuedDelta);
+      }
+    }, 1000);
 
     wheelLockRef.current = true;
     if (delta > 0) goToNextReel();
@@ -315,25 +353,55 @@ export default function MediaPopup({
     }, 180);
   };
 
+  const releaseReelTransition = () => {
+    reelTransitionInFlightRef.current = false;
+    if (reelTransitionFailSafeTimerRef.current) {
+      clearTimeout(reelTransitionFailSafeTimerRef.current);
+      reelTransitionFailSafeTimerRef.current = null;
+    }
+
+    const queuedDelta = queuedReelDeltaRef.current;
+    queuedReelDeltaRef.current = 0;
+    if (queuedDelta) {
+      stepReelFromDelta(queuedDelta);
+    }
+  };
+
   const handleReelWheel = (event) => {
-    if (reels.length <= 1) return;
     event.preventDefault();
     event.stopPropagation();
 
-    const dominantDelta =
+    if (reels.length <= 1) return;
+
+    const now = performance.now();
+    if (now < wheelIgnoreUntilRef.current) return;
+
+    let dominantDelta =
       Math.abs(event.deltaY) >= Math.abs(event.deltaX)
         ? event.deltaY
         : event.deltaX;
 
-    if (!Number.isFinite(dominantDelta) || dominantDelta === 0) return;
+    // Normalize wheel units across mouse wheels and trackpads.
+    if (event.deltaMode === 1) dominantDelta *= 16;
+    else if (event.deltaMode === 2) dominantDelta *= window.innerHeight;
 
-    // Keep wheel navigation smooth on trackpads by accumulating tiny deltas.
+    if (!Number.isFinite(dominantDelta) || dominantDelta === 0) return;
+    if (Math.abs(dominantDelta) < 1) return;
+
+    const isNewGesture = now - wheelLastEventTimeRef.current > 170;
+    wheelLastEventTimeRef.current = now;
+    if (isNewGesture) {
+      wheelAccumulatorRef.current = 0;
+    }
+
+    // Keep wheel/swipe transitions smooth on trackpads by buffering tiny deltas.
     if (
       wheelAccumulatorRef.current !== 0 &&
       Math.sign(wheelAccumulatorRef.current) !== Math.sign(dominantDelta)
     ) {
       wheelAccumulatorRef.current = 0;
     }
+
     wheelAccumulatorRef.current += dominantDelta;
 
     if (wheelAccumulatorResetTimerRef.current) {
@@ -341,12 +409,13 @@ export default function MediaPopup({
     }
     wheelAccumulatorResetTimerRef.current = setTimeout(() => {
       wheelAccumulatorRef.current = 0;
-    }, 120);
+    }, 140);
 
-    if (Math.abs(wheelAccumulatorRef.current) < 55) return;
+    if (Math.abs(wheelAccumulatorRef.current) < 22) return;
 
     const reelStepDelta = wheelAccumulatorRef.current;
     wheelAccumulatorRef.current = 0;
+    wheelIgnoreUntilRef.current = now + 180;
     stepReelFromDelta(reelStepDelta);
   };
 
@@ -354,7 +423,6 @@ export default function MediaPopup({
     const video = videoRef.current;
     if (!video) return;
 
-    // User interaction: enable audio for subsequent playback.
     video.muted = false;
     video.defaultMuted = false;
 
@@ -434,13 +502,17 @@ export default function MediaPopup({
             <>
               <video
                 ref={videoRef}
-                key={reelVideoUrl}
-                className="media-popup__reel-video"
+                className={`media-popup__reel-video${isReelVideoReady ? " media-popup__reel-video--ready" : ""}`}
                 src={reelVideoUrl}
                 autoPlay
                 playsInline
-                preload="metadata"
-                onLoadedMetadata={startAutoplay}
+                preload="auto"
+                onLoadedData={() => {
+                  setIsReelVideoReady(true);
+                  startAutoplay();
+                  releaseReelTransition();
+                }}
+                onError={releaseReelTransition}
                 onEnded={goToNextReel}
                 onPause={() => setIsVideoPlaying(false)}
                 onPlay={() => setIsVideoPlaying(true)}
