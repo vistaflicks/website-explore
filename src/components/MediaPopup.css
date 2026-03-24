@@ -89,7 +89,7 @@ box-shadow:
   padding: 0;
   color: rgba(255, 255, 255, 0.94);
   background: transparent;
-  border: 1px solid transparent;
+  /* border: 1px solid transparent; */
   box-shadow: none;
   transition:
     background-color 0.2s ease,
@@ -105,7 +105,7 @@ box-shadow:
 }
 
 .media-popup__close--panel {
-  top: 10px;
+  top: 24px;
   right: 10px;
   z-index: 32;
   background: transparent;
@@ -114,8 +114,8 @@ box-shadow:
 }
 
 .media-popup__close--panel:hover {
-  background: transparent;
-  border-color: transparent;
+  /* background: transparent; */
+  /* border-color: transparent; */
   box-shadow: none;
   transform: none;
 }
