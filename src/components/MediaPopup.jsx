@@ -1,5 +1,8 @@
 import { useEffect, useRef, useState } from "react";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Mousewheel } from "swiper/modules";
 import { buildApiUrl } from "../config/api";
+import "swiper/css";
 import "./MediaPopup.css";
 
 const FALLBACK_GENRES = ["Crime", "Drama", "Mystery", "Romance", "Thriller"];
@@ -9,6 +12,8 @@ const FALLBACK_CAST = [
   { name: "Farhan Akhtar" },
   { name: "Katrina Kaif" },
 ];
+const WHEEL_SWITCH_THRESHOLD = 24;
+const REEL_SWITCH_SPEED_MS = 380;
 
 const normalizeCastAvatar = (value) => {
   if (!value || typeof value !== "string") return "";
@@ -140,22 +145,11 @@ export default function MediaPopup({
   const [activeReelIndex, setActiveReelIndex] = useState(0);
   const [isLoadingReels, setIsLoadingReels] = useState(false);
   const [isVideoPlaying, setIsVideoPlaying] = useState(true);
-  const [isReelVideoReady, setIsReelVideoReady] = useState(false);
+  const [readyReels, setReadyReels] = useState({});
   const [showPlaybackControl, setShowPlaybackControl] = useState(false);
-  const wheelLockRef = useRef(false);
-  const wheelUnlockTimerRef = useRef(null);
-  const wheelAccumulatorRef = useRef(0);
-  const wheelAccumulatorResetTimerRef = useRef(null);
-  const wheelLastEventTimeRef = useRef(0);
-  const wheelIgnoreUntilRef = useRef(0);
-  const reelTransitionInFlightRef = useRef(false);
-  const queuedReelDeltaRef = useRef(0);
-  const reelTransitionFailSafeTimerRef = useRef(null);
   const playbackControlTimerRef = useRef(null);
-  const touchStartYRef = useRef(null);
-  const touchStartXRef = useRef(null);
-  const ignoreNextTapRef = useRef(false);
-  const videoRef = useRef(null);
+  const swiperRef = useRef(null);
+  const videoRefs = useRef({});
   const activeReel = reels[activeReelIndex] || null;
   const reelVideoUrl = activeReel?.videoUrl || "";
   const contentId = getContentId(item);
@@ -166,7 +160,8 @@ export default function MediaPopup({
     if (!isOpen) return undefined;
 
     const previousBodyOverflow = document.body.style.overflow;
-    const previousBodyOverscrollBehavior = document.body.style.overscrollBehavior;
+    const previousBodyOverscrollBehavior =
+      document.body.style.overscrollBehavior;
     const previousHtmlOverflow = document.documentElement.style.overflow;
     const previousHtmlOverscrollBehavior =
       document.documentElement.style.overscrollBehavior;
@@ -201,7 +196,7 @@ export default function MediaPopup({
       setReels([]);
       setActiveReelIndex(0);
       setIsLoadingReels(false);
-      setIsReelVideoReady(false);
+      setReadyReels({});
       return undefined;
     }
 
@@ -227,11 +222,11 @@ export default function MediaPopup({
 
         setReels(mappedReels);
         setActiveReelIndex(0);
-        setIsReelVideoReady(false);
+        setReadyReels({});
       } catch (error) {
         setReels([]);
         setActiveReelIndex(0);
-        setIsReelVideoReady(false);
+        setReadyReels({});
       } finally {
         setIsLoadingReels(false);
       }
@@ -242,8 +237,7 @@ export default function MediaPopup({
     return () => controller.abort();
   }, [isOpen, contentId]);
 
-  const startAutoplay = () => {
-    const video = videoRef.current;
+  const startAutoplay = (video) => {
     if (!video) return;
 
     // Try autoplay with sound first; fall back to muted playback if blocked.
@@ -251,7 +245,8 @@ export default function MediaPopup({
     video.defaultMuted = false;
     video.volume = 1;
 
-    video.play()
+    video
+      .play()
       .then(() => setIsVideoPlaying(true))
       .catch(() => {
         video.muted = true;
@@ -275,22 +270,30 @@ export default function MediaPopup({
   };
 
   useEffect(() => {
-    if (!isOpen || !videoRef.current || !reelVideoUrl) return;
-    setIsVideoPlaying(true);
+    if (!isOpen) {
+      Object.values(videoRefs.current).forEach((video) => {
+        if (video && !video.paused) video.pause();
+      });
+      return;
+    }
+
+    const activeVideo = videoRefs.current[activeReelIndex];
+    Object.entries(videoRefs.current).forEach(([index, video]) => {
+      if (!video) return;
+      if (Number(index) !== activeReelIndex && !video.paused) {
+        video.pause();
+      }
+    });
+
+    if (activeVideo && reelVideoUrl) {
+      setIsVideoPlaying(true);
+      startAutoplay(activeVideo);
+    }
     setShowPlaybackControl(false);
-  }, [isOpen, reelVideoUrl]);
+  }, [isOpen, activeReelIndex, reelVideoUrl]);
 
   useEffect(
     () => () => {
-      if (wheelUnlockTimerRef.current) {
-        clearTimeout(wheelUnlockTimerRef.current);
-      }
-      if (wheelAccumulatorResetTimerRef.current) {
-        clearTimeout(wheelAccumulatorResetTimerRef.current);
-      }
-      if (reelTransitionFailSafeTimerRef.current) {
-        clearTimeout(reelTransitionFailSafeTimerRef.current);
-      }
       if (playbackControlTimerRef.current) {
         clearTimeout(playbackControlTimerRef.current);
       }
@@ -298,129 +301,29 @@ export default function MediaPopup({
     [],
   );
 
-  if (!isOpen || !item) return null;
-  const poster = item.poster || item.image || "";
+  const selectedItem = item || {};
+  const poster = selectedItem.poster || selectedItem.image || "";
   const plot =
-    item.plot ||
-    item.overview ||
-    item.description ||
+    selectedItem.plot ||
+    selectedItem.overview ||
+    selectedItem.description ||
     "Three friends who were inseparable in childhood decide to go on a road trip to rediscover themselves and repair old bonds before one of them gets married.";
-  const genres = getGenres(item);
-  const cast = getCast(item);
-  const metaParts = getMetaParts(item, genres);
+  const genres = getGenres(selectedItem);
+  const cast = getCast(selectedItem);
+  const metaParts = getMetaParts(selectedItem, genres);
 
   const goToNextReel = () => {
     if (reels.length <= 1) return;
-    setActiveReelIndex((prev) => (prev + 1) % reels.length);
-  };
-
-  const goToPrevReel = () => {
-    if (reels.length <= 1) return;
-    setActiveReelIndex((prev) => (prev - 1 + reels.length) % reels.length);
-  };
-
-  const stepReelFromDelta = (delta) => {
-    if (reels.length <= 1) return;
-    if (!delta) return;
-    if (reelTransitionInFlightRef.current) {
-      queuedReelDeltaRef.current = delta;
+    const nextIndex = (activeReelIndex + 1) % reels.length;
+    if (swiperRef.current) {
+      swiperRef.current.slideTo(nextIndex, REEL_SWITCH_SPEED_MS);
       return;
     }
-    if (wheelLockRef.current) return;
-
-    reelTransitionInFlightRef.current = true;
-    if (reelTransitionFailSafeTimerRef.current) {
-      clearTimeout(reelTransitionFailSafeTimerRef.current);
-    }
-    reelTransitionFailSafeTimerRef.current = setTimeout(() => {
-      reelTransitionInFlightRef.current = false;
-      const queuedDelta = queuedReelDeltaRef.current;
-      queuedReelDeltaRef.current = 0;
-      if (queuedDelta) {
-        stepReelFromDelta(queuedDelta);
-      }
-    }, 1000);
-
-    wheelLockRef.current = true;
-    if (delta > 0) goToNextReel();
-    else goToPrevReel();
-
-    if (wheelUnlockTimerRef.current) {
-      clearTimeout(wheelUnlockTimerRef.current);
-    }
-    wheelUnlockTimerRef.current = setTimeout(() => {
-      wheelLockRef.current = false;
-    }, 180);
-  };
-
-  const releaseReelTransition = () => {
-    reelTransitionInFlightRef.current = false;
-    if (reelTransitionFailSafeTimerRef.current) {
-      clearTimeout(reelTransitionFailSafeTimerRef.current);
-      reelTransitionFailSafeTimerRef.current = null;
-    }
-
-    const queuedDelta = queuedReelDeltaRef.current;
-    queuedReelDeltaRef.current = 0;
-    if (queuedDelta) {
-      stepReelFromDelta(queuedDelta);
-    }
-  };
-
-  const handleReelWheel = (event) => {
-    event.preventDefault();
-    event.stopPropagation();
-
-    if (reels.length <= 1) return;
-
-    const now = performance.now();
-    if (now < wheelIgnoreUntilRef.current) return;
-
-    let dominantDelta =
-      Math.abs(event.deltaY) >= Math.abs(event.deltaX)
-        ? event.deltaY
-        : event.deltaX;
-
-    // Normalize wheel units across mouse wheels and trackpads.
-    if (event.deltaMode === 1) dominantDelta *= 16;
-    else if (event.deltaMode === 2) dominantDelta *= window.innerHeight;
-
-    if (!Number.isFinite(dominantDelta) || dominantDelta === 0) return;
-    if (Math.abs(dominantDelta) < 1) return;
-
-    const isNewGesture = now - wheelLastEventTimeRef.current > 170;
-    wheelLastEventTimeRef.current = now;
-    if (isNewGesture) {
-      wheelAccumulatorRef.current = 0;
-    }
-
-    // Keep wheel/swipe transitions smooth on trackpads by buffering tiny deltas.
-    if (
-      wheelAccumulatorRef.current !== 0 &&
-      Math.sign(wheelAccumulatorRef.current) !== Math.sign(dominantDelta)
-    ) {
-      wheelAccumulatorRef.current = 0;
-    }
-
-    wheelAccumulatorRef.current += dominantDelta;
-
-    if (wheelAccumulatorResetTimerRef.current) {
-      clearTimeout(wheelAccumulatorResetTimerRef.current);
-    }
-    wheelAccumulatorResetTimerRef.current = setTimeout(() => {
-      wheelAccumulatorRef.current = 0;
-    }, 140);
-
-    if (Math.abs(wheelAccumulatorRef.current) < 22) return;
-
-    const reelStepDelta = wheelAccumulatorRef.current;
-    wheelAccumulatorRef.current = 0;
-    wheelIgnoreUntilRef.current = now + 180;
-    stepReelFromDelta(reelStepDelta);
+    setActiveReelIndex(nextIndex);
   };
 
   const toggleVideoPlayback = () => {
-    const video = videoRef.current;
+    const video = videoRefs.current[activeReelIndex];
     if (!video) return;
 
     video.muted = false;
@@ -438,6 +341,8 @@ export default function MediaPopup({
     setIsVideoPlaying(false);
   };
 
+  if (!isOpen || !item) return null;
+
   return (
     <div
       className="media-popup"
@@ -454,42 +359,9 @@ export default function MediaPopup({
       >
         <div
           className="media-popup__media"
-          onWheel={handleReelWheel}
-          onTouchStart={(event) => {
-            const touch = event.touches?.[0];
-            if (!touch) return;
-            touchStartYRef.current = touch.clientY;
-            touchStartXRef.current = touch.clientX;
-          }}
-          onTouchEnd={(event) => {
-            if (reels.length <= 1) return;
-            const touch = event.changedTouches?.[0];
-            const startY = touchStartYRef.current;
-            const startX = touchStartXRef.current;
-
-            touchStartYRef.current = null;
-            touchStartXRef.current = null;
-            if (!touch || startY === null || startX === null) return;
-
-            const deltaY = startY - touch.clientY;
-            const deltaX = startX - touch.clientX;
-
-            // Treat as vertical swipe only when clearly dominant.
-            if (
-              Math.abs(deltaY) > Math.abs(deltaX) * 1.2 &&
-              Math.abs(deltaY) > 28
-            ) {
-              ignoreNextTapRef.current = true;
-              stepReelFromDelta(deltaY);
-            }
-          }}
           onClick={(event) => {
             if (!reelVideoUrl) return;
             if (event.target.closest("button, a")) return;
-            if (ignoreNextTapRef.current) {
-              ignoreNextTapRef.current = false;
-              return;
-            }
             revealPlaybackControl();
             toggleVideoPlayback();
           }}
@@ -500,23 +372,76 @@ export default function MediaPopup({
             </div>
           ) : reelVideoUrl ? (
             <>
-              <video
-                ref={videoRef}
-                className={`media-popup__reel-video${isReelVideoReady ? " media-popup__reel-video--ready" : ""}`}
-                src={reelVideoUrl}
-                autoPlay
-                playsInline
-                preload="auto"
-                onLoadedData={() => {
-                  setIsReelVideoReady(true);
-                  startAutoplay();
-                  releaseReelTransition();
+              <Swiper
+                className="media-popup__reel-swiper"
+                direction="vertical"
+                modules={[Mousewheel]}
+                mousewheel={
+                  reels.length > 1
+                    ? {
+                        forceToAxis: true,
+                        thresholdDelta: WHEEL_SWITCH_THRESHOLD,
+                        sensitivity: 0.6,
+                        releaseOnEdges: false,
+                      }
+                    : false
+                }
+                speed={REEL_SWITCH_SPEED_MS}
+                slidesPerView={1}
+                spaceBetween={0}
+                nested
+                preventClicks
+                preventClicksPropagation
+                allowTouchMove={reels.length > 1}
+                onSwiper={(swiper) => {
+                  swiperRef.current = swiper;
+                  if (swiper.activeIndex !== activeReelIndex) {
+                    swiper.slideTo(activeReelIndex, 0);
+                  }
                 }}
-                onError={releaseReelTransition}
-                onEnded={goToNextReel}
-                onPause={() => setIsVideoPlaying(false)}
-                onPlay={() => setIsVideoPlaying(true)}
-              />
+                onSlideChange={(swiper) => {
+                  setActiveReelIndex(swiper.activeIndex);
+                }}
+              >
+                {reels.map((reel, index) => (
+                  <SwiperSlide
+                    className="media-popup__reel-slide"
+                    key={reel?._id || reel?.id || `${index}-${reel.videoUrl}`}
+                  >
+                    <video
+                      ref={(node) => {
+                        if (node) videoRefs.current[index] = node;
+                        else delete videoRefs.current[index];
+                      }}
+                      className={`media-popup__reel-video${readyReels[index] ? " media-popup__reel-video--ready" : ""}`}
+                      src={reel.videoUrl}
+                      playsInline
+                      preload={index === activeReelIndex ? "auto" : "metadata"}
+                      onLoadedData={(event) => {
+                        setReadyReels((prev) =>
+                          prev[index] ? prev : { ...prev, [index]: true },
+                        );
+                        if (index === activeReelIndex) {
+                          startAutoplay(event.currentTarget);
+                        }
+                      }}
+                      onEnded={() => {
+                        if (index === activeReelIndex) goToNextReel();
+                      }}
+                      onPause={() => {
+                        if (index === activeReelIndex) {
+                          setIsVideoPlaying(false);
+                        }
+                      }}
+                      onPlay={() => {
+                        if (index === activeReelIndex) {
+                          setIsVideoPlaying(true);
+                        }
+                      }}
+                    />
+                  </SwiperSlide>
+                ))}
+              </Swiper>
               <div className="media-popup__reel-badge">
                 <span>Reels</span>
                 <span>{reelCountText}</span>
@@ -529,10 +454,15 @@ export default function MediaPopup({
                   revealPlaybackControl();
                   toggleVideoPlayback();
                 }}
-                aria-label={isVideoPlaying ? "Pause reel video" : "Play reel video"}
+                aria-label={
+                  isVideoPlaying ? "Pause reel video" : "Play reel video"
+                }
               >
                 {isVideoPlaying ? (
-                  <span className="media-popup__pause-icon" aria-hidden="true" />
+                  <span
+                    className="media-popup__pause-icon"
+                    aria-hidden="true"
+                  />
                 ) : (
                   <span className="media-popup__play-icon" aria-hidden="true" />
                 )}
@@ -542,7 +472,7 @@ export default function MediaPopup({
             <img
               className="media-popup__poster"
               src={poster}
-              alt={item.title || "Selected title"}
+              alt={selectedItem.title || "Selected title"}
             />
           ) : (
             <div className="media-popup__poster-placeholder">
@@ -602,7 +532,7 @@ export default function MediaPopup({
           </button>
 
           <h3 className="media-popup__title" id="media-popup-title">
-            {item.title || "Untitled"}
+            {selectedItem.title || "Untitled"}
           </h3>
 
           <div
@@ -629,7 +559,10 @@ export default function MediaPopup({
             <h4 className="media-popup__section-title">Genres</h4>
             <div className="media-popup__genre-list">
               {genres.map((genre) => (
-                <span className="media-popup__genre-chip first-letter" key={genre}>
+                <span
+                  className="media-popup__genre-chip first-letter"
+                  key={genre}
+                >
                   {genre}
                 </span>
               ))}
