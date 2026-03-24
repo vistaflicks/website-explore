@@ -782,7 +782,17 @@ box-shadow:
   }
 
   .media-popup__nav {
-    display: none;
+    display: flex;
+    left: 12px;
+    right: 12px;
+    bottom: 12px;
+    gap: 10px;
+    z-index: 5;
+  }
+
+  .media-popup__nav-btn {
+    height: 34px;
+    font-size: 12px;
   }
 }
 
@@ -833,14 +843,14 @@ box-shadow:
   }
 
   .media-popup__nav {
+    left: 10px;
+    right: 10px;
+    bottom: 10px;
     gap: 8px;
-    left: 12px;
-    right: 12px;
-    bottom: 12px;
   }
 
   .media-popup__nav-btn {
-    height: 34px;
-    font-size: 12px;
+    height: 32px;
+    font-size: 11px;
   }
 }

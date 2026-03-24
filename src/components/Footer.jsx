@@ -10,7 +10,7 @@ export default function Footer() {
         <div className="footer__top">
           {/* Brand */}
           <div className="footer__brand">
-            <img className="footer__brand-logo" src="/assets/Group-4.svg" alt="Vista Reels" />
+            <img className="footer__brand-logo" src="/assets/Group-4-1.svg" alt="Vista Reels" />
             <p className="footer__tagline">
               Your streaming guide for movies, TV shows & more.
               Discover what's streaming across all your favorite platforms — all in one place.

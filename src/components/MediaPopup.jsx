@@ -653,20 +653,22 @@ export default function MediaPopup({
             </div>
           )}
 
-          <button
-            type="button"
-            className="media-popup__close media-popup__close--media"
-            onClick={onClose}
-            aria-label="Close popup"
-          >
-            <svg
-              className="media-popup__close-icon"
-              viewBox="0 0 20 20"
-              aria-hidden="true"
+          {!isDownloadSlideActive ? (
+            <button
+              type="button"
+              className="media-popup__close media-popup__close--media"
+              onClick={onClose}
+              aria-label="Close popup"
             >
-              <path d="M5 5l10 10M15 5L5 15" />
-            </svg>
-          </button>
+              <svg
+                className="media-popup__close-icon"
+                viewBox="0 0 20 20"
+                aria-hidden="true"
+              >
+                <path d="M5 5l10 10M15 5L5 15" />
+              </svg>
+            </button>
+          ) : null}
 
           <div className="media-popup__nav">
             <button

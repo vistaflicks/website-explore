@@ -356,7 +356,16 @@
   .poster-grid__pagination {
     margin-top: 20px;
     gap: 8px;
-    justify-content: space-between;
+    justify-content: center;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    padding: 0 2px 4px;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .poster-grid__pagination::-webkit-scrollbar {
+    display: none;
   }
 
   .poster-grid__page-btn,
@@ -370,14 +379,14 @@
 
   .poster-grid__page-numbers {
     gap: 6px;
-    flex: 1;
-    overflow-x: auto;
-    scrollbar-width: none;
-    -ms-overflow-style: none;
+    flex: 0 0 auto;
+    overflow: visible;
+    white-space: nowrap;
   }
 
-  .poster-grid__page-numbers::-webkit-scrollbar {
-    display: none;
+  .poster-grid__page-nav {
+    min-width: 78px;
+    white-space: nowrap;
   }
 }
 
@@ -397,6 +406,7 @@
   }
 
   .poster-grid__page-nav {
+    min-width: 70px;
     padding: 0 8px;
     font-size: 11px;
   }

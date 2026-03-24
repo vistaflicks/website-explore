@@ -118,6 +118,7 @@ export default function FilterPanel({
   onFiltersChange,
   resultsCount = 0,
   platformOptions = [],
+  streamingServicesCount = 0,
 }) {
   const [selectedProviders, setSelectedProviders] = useState(new Set())
   const [activeTab, setActiveTab] = useState('All')
@@ -337,6 +338,23 @@ export default function FilterPanel({
     () => Number(resultsCount || 0).toLocaleString(),
     [resultsCount],
   )
+  const resolvedStreamingServicesCount = useMemo(() => {
+    const provided = Number(streamingServicesCount)
+    if (Number.isFinite(provided) && provided > 0) return provided
+    if (Array.isArray(platformOptions) && platformOptions.length > 0) {
+      return platformOptions.length
+    }
+    if (Array.isArray(platforms) && platforms.length > 0) return platforms.length
+    return providerLogos.length
+  }, [streamingServicesCount, platformOptions, platforms])
+  const formattedStreamingServicesCount = useMemo(
+    () => Number(resolvedStreamingServicesCount).toLocaleString(),
+    [resolvedStreamingServicesCount],
+  )
+  const streamingServicesLabel =
+    resolvedStreamingServicesCount === 1
+      ? 'streaming service'
+      : 'streaming services'
 
   return (
     <section className="filter-panel" id="filter-panel">
@@ -347,7 +365,7 @@ export default function FilterPanel({
             Discover What to <span className="accent">Watch</span>
           </h2>
           <p className="filter-panel__subtitle">
-            Filter by platform, genre, and more — find your next binge across 50+ streaming services.
+            Filter by platform, genre, and more — find your next binge across {formattedStreamingServicesCount} {streamingServicesLabel}.
           </p>
         </div>
       </div>

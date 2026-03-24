@@ -437,31 +437,6 @@ export default function PosterGrid({ filters, onTotalResultsChange }) {
                     </svg>
                   </button>
                 )}
-                <div className="poster-grid__actions">
-                  <button
-                    className="poster-grid__action-btn"
-                    title="Add to Watchlist"
-                    onClick={(event) => event.stopPropagation()}
-                  >
-                    <svg viewBox="0 0 24 24" width="16" height="16">
-                      <path d="M12 4v16M4 12h16" stroke="white" strokeWidth="2" fill="none" strokeLinecap="round" />
-                    </svg>
-                  </button>
-                  <button
-                    className="poster-grid__action-btn"
-                    title="More Info"
-                    onClick={(event) => {
-                      event.stopPropagation()
-                      setSelectedPoster(item)
-                    }}
-                  >
-                    <svg viewBox="0 0 24 24" width="16" height="16">
-                      <circle cx="12" cy="5" r="1.5" fill="white" />
-                      <circle cx="12" cy="12" r="1.5" fill="white" />
-                      <circle cx="12" cy="19" r="1.5" fill="white" />
-                    </svg>
-                  </button>
-                </div>
               </div>
             </div>
 

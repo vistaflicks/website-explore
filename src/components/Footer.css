@@ -42,10 +42,10 @@
 }
 
 .footer__brand-logo {
-  height: 32px;
+  height: 46px;
   width: auto;
   display: block;
-  margin-left: -4px;
+  margin-left: 0;
 }
 
 .footer__tagline {
@@ -95,7 +95,7 @@
 }
 
 .footer__stores a img {
-  height: 36px;
+  height: 44px;
   transition: opacity var(--transition-fast);
 }
 
@@ -291,12 +291,20 @@
     text-align: center;
   }
 
+  .footer__brand-logo {
+    height: 42px;
+  }
+
   .footer__tagline {
     max-width: 100%;
   }
 
   .footer__stores {
     justify-content: center;
+  }
+
+  .footer__stores a img {
+    height: 38px;
   }
 
   .footer__social {

@@ -8,6 +8,8 @@ const getGenreFromCategory = (categoryTitle = '') => {
 }
 
 export default function ContentCarousel({ title, desc, movies }) {
+  if (!Array.isArray(movies) || movies.length === 0) return null
+
   const trackRef = useRef(null)
   const [showPrev, setShowPrev] = useState(false)
   const [showNext, setShowNext] = useState(true)
