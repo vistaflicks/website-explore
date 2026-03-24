@@ -12,6 +12,9 @@ const FALLBACK_CAST = [
   { name: "Farhan Akhtar" },
   { name: "Katrina Kaif" },
 ];
+const PLAY_STORE_URL =
+  "https://play.google.com/store/apps/details?id=com.vistareels.app";
+const APP_STORE_URL = "https://apps.apple.com/in/app/vista-reel/id6746562815";
 const WHEEL_SWITCH_THRESHOLD = 24;
 const REEL_SWITCH_SPEED_MS = 380;
 
@@ -147,14 +150,16 @@ export default function MediaPopup({
   const [isVideoPlaying, setIsVideoPlaying] = useState(true);
   const [readyReels, setReadyReels] = useState({});
   const [showPlaybackControl, setShowPlaybackControl] = useState(false);
+  const [showScrollHint, setShowScrollHint] = useState(true);
+  const [isDownloadSlideActive, setIsDownloadSlideActive] = useState(false);
   const playbackControlTimerRef = useRef(null);
   const swiperRef = useRef(null);
   const videoRefs = useRef({});
+  const hasInteractedRef = useRef(false);
   const activeReel = reels[activeReelIndex] || null;
   const reelVideoUrl = activeReel?.videoUrl || "";
   const contentId = getContentId(item);
-  const reelCountText =
-    reels.length > 0 ? `${activeReelIndex + 1} / ${reels.length}` : "";
+  const downloadSlideIndex = reels.length;
 
   useEffect(() => {
     if (!isOpen) return undefined;
@@ -197,6 +202,9 @@ export default function MediaPopup({
       setActiveReelIndex(0);
       setIsLoadingReels(false);
       setReadyReels({});
+      setIsDownloadSlideActive(false);
+      setShowScrollHint(true);
+      hasInteractedRef.current = false;
       return undefined;
     }
 
@@ -223,10 +231,16 @@ export default function MediaPopup({
         setReels(mappedReels);
         setActiveReelIndex(0);
         setReadyReels({});
+        setIsDownloadSlideActive(false);
+        setShowScrollHint(true);
+        hasInteractedRef.current = false;
       } catch (error) {
         setReels([]);
         setActiveReelIndex(0);
         setReadyReels({});
+        setIsDownloadSlideActive(false);
+        setShowScrollHint(true);
+        hasInteractedRef.current = false;
       } finally {
         setIsLoadingReels(false);
       }
@@ -259,6 +273,7 @@ export default function MediaPopup({
   };
 
   const revealPlaybackControl = () => {
+    if (isDownloadSlideActive) return;
     if (!reelVideoUrl) return;
     setShowPlaybackControl(true);
     if (playbackControlTimerRef.current) {
@@ -270,10 +285,33 @@ export default function MediaPopup({
   };
 
   useEffect(() => {
+    if (isDownloadSlideActive) return undefined;
+    if (!isOpen || !showScrollHint || reels.length <= 1) return undefined;
+
+    const hintTimer = setTimeout(() => {
+      setShowScrollHint(false);
+    }, 3200);
+
+    return () => clearTimeout(hintTimer);
+  }, [isOpen, showScrollHint, isDownloadSlideActive, reels.length]);
+
+  useEffect(() => {
     if (!isOpen) {
       Object.values(videoRefs.current).forEach((video) => {
         if (video && !video.paused) video.pause();
       });
+      setIsDownloadSlideActive(false);
+      setShowScrollHint(true);
+      hasInteractedRef.current = false;
+      return;
+    }
+
+    if (isDownloadSlideActive) {
+      Object.values(videoRefs.current).forEach((video) => {
+        if (video && !video.paused) video.pause();
+      });
+      setIsVideoPlaying(false);
+      setShowPlaybackControl(false);
       return;
     }
 
@@ -290,7 +328,7 @@ export default function MediaPopup({
       startAutoplay(activeVideo);
     }
     setShowPlaybackControl(false);
-  }, [isOpen, activeReelIndex, reelVideoUrl]);
+  }, [isOpen, activeReelIndex, reelVideoUrl, isDownloadSlideActive]);
 
   useEffect(
     () => () => {
@@ -313,6 +351,7 @@ export default function MediaPopup({
   const metaParts = getMetaParts(selectedItem, genres);
 
   const goToNextReel = () => {
+    if (isDownloadSlideActive) return;
     if (reels.length <= 1) return;
     const nextIndex = (activeReelIndex + 1) % reels.length;
     if (swiperRef.current) {
@@ -322,7 +361,33 @@ export default function MediaPopup({
     setActiveReelIndex(nextIndex);
   };
 
+  const markReelInteraction = () => {
+    if (!hasInteractedRef.current) {
+      hasInteractedRef.current = true;
+    }
+    setShowScrollHint(false);
+  };
+
+  const openDownloadSlide = () => {
+    markReelInteraction();
+    setIsDownloadSlideActive(true);
+    if (swiperRef.current) {
+      swiperRef.current.slideTo(downloadSlideIndex, REEL_SWITCH_SPEED_MS);
+    }
+  };
+
+  const closeDownloadSlide = () => {
+    if (swiperRef.current && reels.length > 0) {
+      swiperRef.current.slideTo(
+        Math.max(0, reels.length - 1),
+        REEL_SWITCH_SPEED_MS,
+      );
+    }
+    setIsDownloadSlideActive(false);
+  };
+
   const toggleVideoPlayback = () => {
+    if (isDownloadSlideActive) return;
     const video = videoRefs.current[activeReelIndex];
     if (!video) return;
 
@@ -362,6 +427,7 @@ export default function MediaPopup({
           onClick={(event) => {
             if (!reelVideoUrl) return;
             if (event.target.closest("button, a")) return;
+            markReelInteraction();
             revealPlaybackControl();
             toggleVideoPlayback();
           }}
@@ -400,7 +466,12 @@ export default function MediaPopup({
                   }
                 }}
                 onSlideChange={(swiper) => {
-                  setActiveReelIndex(swiper.activeIndex);
+                  markReelInteraction();
+                  const isDownload = swiper.activeIndex === downloadSlideIndex;
+                  setIsDownloadSlideActive(isDownload);
+                  if (!isDownload) {
+                    setActiveReelIndex(swiper.activeIndex);
+                  }
                 }}
               >
                 {reels.map((reel, index) => (
@@ -441,14 +512,116 @@ export default function MediaPopup({
                     />
                   </SwiperSlide>
                 ))}
+                <SwiperSlide className="media-popup__reel-slide">
+                  <div
+                    className="media-popup__download-slide"
+                    onClick={(event) => event.stopPropagation()}
+                  >
+                    <button
+                      type="button"
+                      className="media-popup__download-slide-close"
+                      onClick={closeDownloadSlide}
+                      aria-label="Back to reels"
+                    >
+                      <svg
+                        className="media-popup__close-icon"
+                        viewBox="0 0 20 20"
+                        aria-hidden="true"
+                      >
+                        <path d="M5 5l10 10M15 5L5 15" />
+                      </svg>
+                    </button>
+                    <p className="media-popup__download-title">
+                      Enjoy more on Vista Reels app
+                    </p>
+                    <p className="media-popup__download-subtitle">
+                      Discover, like, save and share seamlessly in the app.
+                    </p>
+                    <div className="media-popup__download-stores">
+                      <a
+                        href={PLAY_STORE_URL}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="media-popup__download-store"
+                      >
+                        <img
+                          src="/assets/Group-9076-2.svg"
+                          alt="Get it on Google Play"
+                        />
+                      </a>
+                      <a
+                        href={APP_STORE_URL}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="media-popup__download-store"
+                      >
+                        <img
+                          src="/assets/Group-9577.svg"
+                          alt="Download on the App Store"
+                        />
+                      </a>
+                    </div>
+                    <img
+                      className="media-popup__download-frame"
+                      src="/assets/Download-frame.png"
+                      alt="Vista Reels app preview"
+                    />
+                  </div>
+                </SwiperSlide>
               </Swiper>
-              <div className="media-popup__reel-badge">
-                <span>Reels</span>
-                <span>{reelCountText}</span>
-              </div>
+              {showScrollHint && !isDownloadSlideActive && reels.length > 1 ? (
+                <div className="media-popup__scroll-hint">
+                  <span className="media-popup__scroll-hint-arrow">↑↓</span>
+                  <span>Swipe or scroll to browse reels</span>
+                </div>
+              ) : null}
+              {!isDownloadSlideActive ? (
+                <div
+                  className="media-popup__action-rail"
+                  onClick={(event) => event.stopPropagation()}
+                >
+                  <button
+                    type="button"
+                    className="media-popup__action-btn"
+                    onClick={openDownloadSlide}
+                    aria-label="Like reel"
+                  >
+                    <span className="media-popup__action-icon" aria-hidden="true">
+                      <svg viewBox="0 0 24 24">
+                        <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.27 2 8.5A4.5 4.5 0 0 1 6.5 4C8.24 4 9.91 4.81 11 6.08 12.09 4.81 13.76 4 15.5 4A4.5 4.5 0 0 1 20 8.5c0 3.77-3.4 6.86-8.55 11.54z" />
+                      </svg>
+                    </span>
+                  </button>
+                  <button
+                    type="button"
+                    className="media-popup__action-btn"
+                    onClick={openDownloadSlide}
+                    aria-label="Share reel"
+                  >
+                    <span className="media-popup__action-icon" aria-hidden="true">
+                      <svg viewBox="0 0 24 24">
+                        <path d="M22 2L11 13" />
+                        <path d="M22 2l-7 20-4-9-9-4z" />
+                      </svg>
+                    </span>
+                  </button>
+                  <button
+                    type="button"
+                    className="media-popup__action-btn"
+                    onClick={openDownloadSlide}
+                    aria-label="Save reel"
+                  >
+                    <span className="media-popup__action-icon" aria-hidden="true">
+                      <svg viewBox="0 0 24 24">
+                        <path d="M6 3h12a1 1 0 0 1 1 1v17l-7-4-7 4V4a1 1 0 0 1 1-1z" />
+                      </svg>
+                    </span>
+                  </button>
+                </div>
+              ) : null}
               <button
                 type="button"
-                className={`media-popup__play-toggle${showPlaybackControl ? " media-popup__play-toggle--visible" : ""}`}
+                className={`media-popup__play-toggle${showPlaybackControl && !isDownloadSlideActive ? " media-popup__play-toggle--visible" : ""}`}
                 onClick={(event) => {
                   event.stopPropagation();
                   revealPlaybackControl();
