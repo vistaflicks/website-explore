@@ -492,10 +492,7 @@ export default function FilterPanel({
       {/* Results info */}
       <div className="filter-panel__results">
         <span className="filter-panel__results-count">
-          <strong>{formattedResultsCount}</strong> titles&ensp;·&ensp;sorted by&ensp;
-          <span className="filter-panel__sort-value">
-            Popularity <ChevronDown />
-          </span>
+          <strong>{formattedResultsCount}</strong> titles
         </span>
       </div>
     </section>

@@ -30,6 +30,12 @@ const categoryDescFallbacks = movieCategories.reduce((acc, category) => {
   return acc;
 }, {});
 
+const capitalizeFirstLetter = (value = "") => {
+  const text = String(value).trim();
+  if (!text) return "";
+  return text.charAt(0).toUpperCase() + text.slice(1);
+};
+
 const mapResultsToCategories = (results) => {
   if (!Array.isArray(results)) return [];
 
@@ -60,7 +66,7 @@ const mapResultsToCategories = (results) => {
         .filter((movie) => Boolean(movie?.title || movie?.poster));
 
       return {
-        title: item.categoryName || "",
+        title: capitalizeFirstLetter(item.categoryName || ""),
         desc:
           item.description ||
           item.desc ||

@@ -152,7 +152,10 @@ export default function MediaPopup({
   const [showPlaybackControl, setShowPlaybackControl] = useState(false);
   const [showScrollHint, setShowScrollHint] = useState(true);
   const [isDownloadSlideActive, setIsDownloadSlideActive] = useState(false);
+  const [navTransitionDirection, setNavTransitionDirection] = useState("");
   const playbackControlTimerRef = useRef(null);
+  const navTransitionTimerRef = useRef(null);
+  const navTransitionFrameRef = useRef(null);
   const swiperRef = useRef(null);
   const videoRefs = useRef({});
   const hasInteractedRef = useRef(false);
@@ -336,6 +339,12 @@ export default function MediaPopup({
       if (playbackControlTimerRef.current) {
         clearTimeout(playbackControlTimerRef.current);
       }
+      if (navTransitionTimerRef.current) {
+        clearTimeout(navTransitionTimerRef.current);
+      }
+      if (navTransitionFrameRef.current) {
+        cancelAnimationFrame(navTransitionFrameRef.current);
+      }
     },
     [],
   );
@@ -407,6 +416,42 @@ export default function MediaPopup({
     setIsVideoPlaying(false);
   };
 
+  const triggerNavTransition = (direction, callback) => {
+    if (typeof callback !== "function") return;
+    callback();
+    if (navTransitionFrameRef.current) {
+      cancelAnimationFrame(navTransitionFrameRef.current);
+    }
+    navTransitionFrameRef.current = requestAnimationFrame(() => {
+      setNavTransitionDirection(direction);
+    });
+  };
+
+  const handlePrevClick = () => {
+    triggerNavTransition("prev", onPrev);
+  };
+
+  const handleNextClick = () => {
+    triggerNavTransition("next", onNext);
+  };
+
+  useEffect(() => {
+    if (!navTransitionDirection) return undefined;
+    if (navTransitionTimerRef.current) {
+      clearTimeout(navTransitionTimerRef.current);
+    }
+
+    navTransitionTimerRef.current = setTimeout(() => {
+      setNavTransitionDirection("");
+    }, 280);
+
+    return () => {
+      if (navTransitionTimerRef.current) {
+        clearTimeout(navTransitionTimerRef.current);
+      }
+    };
+  }, [navTransitionDirection, selectedItem?.id, selectedItem?._id, selectedItem?.title]);
+
   if (!isOpen || !item) return null;
 
   return (
@@ -420,9 +465,24 @@ export default function MediaPopup({
       }}
     >
       <div
-        className={`media-popup__panel${showNoReelsLayout ? " media-popup__panel--no-reels" : ""}`}
+        className={`media-popup__panel${showNoReelsLayout ? " media-popup__panel--no-reels" : ""}${navTransitionDirection ? ` media-popup__panel--transition-${navTransitionDirection}` : ""}`}
         onMouseDown={(event) => event.stopPropagation()}
       >
+        <button
+          type="button"
+          className="media-popup__close media-popup__close--panel"
+          onClick={onClose}
+          aria-label="Close popup"
+        >
+          <svg
+            className="media-popup__close-icon"
+            viewBox="0 0 20 20"
+            aria-hidden="true"
+          >
+            <path d="M5 5l10 10M15 5L5 15" />
+          </svg>
+        </button>
+
         <div
           className="media-popup__media"
           onClick={(event) => {
@@ -433,12 +493,20 @@ export default function MediaPopup({
             toggleVideoPlayback();
           }}
         >
-          {isLoadingReels ? (
-            <div className="media-popup__poster-placeholder">
-              Loading reels...
-            </div>
-          ) : reelVideoUrl ? (
-            <>
+          <div className="media-popup__media-stage">
+            {isLoadingReels ? (
+              <div className="media-popup__poster-placeholder">
+                <div
+                  className="media-popup__loader"
+                  role="status"
+                  aria-live="polite"
+                  aria-label="Loading reels"
+                >
+                  <span className="media-popup__loader-ring" aria-hidden="true" />
+                </div>
+              </div>
+            ) : reelVideoUrl ? (
+              <>
               <Swiper
                 className="media-popup__reel-swiper"
                 direction="vertical"
@@ -658,41 +726,25 @@ export default function MediaPopup({
                   </div>
                 </div>
               ) : null}
-            </>
-          ) : poster ? (
-            <img
-              className="media-popup__poster"
-              src={poster}
-              alt={selectedItem.title || "Selected title"}
-            />
-          ) : (
-            <div className="media-popup__poster-placeholder">
-              No image available
-            </div>
-          )}
-
-          {!isDownloadSlideActive && !showNoReelsLayout ? (
-            <button
-              type="button"
-              className="media-popup__close media-popup__close--media"
-              onClick={onClose}
-              aria-label="Close popup"
-            >
-              <svg
-                className="media-popup__close-icon"
-                viewBox="0 0 20 20"
-                aria-hidden="true"
-              >
-                <path d="M5 5l10 10M15 5L5 15" />
-              </svg>
-            </button>
-          ) : null}
+              </>
+            ) : poster ? (
+              <img
+                className="media-popup__poster"
+                src={poster}
+                alt={selectedItem.title || "Selected title"}
+              />
+            ) : (
+              <div className="media-popup__poster-placeholder">
+                No image available
+              </div>
+            )}
+          </div>
 
           <div className="media-popup__nav">
             <button
               type="button"
               className="media-popup__nav-btn media-popup__nav-btn--ghost"
-              onClick={onPrev}
+              onClick={handlePrevClick}
               disabled={!hasPrev}
             >
               {prevLabel}
@@ -700,7 +752,7 @@ export default function MediaPopup({
             <button
               type="button"
               className="media-popup__nav-btn media-popup__nav-btn--solid"
-              onClick={onNext}
+              onClick={handleNextClick}
               disabled={!hasNext}
             >
               {nextLabel}
@@ -709,120 +761,107 @@ export default function MediaPopup({
         </div>
 
         <div className="media-popup__details">
-          <button
-            type="button"
-            className="media-popup__close"
-            onClick={onClose}
-            aria-label="Close popup"
-          >
-            <svg
-              className="media-popup__close-icon"
-              viewBox="0 0 20 20"
-              aria-hidden="true"
-            >
-              <path d="M5 5l10 10M15 5L5 15" />
-            </svg>
-          </button>
-
-          {showNoReelsLayout ? (
-            <div className="media-popup__details-poster">
-              {poster ? (
-                <img
-                  src={poster}
-                  alt={selectedItem.title || "Selected title"}
-                />
-              ) : (
-                <div className="media-popup__details-poster-fallback">
-                  {getInitials(selectedItem.title || "Vista Reels")}
-                </div>
-              )}
-            </div>
-          ) : null}
-
-          <h3 className="media-popup__title" id="media-popup-title">
-            {selectedItem.title || "Untitled"}
-          </h3>
-
-          <div
-            className="media-popup__meta-line"
-            aria-label={metaParts.join(" • ")}
-          >
-            {metaParts.map((part, index) => (
-              <div className="media-popup__meta-item" key={`${index}-${part}`}>
-                {index > 0 ? <span className="media-popup__meta-dot" /> : null}
-                <span>{part}</span>
-              </div>
-            ))}
-          </div>
-          <div className="media-popup__divider" />
-
-          <section className="media-popup__section">
-            <h4 className="media-popup__section-title">Movie Plot</h4>
-            <p className="media-popup__plot">{plot}</p>
-          </section>
-
-          <div className="media-popup__divider" />
-
-          <section className="media-popup__section">
-            <h4 className="media-popup__section-title">Genres</h4>
-            <div className="media-popup__genre-list">
-              {genres.map((genre) => (
-                <span
-                  className="media-popup__genre-chip first-letter"
-                  key={genre}
-                >
-                  {genre}
-                </span>
-              ))}
-            </div>
-          </section>
-
-          <div className="media-popup__divider" />
-
-          <section className="media-popup__section">
-            <h4 className="media-popup__section-title">Cast</h4>
-            <div className="media-popup__cast-list">
-              {cast.map((member) => (
-                <div className="media-popup__cast-item" key={member.name}>
-                  <div className="media-popup__cast-avatar-wrap">
-                    {member.image ? (
-                      <img
-                        className="media-popup__cast-avatar"
-                        src={member.image}
-                        alt={member.name}
-                      />
-                    ) : (
-                      <div className="media-popup__cast-avatar media-popup__cast-avatar--fallback">
-                        {getInitials(member.name)}
-                      </div>
-                    )}
+          <div className="media-popup__details-stage">
+            {showNoReelsLayout ? (
+              <div className="media-popup__details-poster">
+                {poster ? (
+                  <img
+                    src={poster}
+                    alt={selectedItem.title || "Selected title"}
+                  />
+                ) : (
+                  <div className="media-popup__details-poster-fallback">
+                    {getInitials(selectedItem.title || "Vista Reels")}
                   </div>
-                  <span className="media-popup__cast-name">{member.name}</span>
+                )}
+              </div>
+            ) : null}
+
+            <h3 className="media-popup__title" id="media-popup-title">
+              {selectedItem.title || "Untitled"}
+            </h3>
+
+            <div
+              className="media-popup__meta-line"
+              aria-label={metaParts.join(" • ")}
+            >
+              {metaParts.map((part, index) => (
+                <div className="media-popup__meta-item" key={`${index}-${part}`}>
+                  {index > 0 ? <span className="media-popup__meta-dot" /> : null}
+                  <span>{part}</span>
                 </div>
               ))}
             </div>
-          </section>
+            <div className="media-popup__divider" />
 
-          {showNoReelsLayout ? (
-            <div className="media-popup__details-nav">
-              <button
-                type="button"
-                className="media-popup__nav-btn media-popup__nav-btn--ghost"
-                onClick={onPrev}
-                disabled={!hasPrev}
-              >
-                {prevLabel}
-              </button>
-              <button
-                type="button"
-                className="media-popup__nav-btn media-popup__nav-btn--solid"
-                onClick={onNext}
-                disabled={!hasNext}
-              >
-                {nextLabel}
-              </button>
-            </div>
-          ) : null}
+            <section className="media-popup__section">
+              <h4 className="media-popup__section-title">Movie Plot</h4>
+              <p className="media-popup__plot">{plot}</p>
+            </section>
+
+            <div className="media-popup__divider" />
+
+            <section className="media-popup__section">
+              <h4 className="media-popup__section-title">Genres</h4>
+              <div className="media-popup__genre-list">
+                {genres.map((genre) => (
+                  <span
+                    className="media-popup__genre-chip first-letter"
+                    key={genre}
+                  >
+                    {genre}
+                  </span>
+                ))}
+              </div>
+            </section>
+
+            <div className="media-popup__divider" />
+
+            <section className="media-popup__section">
+              <h4 className="media-popup__section-title">Cast</h4>
+              <div className="media-popup__cast-list">
+                {cast.map((member) => (
+                  <div className="media-popup__cast-item" key={member.name}>
+                    <div className="media-popup__cast-avatar-wrap">
+                      {member.image ? (
+                        <img
+                          className="media-popup__cast-avatar"
+                          src={member.image}
+                          alt={member.name}
+                        />
+                      ) : (
+                        <div className="media-popup__cast-avatar media-popup__cast-avatar--fallback">
+                          {getInitials(member.name)}
+                        </div>
+                      )}
+                    </div>
+                    <span className="media-popup__cast-name">{member.name}</span>
+                  </div>
+                ))}
+              </div>
+            </section>
+
+            {showNoReelsLayout ? (
+              <div className="media-popup__details-nav">
+                <button
+                  type="button"
+                  className="media-popup__nav-btn media-popup__nav-btn--ghost"
+                  onClick={handlePrevClick}
+                  disabled={!hasPrev}
+                >
+                  {prevLabel}
+                </button>
+                <button
+                  type="button"
+                  className="media-popup__nav-btn media-popup__nav-btn--solid"
+                  onClick={handleNextClick}
+                  disabled={!hasNext}
+                >
+                  {nextLabel}
+                </button>
+              </div>
+            ) : null}
+          </div>
         </div>
       </div>
     </div>

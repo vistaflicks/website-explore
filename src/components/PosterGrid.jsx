@@ -81,9 +81,15 @@ const getValueName = (value) => {
   return ''
 }
 
+const capitalizeFirstLetter = (value = '') => {
+  const text = String(value).trim()
+  if (!text) return ''
+  return text.charAt(0).toUpperCase() + text.slice(1)
+}
+
 const getPrimaryGenre = (genres) => {
   if (!Array.isArray(genres) || genres.length === 0) return 'Drama'
-  return getValueName(genres[0]) || 'Drama'
+  return capitalizeFirstLetter(getValueName(genres[0]) || 'Drama')
 }
 
 const getTypeLabel = (type, seasonCount) => {
