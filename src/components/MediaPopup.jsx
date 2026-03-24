@@ -163,6 +163,7 @@ export default function MediaPopup({
   const reelVideoUrl = activeReel?.videoUrl || "";
   const contentId = getContentId(item);
   const downloadSlideIndex = reels.length;
+  const canSlideReels = reels.length > 0;
   const showNoReelsLayout = !isLoadingReels && !reelVideoUrl;
 
   useEffect(() => {
@@ -512,7 +513,7 @@ export default function MediaPopup({
                 direction="vertical"
                 modules={[Mousewheel]}
                 mousewheel={
-                  reels.length > 1
+                  canSlideReels
                     ? {
                         forceToAxis: true,
                         thresholdDelta: WHEEL_SWITCH_THRESHOLD,
@@ -527,7 +528,7 @@ export default function MediaPopup({
                 nested
                 preventClicks
                 preventClicksPropagation
-                allowTouchMove={reels.length > 1}
+                allowTouchMove={canSlideReels}
                 onSwiper={(swiper) => {
                   swiperRef.current = swiper;
                   if (swiper.activeIndex !== activeReelIndex) {

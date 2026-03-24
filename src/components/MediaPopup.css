@@ -909,6 +909,10 @@ box-shadow:
     place-items: center;
   }
 
+  .media-popup__download-slide-close {
+    display: none;
+  }
+
   .media-popup__close--panel {
     top: calc(50% - (min(88vh, 760px) / 2) + 10px);
     right: calc(50% - (min(92vw, 430px) / 2) + 10px);
