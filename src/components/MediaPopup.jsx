@@ -160,6 +160,7 @@ export default function MediaPopup({
   const reelVideoUrl = activeReel?.videoUrl || "";
   const contentId = getContentId(item);
   const downloadSlideIndex = reels.length;
+  const showNoReelsLayout = !isLoadingReels && !reelVideoUrl;
 
   useEffect(() => {
     if (!isOpen) return undefined;
@@ -419,7 +420,7 @@ export default function MediaPopup({
       }}
     >
       <div
-        className="media-popup__panel"
+        className={`media-popup__panel${showNoReelsLayout ? " media-popup__panel--no-reels" : ""}`}
         onMouseDown={(event) => event.stopPropagation()}
       >
         <div
@@ -640,6 +641,23 @@ export default function MediaPopup({
                   <span className="media-popup__play-icon" aria-hidden="true" />
                 )}
               </button>
+              {!isDownloadSlideActive ? (
+                <div className="media-popup__reel-info">
+                  <div className="media-popup__reel-info-avatar">
+                    {poster ? (
+                      <img src={poster} alt={selectedItem.title || "Selected title"} />
+                    ) : (
+                      <span>{getInitials(selectedItem.title || "Vista Reels")}</span>
+                    )}
+                  </div>
+                  <div className="media-popup__reel-info-copy">
+                    <p className="media-popup__reel-info-title">
+                      {selectedItem.title || "Untitled"}
+                    </p>
+                    <p className="media-popup__reel-info-overview">{plot}</p>
+                  </div>
+                </div>
+              ) : null}
             </>
           ) : poster ? (
             <img
@@ -653,7 +671,7 @@ export default function MediaPopup({
             </div>
           )}
 
-          {!isDownloadSlideActive ? (
+          {!isDownloadSlideActive && !showNoReelsLayout ? (
             <button
               type="button"
               className="media-popup__close media-popup__close--media"
@@ -705,6 +723,21 @@ export default function MediaPopup({
               <path d="M5 5l10 10M15 5L5 15" />
             </svg>
           </button>
+
+          {showNoReelsLayout ? (
+            <div className="media-popup__details-poster">
+              {poster ? (
+                <img
+                  src={poster}
+                  alt={selectedItem.title || "Selected title"}
+                />
+              ) : (
+                <div className="media-popup__details-poster-fallback">
+                  {getInitials(selectedItem.title || "Vista Reels")}
+                </div>
+              )}
+            </div>
+          ) : null}
 
           <h3 className="media-popup__title" id="media-popup-title">
             {selectedItem.title || "Untitled"}
@@ -769,6 +802,27 @@ export default function MediaPopup({
               ))}
             </div>
           </section>
+
+          {showNoReelsLayout ? (
+            <div className="media-popup__details-nav">
+              <button
+                type="button"
+                className="media-popup__nav-btn media-popup__nav-btn--ghost"
+                onClick={onPrev}
+                disabled={!hasPrev}
+              >
+                {prevLabel}
+              </button>
+              <button
+                type="button"
+                className="media-popup__nav-btn media-popup__nav-btn--solid"
+                onClick={onNext}
+                disabled={!hasNext}
+              >
+                {nextLabel}
+              </button>
+            </div>
+          ) : null}
         </div>
       </div>
     </div>
