@@ -1,0 +1,637 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([["chunk-0f088e4f","chunk-cad66622"],{1085:function(e,t,a){var n=a("38da");n.__esModule&&(n=n.default),"string"==typeof n&&(n=[[e.i,n,""]]),n.locals&&(e.exports=n.locals);(0,a("499e").default)("29279327",n,!0,{sourceMap:!1,shadowMode:!1})},"137f":function(e,t,a){(t=a("24fb")(!1)).push([e.i,".jw-scoring-listing{display:flex;align-items:center;justify-content:flex-start;gap:10px}.jw-scoring-listing__rating img{width:16px;margin-inline-end:3px;vertical-align:sub}.jw-scoring-listing__rating img.is-imdb{width:24px}.jw-scoring-listing__rating--group{display:flex;align-items:center;gap:4px}.jw-scoring-listing__rating--link{color:#78a6b8;cursor:pointer}.jw-scoring-listing__rating--no-link{color:inherit!important;pointer-events:none}.jw-scoring-listing__rating a{display:inline-flex;align-items:center}.jw-scoring-listing__rating a img{margin-inline-end:6px}.jw-scoring-listing.poster-details{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:auto auto;margin:auto}.jw-scoring-listing.poster-details .jw-scoring-listing__rating:first-child{grid-column:span 2}@media(max-width:380px){.jw-scoring-listing__rating{font-size:13px}.jw-scoring-listing__rating--img{margin-inline-end:1px}}.nowrap{white-space:nowrap}",""]),e.exports=t},2548:function(e,t,a){"use strict";a.d(t,"a",(function(){return l})),a.d(t,"b",(function(){return c})),a.d(t,"c",(function(){return p})),a.d(t,"d",(function(){return g})),a.d(t,"g",(function(){return m})),a.d(t,"e",(function(){return v})),a.d(t,"f",(function(){return _}));var n=a("ca0f"),i=a("1156"),o=a("9a30");const r={load(e,t){const a=document.createElement("script");a.type="text/javascript",a.async=!0,a.defer=!0,a.setAttribute("crossorigin","anonymous"),a.src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3179068936475881",document.body.appendChild(a),(window.adsbygoogle=window.adsbygoogle||[]).onload=t}};const s=(e,t)=>{(window.googletag=window.googletag||{cmd:[]}).cmd=window.googletag.cmd||[],t()};var l;!function(e){e.YIELDLOVE="yieldlove",e.ADSENSE="adsense",e.GAM="GAM"}(l||(l={}));const d=Object.keys(n.i).reduce((e,t)=>(e[t]=function(e){if(o.d.includes(e))return l.YIELDLOVE;if([i.a.uk,i.a.fr,i.a.es,i.a.de,i.a.it].includes(e))return l.GAM;return l.ADSENSE}(t),e),{}),c=[{name:"jw_{WEBLOCALE}_inlist_1",path:"/21679119891/jw_{WEBLOCALE}_inlist_1",gamPath:"/21679119891/new_inlist_1",sizes:[{x:300,y:250,breakpoint:310,adsenseSlot:2488461659},{x:970,y:250,breakpoint:1106,adsenseSlot:1566723844}]},{name:"jw_{WEBLOCALE}_inlist_2",path:"/21679119891/jw_{WEBLOCALE}_inlist_2",gamPath:"/21679119891/new_inlist_2",sizes:[{x:300,y:250,breakpoint:310,adsenseSlot:2488461659},{x:970,y:250,breakpoint:1106,adsenseSlot:1566723844}]},{name:"jw_{WEBLOCALE}_inlist_3",path:"/21679119891/jw_{WEBLOCALE}_inlist_3",gamPath:"/21679119891/new_inlist_3",sizes:[{x:300,y:250,breakpoint:310,adsenseSlot:2488461659},{x:970,y:250,breakpoint:1106,adsenseSlot:1566723844}]},{name:"jw_{WEBLOCALE}_under_detail_info",path:"/21679119891/jw_{WEBLOCALE}_under_detail_info",gamPath:"/21679119891/title_under_detail_info",sizes:[{x:300,y:600,breakpoint:992,adsenseSlot:9468572974}]},{name:"jw_{WEBLOCALE}_under_buybox",path:"/21679119891/jw_{WEBLOCALE}_under_buybox",gamPath:"/21679119891/title_under_buybox",sizes:[{x:300,y:250,breakpoint:310,adsenseSlot:2488461659},{x:728,y:90,breakpoint:1130,adsenseSlot:2516381812}]},{name:"jw_{WEBLOCALE}_bottom_page",path:"/21679119891/jw_{WEBLOCALE}_bottom_page",gamPath:"/21679119891/title_bottom_page",sizes:[{x:300,y:250,breakpoint:310,adsenseSlot:2488461659},{x:728,y:90,breakpoint:1130,adsenseSlot:2516381812}]},{name:"jw_{WEBLOCALE}_sport_under_offers",sizes:[{x:300,y:250,breakpoint:310,adsenseSlot:2488461659},{x:728,y:90,breakpoint:1130,adsenseSlot:2516381812}]},{name:"jw_{WEBLOCALE}_sport_under_details",sizes:[{x:300,y:250,breakpoint:310,adsenseSlot:2488461659},{x:728,y:90,breakpoint:1130,adsenseSlot:2516381812}]},{name:"jw_{WEBLOCALE}_sport_inlist_1",sizes:[{x:300,y:250,breakpoint:310,adsenseSlot:2488461659},{x:970,y:250,breakpoint:1106,adsenseSlot:1566723844}]},{name:"jw_{WEBLOCALE}_sport_inlist_2",sizes:[{x:300,y:250,breakpoint:310,adsenseSlot:2488461659},{x:970,y:250,breakpoint:1106,adsenseSlot:1566723844}]},{name:"jw_{WEBLOCALE}_sport_inlist_3",sizes:[{x:300,y:250,breakpoint:310,adsenseSlot:2488461659},{x:970,y:250,breakpoint:1106,adsenseSlot:1566723844}]},{name:"jw_{WEBLOCALE}_sport_inlist_4",sizes:[{x:300,y:250,breakpoint:310,adsenseSlot:2488461659},{x:970,y:250,breakpoint:1106,adsenseSlot:1566723844}]},{name:"jw_{WEBLOCALE}_sport_inlist_5",sizes:[{x:300,y:250,breakpoint:310,adsenseSlot:2488461659},{x:970,y:250,breakpoint:1106,adsenseSlot:1566723844}]},{name:"jw_{WEBLOCALE}_sport_inlist_6",sizes:[{x:300,y:250,breakpoint:310,adsenseSlot:2488461659},{x:970,y:250,breakpoint:1106,adsenseSlot:1566723844}]},{name:"jw_{WEBLOCALE}_sport_inlist_7",sizes:[{x:300,y:250,breakpoint:310,adsenseSlot:2488461659},{x:970,y:250,breakpoint:1106,adsenseSlot:1566723844}]}];let u=!1;function p(){u||window.googletag.cmd.push(()=>{u||(window.googletag.pubads().enableSingleRequest(),window.googletag.pubads().disableInitialLoad(),window.googletag.enableServices(),u=!0)})}const f={};function g(e,t){return t?l.ADSENSE:d[e]}async function m(e,t){if(!f[t])switch(t){case l.YIELDLOVE:f[l.YIELDLOVE]=new Promise(async(t,a)=>await Object(o.c)(e,t,a));break;case l.ADSENSE:f[l.ADSENSE]=new Promise(t=>r.load(e,t));break;case l.GAM:f[l.GAM]=new Promise(t=>function(e,t){const a=document.createElement("script");a.type="text/javascript",a.async=!0,a.defer=!0,a.src="https://securepubads.g.doubleclick.net/tag/js/gpt.js",document.body.appendChild(a),s(e,t)}(e,t))}return f[t]}async function v(e,t,n,i){try{switch(await m(e,n),n){case l.YIELDLOVE:window.YLHH&&window.YLHH.bidder?window.googletag.cmd.push(()=>{window.YLHH.bidder.startAuction(Object(o.a)(e,"/21679119891/"+t)),window.googletag.cmd.push((function(){window.googletag.display(t)})),window.googletag.pubads().addEventListener("slotResponseReceived",e=>{const{slot:a}=e;t===a.getSlotElementId()&&(null==i||i(null!==a.getResponseInformation()))})}):(Promise.resolve().then(a.bind(null,"ed4f")).then(({captureMessageForSentry:e})=>{e("[ad-helper.ts YIELDLOVE]: window.YLHH.bidder is undefined")}),null==i||i(!1));break;case l.ADSENSE:(window.adsbygoogle=window.adsbygoogle||[]).push({});break;case l.GAM:window.googletag.cmd.push((function(){window.googletag.display(t)}))}}catch(e){console.error(`[Ad-Helper] Failed to load ad: ${n} for slot ${t}`,e),null==i||i(!1)}}async function _(e,t,a){switch(await m(e,a),a){case l.YIELDLOVE:window.googletag.cmd.push((function(){const e=window.googletag.pubads().getSlots().find(e=>e.getSlotElementId()===t);e?window.googletag.pubads().clear([e]):console.warn("[YL] Slot not found for removal: "+t)}))}}},"38da":function(e,t,a){(t=a("24fb")(!1)).push([e.i,".ad-unit[data-v-7eac40d7]{display:flex;flex-direction:column;align-items:center}.ad-unit__container[data-v-7eac40d7]{overflow:hidden;text-align:center}.ad-unit__container--button[data-v-7eac40d7]{all:unset;cursor:pointer}.ad-unit__container div iframe[data-v-7eac40d7]{vertical-align:middle!important}.ad-unit__removal[data-v-7eac40d7]{all:unset;margin-top:5px;min-height:22px;cursor:pointer;color:var(--jw-color-secondary)}.ad-unit__removal-container[data-v-7eac40d7]{position:absolute;bottom:-25px;width:100%;display:flex;justify-content:center}div.ad-container[data-v-7eac40d7]{position:relative;margin-bottom:30px;margin-top:10px}div.ad-container[data-ad-position=top][data-v-7eac40d7]{height:50px;width:320px}@media(max-width:825px){div.ad-container[data-ad-position=top][data-v-7eac40d7]{height:90px;width:728px}}div.ad-container[data-ad-position=inlist_1][data-v-7eac40d7],div.ad-container[data-ad-position=inlist_2][data-v-7eac40d7],div.ad-container[data-ad-position=inlist_3][data-v-7eac40d7]{margin-top:30px}div.ad-container[data-ad-position=inlist_1][data-v-7eac40d7],div.ad-container[data-ad-position=inlist_2][data-v-7eac40d7],div.ad-container[data-ad-position=inlist_3][data-v-7eac40d7],div.ad-container[data-ad-position=sport_inlist_1][data-v-7eac40d7],div.ad-container[data-ad-position=sport_inlist_2][data-v-7eac40d7],div.ad-container[data-ad-position=sport_inlist_3][data-v-7eac40d7],div.ad-container[data-ad-position=sport_inlist_4][data-v-7eac40d7],div.ad-container[data-ad-position=sport_inlist_5][data-v-7eac40d7],div.ad-container[data-ad-position=sport_inlist_6][data-v-7eac40d7],div.ad-container[data-ad-position=sport_inlist_7][data-v-7eac40d7]{align-self:flex-start;height:250px;width:970px}@media(max-width:1106px){div.ad-container[data-ad-position=inlist_1][data-v-7eac40d7],div.ad-container[data-ad-position=inlist_2][data-v-7eac40d7],div.ad-container[data-ad-position=inlist_3][data-v-7eac40d7],div.ad-container[data-ad-position=sport_inlist_1][data-v-7eac40d7],div.ad-container[data-ad-position=sport_inlist_2][data-v-7eac40d7],div.ad-container[data-ad-position=sport_inlist_3][data-v-7eac40d7],div.ad-container[data-ad-position=sport_inlist_4][data-v-7eac40d7],div.ad-container[data-ad-position=sport_inlist_5][data-v-7eac40d7],div.ad-container[data-ad-position=sport_inlist_6][data-v-7eac40d7],div.ad-container[data-ad-position=sport_inlist_7][data-v-7eac40d7]{width:300px}}div.ad-container[data-ad-position=under_detail_info][data-v-7eac40d7]{height:600px;width:300px}div.ad-container[data-ad-position=bottom_page][data-v-7eac40d7],div.ad-container[data-ad-position=sport_under_details][data-v-7eac40d7],div.ad-container[data-ad-position=sport_under_offers][data-v-7eac40d7],div.ad-container[data-ad-position=under_buybox][data-v-7eac40d7]{height:90px;width:728px}@media(max-width:1130px){div.ad-container[data-ad-position=bottom_page][data-v-7eac40d7],div.ad-container[data-ad-position=sport_under_details][data-v-7eac40d7],div.ad-container[data-ad-position=sport_under_offers][data-v-7eac40d7],div.ad-container[data-ad-position=under_buybox][data-v-7eac40d7]{height:250px;width:300px}}",""]),e.exports=t},"488a":function(e,t,a){"use strict";a("1085")},5027:function(e,t,a){"use strict";a.d(t,"b",(function(){return i})),a.d(t,"a",(function(){return o}));var n=a("5184");const i=n.a`
+	fragment TitleOffer on Offer {
+		id
+		presentationType
+		monetizationType
+		newElementCount
+		retailPrice(language: $language)
+		retailPriceValue
+		userLocalCurrency
+		retailPriceConverted(language: $language)
+		currency
+		lastChangeRetailPriceValue
+		type
+		country
+		package {
+			id
+			packageId
+			clearName
+			shortName
+			technicalName
+			icon(profile: S100)
+			iconWide(profile: S160)
+			planOffers(country: $country, platform: WEB) {
+				title
+				retailPrice(language: $language)
+				isTrial
+				durationDays
+				retailPriceValue
+				retailPriceConverted(language: $language)
+				children {
+					title
+					retailPrice(language: $language)
+					isTrial
+					durationDays
+					retailPriceValue
+				}
+			}
+		}
+		plans(platform: WEB) {
+			title
+			retailPrice(language: $language)
+			isTrial
+			durationDays
+			retailPriceValue
+			retailPriceConverted(language: $language)
+			children {
+				title
+				retailPrice(language: $language)
+				isTrial
+				durationDays
+				retailPriceValue
+			}
+		}
+		standardWebURL
+		preAffiliatedStandardWebURL
+		streamUrl
+		streamUrlExternalPlayer
+		elementCount
+		availableTo
+		subtitleLanguages
+		videoTechnology
+		audioTechnology
+		audioLanguages(language: $language)
+	}
+`,o=n.a`
+	fragment FastOffer on Offer {
+		...TitleOffer
+		availableTo
+		availableFromTime
+		availableToTime
+	}
+	${i}
+`},"58e8":function(e,t,a){"use strict";a.d(t,"a",(function(){return n}));const n=a("5184").a`
+	fragment Episode on Episode {
+		id
+		objectId
+		objectType
+		seenlistEntry {
+			createdAt
+		}
+		uniqueOfferCount: offerCount(country: $country, platform: $platform, filter: { bestOnly: true })
+		flatrate: offers(
+			country: $country
+			platform: $platform
+			filter: {
+				monetizationTypes: [FLATRATE_AND_BUY, FLATRATE, ADS, CINEMA, FREE]
+				bestOnly: true
+				preAffiliate: true
+			}
+		) {
+			id
+			package {
+				id
+				clearName
+				packageId
+			}
+		}
+		buy: offers(
+			country: $country
+			platform: $platform
+			filter: { monetizationTypes: [BUY], bestOnly: true, preAffiliate: true }
+		) {
+			id
+			package {
+				id
+				clearName
+				packageId
+			}
+		}
+		rent: offers(
+			country: $country
+			platform: $platform
+			filter: { monetizationTypes: [RENT], bestOnly: true, preAffiliate: true }
+		) {
+			id
+			package {
+				id
+				clearName
+				packageId
+			}
+		}
+		free: offers(
+			country: $country
+			platform: $platform
+			filter: { monetizationTypes: [ADS, FREE], bestOnly: true, preAffiliate: true }
+		) {
+			id
+			package {
+				id
+				clearName
+				packageId
+			}
+		}
+		fast: offers(
+			country: $country
+			platform: $platform
+			filter: { monetizationTypes: [FAST], bestOnly: true, preAffiliate: true }
+		) {
+			id
+			package {
+				id
+				clearName
+				packageId
+			}
+		}
+		content(country: $country, language: $language) {
+			__typename
+			title
+			shortDescription
+			episodeNumber
+			seasonNumber
+			isReleased
+			runtime
+			upcomingReleases {
+				releaseCountDown(country: $country)
+				releaseDate
+				releaseType
+				label
+				package {
+					id
+					packageId
+					shortName
+					clearName
+					monetizationTypes
+					icon(profile: S100)
+					iconWide(profile: S160)
+					hasRectangularIcon(country: $country, platform: WEB)
+					planOffers(country: $country, platform: $platform) {
+						retailPrice(language: $language)
+						durationDays
+						presentationType
+						isTrial
+						retailPriceValue
+						currency
+					}
+				}
+			}
+		}
+	}
+`},"6cb4":function(e,t,a){"use strict";a("8be0")},"6eb3":function(e,t,a){"use strict";a.r(t);var n=a("2b0e"),i=a("f452"),o=a("f65f"),r=a("aded"),s=a("6815"),l=Object(n.defineComponent)({__name:"TitleScoreList",props:{scores:null,externalIds:{default:()=>({})},excluded:{default:()=>[]},includeLinks:{type:Boolean,default:!0},imdbOnly:{type:Boolean},lazy:{type:Boolean,default:!0},showVotes:{type:Boolean},additionalContexts:{default:()=>[]},jwVotes:{default:null},showJwVotes:{type:Boolean,default:!0},isPosterDetail:{type:Boolean},excludeRottenTomatoes:{type:Boolean}},setup(e){const t=e,a=Object(s.b)(),l=Object(n.computed)(()=>null===t.jwVotes?0:t.jwVotes),d=Object(n.computed)(()=>Object(r.d)(t.scores,t.externalIds,t.excluded,t.includeLinks).map(e=>{if(e.provider===r.b.IMDB){const a=t.scores.imdbVotes||0,n=Object(r.e)(a);n&&t.showVotes&&(e.append=` (${n})`)}if(e.provider===r.b.TMDB&&l.value>30){var a;const e=Math.round(100*(null!==(a=t.scores.jwRating)&&void 0!==a?a:0));return{append:"%",decimals:0,filterDisplay:!1,image:"/appassets/img/jw-icon.png",max:100,min:0,name:"JustWatch Rating",provider:r.b.JUSTWATCH,queryName:"justwatchRating",score:e<=0?"0":e,step:1,value:0,link:""}}return e.provider===r.b.ROTTEN_TOMATOES&&(e.image=Object(r.c)(Number(e.score),!!t.scores.certifiedFresh)),e})),c=Object(n.computed)(()=>{const e=d.value.filter(e=>!!e.score&&u(e));return t.imdbOnly?e.filter(e=>e.provider===r.b.IMDB):t.excludeRottenTomatoes?e.filter(e=>e.provider!==r.b.ROTTEN_TOMATOES):e});function u(e){return"JustWatch Rating"===e.name&&l.value>30||"JustWatch Rating"!==e.name}return{__sfc:!0,props:t,route:a,computedJwVotes:l,scoring:d,filteredScoring:c,showRating:u,formatVotes:function(e){return!e||e<30?"":e>=1e4?`(${Object(i.a)(e,0)})`:`(${Object(i.a)(e,1)})`},onRatingClick:function(e,n){e.preventDefault(),e.stopPropagation(),e.stopImmediatePropagation(),o.TrackingHelper.trackEvent("userinteraction",{action:"rating_click",label:n.name},t.additionalContexts);let i=n.link;if("app.detail.show.season"===a.name&&"IMDB"===n.name){var r;const e=null===(r=t.externalIds)||void 0===r?void 0:r.imdbId;let a=e;if(null!=e&&e.includes(":")){const[t]=e.split(":",2);a=t}i=`https://www.imdb.com/title/${a}?ref_=ref_ext_justwatch`}window.open(i)}}}}),d=(a("721b"),a("2877")),c=Object(d.a)(l,(function(){var e=this,t=e._self._c,a=e._self._setupProxy;return t("div",{ref:"rootElement"},[t("div",{staticClass:"jw-scoring-listing",class:{"poster-details":e.isPosterDetail}},e._l(a.filteredScoring,(function(n){return t("div",{key:n.queryName,staticClass:"jw-scoring-listing__rating"},[t("div",{staticClass:"jw-scoring-listing__rating--group",class:{"jw-scoring-listing__rating--no-link":!n.link,"jw-scoring-listing__rating--link":n.link},on:{click:function(e){return a.onRatingClick(e,n)}}},[t("img",{class:{"is-imdb":"imdb"===n.provider},attrs:{loading:e.lazy?"lazy":"eager",alt:n.name,src:n.image,tooltip:n.name}}),"JustWatch Rating"===n.name?t("div",[e._v(" "+e._s(n.score)+e._s(n.append)+" "),e.showJwVotes?t("span",[e._v(" "+e._s(a.formatVotes(a.computedJwVotes)))]):e._e()]):"ROTTEN TOMATOES"===n.name?t("span",[e._v(e._s(n.score)+e._s(n.append))]):t("div",{staticClass:"nowrap"},[e._v(e._s(n.score)+" "+e._s(n.append))])])])})),0)])}),[],!1,null,null,null);t.default=c.exports},"721b":function(e,t,a){"use strict";a("dc66")},"7a84":function(e,t,a){"use strict";a.r(t);var n=a("2b0e"),i=a("85fe"),o=a("9540"),r=a("fe64"),s=a("2548"),l=a("9a30"),d=a("71ff"),c=a("0d7f"),u=a("f65f");const p=[/https:\/\/www\.google/g,/https:\/\/www\.bing/g,/https:\/\/duckduckgo/g,/https:\/\/[a-zA-z]{2}\.search\.yahoo/g,/https:\/\/l\.instagram/g,/https:\/\/www\.facebook/g,/https:\/\/t\.co/g,/https:\/\/www\.reddit/g],f={isCampaignTraffic:()=>["campaign_survey","uct_cs","uct_n","uct_b","sim_locale"].some(e=>-1!==location.search.indexOf(e)),isSeoTraffic:()=>p.some(e=>e.test(document.referrer))};var g=a("da77"),m=a("d57a"),v=a("11ca"),_=a("8a03"),y=a("453d"),b=a("e30e"),w=a("1805"),h=a("be92"),C=a("0c4e"),E=a("3654"),O=Object(n.defineComponent)({__name:"AdUnit",props:{adPosition:null,allowAdRemoval:{type:Boolean,default:!0},additionalContexts:{default:()=>[]}},emits:["adClicked","removeAdClicked"],setup(e,{emit:t}){const p=e,{isUsingAdBlocker:O}=Object(h.d)(Object(w.d)());n.default.use(i.a);const T=[s.a.YIELDLOVE,s.a.ADSENSE,s.a.GAM],k={callback:(e,t)=>q(e,t)},{webLocale:j}=Object(h.d)(Object(_.a)()),{activeRoute:S,urlMetadata:x,urlMetadataPromise:A}=Object(h.d)(Object(b.a)()),{jwLoginId:$,isPremium:L,strictlyAllConsentsGranted:I}=Object(h.d)(Object(y.a)()),P=Object(n.ref)(null),D=Object(n.ref)(!1),R=Object(n.ref)(null),N=Object(n.computed)(()=>{const e=p.adPosition.includes("sport");return Object(s.d)(j.value,e)}),B=Object(n.computed)(()=>`jw_${j.value}_${p.adPosition}`),M=Object(n.computed)(()=>{const e=Object(l.b)(j.value,B.value,N.value===s.a.YIELDLOVE);return s.b.filter(e=>e.name==="jw_{WEBLOCALE}_"+p.adPosition).map(e=>e.sizes).reduce((e,t)=>e=e.concat(t),[]).find(t=>t.x===e.x&&t.y===e.y)||{}}),V=Object(n.computed)(()=>{switch(N.value){case s.a.YIELDLOVE:case s.a.GAM:return B.value;case s.a.ADSENSE:return M.value.adsenseSlot;default:return""}}),W=Object(n.computed)(()=>{switch(N.value){case s.a.ADSENSE:return{adClient:"ca-pub-3179068936475881"};default:return{}}}),U=Object(n.computed)(()=>({display:"inline-block",width:M.value.x+"px",height:M.value.y+"px"})),z=Object(n.computed)(()=>{var e;return(Object(c.f)(j.value)?!L.value:!$.value)&&J()&&!f.isCampaignTraffic()&&!(null!=x&&null!==(e=x.value)&&void 0!==e&&null!==(e=e.htmlContentJson)&&void 0!==e&&e.exclude_from_ads)}),Y=Object(n.computed)(()=>["under_buybox","under_detail_info","bottom_page"].includes(p.adPosition)),H=Object(n.computed)(()=>z.value&&Y.value&&(!1===P.value||O.value));function G(){return[s.a.YIELDLOVE,s.a.ADSENSE,s.a.GAM].includes(N.value)&&"top"===p.adPosition}function J(e=(e=>null===(e=S.value)||void 0===e?void 0:e.name)()){return"smartphone"!==Object(g.d)()||!G()}async function F(e){const t=z.value;Object(C.b)(j.value)&&await Object(E.until)(I).toBeTruthy(),!D.value&&t?await Object(s.e)(j.value,V.value,N.value,e=>P.value=e):D.value&&!t&&await Object(s.f)(j.value,V.value,N.value),D.value=t}function q(e,t){if(!e||!z.value)return;u.TrackingHelper.trackEvent(r.b.AD,{action:"impression",label:"banner",nonInteraction:!0},p.additionalContexts)}function K(){u.TrackingHelper.trackEvent(r.b.AD,{action:"click",label:"banner"},p.additionalContexts),t("adClicked")}function X(){var e;(null===(e=R.value)||void 0===e?void 0:e.querySelector("iframe"))===document.activeElement&&K()}return Object(n.watch)(()=>[S.value,$.value],async()=>{await A.value;await F()}),Object(n.onMounted)(async()=>{await A.value;Object(m.a)(()=>F()),T.includes(N.value)&&window.addEventListener("blur",X)}),Object(n.onBeforeUnmount)(()=>{window.removeEventListener("blur",X)}),Object(n.onUnmounted)(async()=>{Object(C.b)(j.value)&&await Object(E.until)(I).toBeTruthy(),Object(s.f)(j.value,V.value,N.value)}),{__sfc:!0,MrrBanner:()=>a.e("chunk-3bc00606").then(a.bind(null,"23e6")),isUsingAdBlocker:O,props:p,emits:t,iframeAdProviders:T,onVisibleCallback:k,webLocale:j,activeRoute:S,urlMetadata:x,urlMetadataPromise:A,jwLoginId:$,isPremium:L,strictlyAllConsentsGranted:I,isSlotFilled:P,isShown:D,adUnit:R,adProvider:N,yieldloveSlotId:B,adSlot:M,slotId:V,config:W,adsenseStyle:U,isAdSpaceShown:z,isTitlePageSlot:Y,displayMrrBanner:H,isAdAtTop:G,isCorrectViewport:J,setShown:F,onAdImpression:q,onAdClick:K,triggerAdClickOnBlur:X,onMouseLeaveAd:function(){var e;(null===(e=R.value)||void 0===e?void 0:e.querySelector("iframe"))===document.activeElement&&window.focus()},openModal:function(){Object(c.f)(j.value)?(d.ModalHelper.openModal(o.A,{},{},"RemoveAds",!0),Object(c.i)("RemoveAds")):d.ModalHelper.openModal(o.b,{closable:!0},{cssClass:"account-modal"},"AdUnit"),t("removeAdClicked")},faTimes:v.eb}}}),T=(a("488a"),a("2877")),k=Object(T.a)(O,(function(){var e=this,t=e._self._c,a=e._self._setupProxy;return t("div",[a.displayMrrBanner?t(a.MrrBanner,{attrs:{adPosition:e.adPosition}}):t("div",{directives:[{name:"observe-visibility",rawName:"v-observe-visibility",value:a.onVisibleCallback,expression:"onVisibleCallback"}],ref:"adUnit",staticClass:"ad-unit",on:{click:function(e){return a.onAdClick()},mouseleave:function(e){return a.onMouseLeaveAd()}}},[a.isAdSpaceShown?[t("div",{staticClass:"ad-container ad-unit--height",attrs:{id:"slot-"+a.slotId,"data-ad-position":e.adPosition}},[t("div",[t("NoSSR",["yieldlove"===a.adProvider?t("div",{staticClass:"ad-unit__container",attrs:{id:a.slotId}}):e._e(),"GAM"===a.adProvider?t("div",{staticClass:"ad-unit__container",attrs:{id:a.slotId}}):"adsense"===a.adProvider?t("div",{staticClass:"ad-unit__container",attrs:{id:a.slotId}},[t("ins",{staticClass:"ad-div adsbygoogle",style:a.adsenseStyle,attrs:{"data-ad-client":a.config.adClient,"data-ad-slot":a.slotId}})]):e._e()]),t("div",{staticClass:"ad-unit__removal-container"},[a.isShown&&e.allowAdRemoval?t("button",{staticClass:"ad-unit__removal",on:{click:function(e){return e.stopPropagation(),a.openModal.apply(null,arguments)}}},[t("FontAwesomeIcon",{attrs:{icon:a.faTimes}}),t("span",[e._v(" "+e._s(e.$t("WEBAPP_LOGINS_REMOVE"))+" ")])],1):e._e()])],1)])]:e._e()],2)],1)}),[],!1,null,"7eac40d7",null);t.default=k.exports},"7ab0":function(e,t,a){"use strict";a("d6b7")},"8be0":function(e,t,a){var n=a("aa34");n.__esModule&&(n=n.default),"string"==typeof n&&(n=[[e.i,n,""]]),n.locals&&(e.exports=n.locals);(0,a("499e").default)("ad195cda",n,!0,{sourceMap:!1,shadowMode:!1})},"9a30":function(e,t,a){"use strict";a.d(t,"a",(function(){return d})),a.d(t,"b",(function(){return c})),a.d(t,"c",(function(){return g})),a.d(t,"d",(function(){return v}));var n=a("1156"),i=a("2548"),o=a("be92"),r=a("e30e");const s={};function l(e,t=!0){const a=window.innerWidth;return s[e]||(s[e]=i.b.map(t=>({path:d(e,t.path),name:t.name.replace("{WEBLOCALE}",e),sizes:t.sizes.filter(e=>!e.breakpoint||e.breakpoint<=a).map(e=>[e.x,e.y])})),t&&(s[e]=s[e].filter(e=>!!e.path))),s[e]}function d(e,t){return null==t?void 0:t.replace("{WEBLOCALE}",e)}const c=(e,t,a=!0)=>{const n=l(e,a).find(e=>e.name===t);let i;return n&&n.sizes&&(i=n.sizes.reduce((e,t)=>e[0]<t[0]?t:e,[0,0])),{x:(i||[])[0],y:(i||[])[1]}},u=[n.a.co,n.a.tr,n.a.ar,n.a.at,n.a.dk,n.a.fi,n.a.no,n.a.se],p=[n.a.de,n.a.es,n.a.fr,n.a.uk,n.a.in,n.a.mx,n.a.br,n.a.ch,n.a.it,n.a.pt,n.a.au,n.a.ca,n.a.us],f=e=>new Promise((t,a)=>{e.onload=()=>{t(!0)},e.onerror=e=>{a(e)}});const g=async(e,t,a)=>{var n;const{activeRoute:i}=Object(o.d)(Object(r.a)()),s="true"===(null===(n=i.value)||void 0===n||null===(n=n.query)||void 0===n?void 0:n.v2_tag),l=p.includes(e)||s;window.yieldlove_site_id="justwatch.com_"+e,window.yieldlove_prevent_autostart=!0;const d=document.getElementsByTagName("script")[0],c=document.createElement("script");c.type="text/javascript",c.src=l?`https://cdn-a.yieldlove.com/v2/yieldlove.js?${e}.justwatch.com`:"https://cdn-a.yieldlove.com/v2/yieldlove.js?justwatch.com",c.async=!0,c.defer=!0,d.parentNode.insertBefore(c,d),window.googletag=window.googletag||{},window.googletag.cmd=window.googletag.cmd||[];const u=document.createElement("script");u.type="text/javascript",u.async=!0,u.defer=!0,u.src="https://securepubads.g.doubleclick.net/tag/js/gpt.js",document.body.appendChild(u);try{await Promise.all([f(u),f(c)])}catch(e){return console.error("[YieldLove]: "+e),void a()}m(e,()=>function e(t=0,a){window.YLHH&&window.YLHH.bidder?a():t<20?setTimeout(()=>e(t+1,a),200*Math.ceil((t+1)/5)):a()}(0,t))},m=(e,t)=>{window.googletag.cmd.push(()=>{l(e).forEach(t=>{const a=c(e,t.name),n=window.googletag.defineSlot(t.path,[a.x,a.y],t.name);n&&n.addService(window.googletag.pubads())}),Object(i.c)(),t()})},v=[...u,...p]},aa34:function(e,t,a){(t=a("24fb")(!1)).push([e.i,".title-ranking-list[data-v-16d238ee]{display:flex;justify-content:flex-start;align-items:center}.title-ranking-list__img[data-v-16d238ee]{height:16px;width:16px}.title-ranking-list__rank[data-v-16d238ee]{margin:0 8px;font-size:22px;color:#c6c8cd}.title-ranking-list__rank--condensed[data-v-16d238ee]{font-size:16px;font-weight:900;letter-spacing:.24px}.title-ranking-list__details[data-v-16d238ee]{display:flex;align-items:center}.title-ranking-list__details p[data-v-16d238ee],.title-ranking-list__details span[data-v-16d238ee]{margin-inline-start:8px}.arrow-container[data-v-16d238ee]{margin-inline-end:auto;display:flex;justify-content:center;align-items:center;border:1px solid;border-radius:16px;padding:2px 5px;width:-moz-fit-content;width:fit-content}.arrow-container p[data-v-16d238ee]{font-size:12px;margin:0}.arrow-container svg[data-v-16d238ee]{margin-inline-end:4px;font-size:14px}.arrow-container--up[data-v-16d238ee]{color:#339b2a;border-color:#339b2a}.arrow-container--up p[data-v-16d238ee]{color:#339b2a}.arrow-container--stable[data-v-16d238ee]{color:#797979;border-color:#797979}.arrow-container--stable p[data-v-16d238ee]{color:#797979;font-weight:900;padding:0 8px}.arrow-container--down[data-v-16d238ee]{color:#a30000;border-color:#a30000}.arrow-container--down p[data-v-16d238ee]{color:#a30000}.arrow-container__arrow[data-v-16d238ee]{font-size:24px;margin-inline-end:4px}.arrow-container__arrow--up[data-v-16d238ee]{color:#339b2a}.arrow-container__arrow--stable[data-v-16d238ee]{color:#797979;transform:rotate(90deg);display:none}.arrow-container__arrow--down[data-v-16d238ee]{color:#a30000;transform:rotate(180deg)}.new[data-v-16d238ee]{text-transform:uppercase;color:#fbc500;font-size:16px;font-weight:400;letter-spacing:.24px}",""]),e.exports=t},ba9f:function(e,t,a){"use strict";var n=a("2b0e"),i=a("51c1"),o=a("f65f"),r=a("6fb7"),s=a("7637"),l=a("453d"),d=Object(n.defineComponent)({__name:"TitleCreditName",props:{credit:null},setup(e){const t=e,a=Object(l.a)(),{updateRouterState:n}=Object(s.a)();return{__sfc:!0,props:t,userStore:a,updateRouterState:n,clicked:function({searchString:e,personId:s}){var l,d;null!==(l=t.credit)&&void 0!==l&&l.profilePath||(a.saveSearchTerm(e),n({collectionType:r.a.SEARCH,routeQuery:{q:e,person_id:s}})),o.TrackingHelper.trackEvent("persons_credit_name",{action:"clicked",label:null===(d=t.credit)||void 0===d?void 0:d.role,property:""+s},[new i.D(s,e)])}}}}),c=(a("7ab0"),a("2877")),u=Object(c.a)(d,(function(){var e,t,a=this,n=a._self._c,i=a._self._setupProxy;return a.credit.profilePath?n("a",{attrs:{href:null===(e=a.credit)||void 0===e?void 0:e.profilePath},on:{click:function(e){return i.clicked({searchString:a.credit.name,personId:a.credit.personId})}}},[n("span",{staticClass:"title-credit-name"},[a._v(a._s(null===(t=a.credit)||void 0===t?void 0:t.name))])]):n("span",{staticClass:"title-credit-name",on:{click:function(e){return e.preventDefault(),i.clicked({searchString:a.credit.name,personId:a.credit.personId})}}},[a._v(a._s(a.credit.name))])}),[],!1,null,"2d310883",null);t.a=u.exports},c27b:function(e,t,a){"use strict";a.d(t,"a",(function(){return c})),a.d(t,"b",(function(){return u}));var n=a("5184"),i=a("62ad1"),o=a("5027");const r=n.a`
+	fragment TrailerClips on Clip {
+		sourceUrl
+		externalId
+		provider
+		name
+		sources {
+			dynamicManifest {
+				fileGroupId
+			}
+		}
+	}
+`;var s=a("5ed2"),l=a("d26f"),d=a("58e8");const c=n.a`
+	fragment Credit on Credit {
+		role
+		name
+		characterName
+		personId
+		portraitUrl(profile: ST150)
+		profilePath
+		__typename
+	}
+`,u=n.a`
+	fragment TitleDetails on MovieOrShowOrSeason {
+		id
+		objectType
+		objectId
+		__typename
+		justwatchTVOffers: offers(
+			country: $country
+			platform: $platform
+			filter: { packages: ["jwt"], preAffiliate: true }
+		) {
+			...WatchNowOffer
+		}
+		disneyOffersCount: offerCount(country: $country, platform: $platform, filter: { packages: ["dnp"] })
+		starOffersCount: offerCount(country: $country, platform: $platform, filter: { packages: ["srp"] })
+		uniqueOfferCount: offerCount(country: $country, platform: $platform, filter: { bestOnly: true })
+		offers(country: $country, platform: $platform, filter: { preAffiliate: true }) {
+			...TitleOffer
+		}
+		watchNowOffer(country: $country, platform: $platform) {
+			...WatchNowOffer
+		}
+		availableTo(country: $country, platform: $platform) {
+			availableCountDown(country: $country)
+			availableToDate
+			package {
+				id
+				shortName
+			}
+		}
+		fallBackClips: content(country: $country, language: "en") {
+			clips(country: $country, language: "en", first: 4) {
+				...TrailerClips
+			}
+			videobusterClips: clips(providers: [VIDEOBUSTER], country: $country, language: "en", first: 4) {
+				...TrailerClips
+			}
+			dailymotionClips: clips(providers: [DAILYMOTION], country: $country, language: "en", first: 4) {
+				...TrailerClips
+			}
+			justwatchtvClips: clips(providers: [JUSTWATCHTV], country: $country, language: "en", first: 4) {
+				...TrailerClips
+			}
+		}
+		content(country: $country, language: $language) {
+			backdrops {
+				backdropUrl
+			}
+			fullBackdrops: backdrops(profile: S1920, format: JPG) {
+				backdropUrl
+			}
+			clips(first: 4) {
+				...TrailerClips
+			}
+			videobusterClips: clips(providers: [VIDEOBUSTER], first: 4) {
+				...TrailerClips
+			}
+			dailymotionClips: clips(providers: [DAILYMOTION], first: 4) {
+				...TrailerClips
+			}
+			justwatchtvClips: clips(providers: [JUSTWATCHTV], first: 4) {
+				...TrailerClips
+			}
+			externalIds {
+				imdbId
+				wikidataId
+			}
+			fullPath
+			posterUrl
+			fullPosterUrl: posterUrl(profile: S718, format: JPG)
+			runtime
+			isReleased
+			scoring {
+				imdbScore
+				imdbVotes
+				tmdbPopularity
+				tmdbScore
+				jwRating
+				tomatoMeter
+				certifiedFresh
+			}
+			shortDescription
+			title
+			originalReleaseYear
+			originalReleaseDate
+			upcomingReleases {
+				releaseCountDown(country: $country)
+				releaseDate
+				releaseType
+				label
+				package {
+					id
+					packageId
+					shortName
+					clearName
+					monetizationTypes
+					icon(profile: S100)
+					iconWide(profile: S160)
+					hasRectangularIcon(country: $country, platform: WEB)
+					planOffers(country: $country, platform: $platform) {
+						retailPrice(language: $language)
+						durationDays
+						presentationType
+						isTrial
+						retailPriceValue
+						currency
+					}
+				}
+			}
+			genres {
+				shortName
+				translation(language: $language)
+			}
+			subgenres {
+				content(country: $country, language: $language) {
+					shortName
+					name
+				}
+			}
+			textRecommendations(first: $first) {
+				...TextRecommendation
+			}
+			... on MovieOrShowOrSeasonContent {
+				subgenres {
+					content(country: $country, language: $language) {
+						url: moviesUrl {
+							fullPath
+						}
+					}
+				}
+				editorialContent {
+					synopsis
+				}
+			}
+			... on MovieOrShowContent {
+				originalTitle
+				ageCertification
+				directors: credits(role: DIRECTOR) {
+					...Credit
+				}
+				credits(role: ACTOR, first: 20) {
+					...Credit
+				}
+				interactions {
+					dislikelistAdditions
+					likelistAdditions
+					votesNumber
+				}
+				productionCountries
+			}
+			... on MovieContent {
+				tags {
+					technicalName
+					translatedName
+				}
+			}
+			... on ShowContent {
+				tags {
+					technicalName
+					translatedName
+				}
+			}
+			... on SeasonContent {
+				seasonNumber
+				interactions {
+					dislikelistAdditions
+					likelistAdditions
+					votesNumber
+				}
+				tags {
+					technicalName
+					translatedName
+				}
+			}
+		}
+		recommendedByCount
+		watchedByCount
+		popularityRank(country: $country) {
+			rank
+			trend
+			trendDifference
+		}
+		streamingCharts(country: $country, filter: $streamingChartsFilter) {
+			edges {
+				streamingChartInfo {
+					rank
+					trend
+					trendDifference
+					updatedAt
+					daysInTop10
+					daysInTop100
+					daysInTop1000
+					daysInTop3
+					topRank
+				}
+			}
+		}
+		likelistEntry {
+			createdAt
+		}
+		dislikelistEntry {
+			createdAt
+		}
+		... on MovieOrShow {
+			watchlistEntryV2 {
+				createdAt
+			}
+			customlistEntries {
+				createdAt
+				genericTitleList {
+					id
+				}
+			}
+			similarTitlesV2(country: $country, allowSponsoredRecommendations: $allowSponsoredRecommendations) {
+				sponsoredAd {
+					...SponsoredAd
+				}
+			}
+		}
+		... on Movie {
+			permanentAudiences
+			seenlistEntry {
+				createdAt
+			}
+		}
+		... on Show {
+			permanentAudiences
+			totalSeasonCount
+			seenState(country: $country) {
+				progress
+				seenEpisodeCount
+			}
+			tvShowTrackingEntry {
+				createdAt
+			}
+			offers(country: $country, platform: $platform, filter: { preAffiliate: true }) {
+				...TitleOffer
+			}
+			firstSeason: seasons(limit: 1) {
+				id
+				offers(
+					country: $country
+					platform: $platform
+					filter: { monetizationTypes: [BUY, RENT], preAffiliate: true }
+				) {
+					package {
+						clearName
+						shortName
+						__typename
+					}
+					monetizationType
+					presentationType
+					retailPrice(language: $language)
+					retailPriceValue
+					__typename
+				}
+			}
+			seasons(sortDirection: DESC) {
+				id
+				objectId
+				objectType
+				totalEpisodeCount
+				availableTo(country: $country, platform: $platform) {
+					availableToDate
+					availableCountDown(country: $country)
+					package {
+						id
+						shortName
+					}
+				}
+				content(country: $country, language: $language) {
+					posterUrl
+					seasonNumber
+					fullPath
+					title
+					upcomingReleases {
+						releaseDate
+						releaseCountDown(country: $country)
+					}
+					isReleased
+					originalReleaseYear
+				}
+				show {
+					__typename
+					id
+					objectId
+					objectType
+					watchlistEntryV2 {
+						createdAt
+					}
+					content(country: $country, language: $language) {
+						title
+					}
+				}
+				fallBackClips: content(country: $country, language: "en") {
+					clips(country: $country, language: "en", first: 4) {
+						...TrailerClips
+					}
+					videobusterClips: clips(providers: [VIDEOBUSTER], country: $country, language: "en", first: 4) {
+						...TrailerClips
+					}
+					dailymotionClips: clips(providers: [DAILYMOTION], country: $country, language: "en", first: 4) {
+						...TrailerClips
+					}
+					justwatchtvClips: clips(providers: [JUSTWATCHTV], country: $country, language: "en", first: 4) {
+						...TrailerClips
+					}
+				}
+			}
+			recentEpisodes: episodes(sortDirection: DESC, limit: 3, releasedInCountry: $country) {
+				...Episode
+			}
+		}
+		... on Season {
+			totalEpisodeCount
+			episodes(limit: $episodeMaxLimit) {
+				...Episode
+			}
+			show {
+				__typename
+				id
+				objectId
+				objectType
+				totalSeasonCount
+				customlistEntries {
+					createdAt
+					genericTitleList {
+						id
+					}
+				}
+				tvShowTrackingEntry {
+					createdAt
+				}
+				fallBackClips: content(country: $country, language: "en") {
+					clips(country: $country, language: "en", first: 4) {
+						...TrailerClips
+					}
+					videobusterClips: clips(providers: [VIDEOBUSTER], country: $country, language: "en", first: 4) {
+						...TrailerClips
+					}
+					dailymotionClips: clips(providers: [DAILYMOTION], country: $country, language: "en", first: 4) {
+						...TrailerClips
+					}
+					justwatchtvClips: clips(providers: [JUSTWATCHTV], country: $country, language: "en", first: 4) {
+						...TrailerClips
+					}
+				}
+				content(country: $country, language: $language) {
+					title
+					ageCertification
+					fullPath
+					genres {
+						shortName
+					}
+					subgenres {
+						content(country: $country, language: $language) {
+							shortName
+							name
+						}
+					}
+					directors: credits(role: DIRECTOR) {
+						...Credit
+					}
+					credits(role: ACTOR, first: 20) {
+						...Credit
+					}
+					productionCountries
+					externalIds {
+						imdbId
+					}
+					upcomingReleases {
+						releaseDate
+						releaseType
+						package {
+							id
+							shortName
+							planOffers(country: $country, platform: $platform) {
+								retailPrice(language: $language)
+								durationDays
+								presentationType
+								isTrial
+								retailPriceValue
+								currency
+							}
+						}
+					}
+					backdrops {
+						backdropUrl
+					}
+					posterUrl
+					isReleased
+					clips(first: 4) {
+						...TrailerClips
+					}
+					videobusterClips: clips(providers: [VIDEOBUSTER], first: 4) {
+						...TrailerClips
+					}
+					dailymotionClips: clips(providers: [DAILYMOTION], first: 4) {
+						...TrailerClips
+					}
+					justwatchtvClips: clips(providers: [JUSTWATCHTV], first: 4) {
+						...TrailerClips
+					}
+				}
+				seenState(country: $country) {
+					progress
+				}
+				watchlistEntryV2 {
+					createdAt
+				}
+				dislikelistEntry {
+					createdAt
+				}
+				likelistEntry {
+					createdAt
+				}
+				similarTitlesV2(country: $country, allowSponsoredRecommendations: $allowSponsoredRecommendations) {
+					sponsoredAd {
+						...SponsoredAd
+					}
+				}
+			}
+			seenState(country: $country) {
+				progress
+			}
+		}
+	}
+	${i.b}
+	${o.b}
+	${r}
+	${s.a}
+	${c}
+	${l.a}
+	${d.a}
+`},d57a:function(e,t,a){"use strict";a.d(t,"a",(function(){return i}));var n=a("2b0e");function i(e){"requestIdleCallback"in window?window.requestIdleCallback(()=>e()):Object(n.nextTick)(()=>e())}},d6b7:function(e,t,a){var n=a("ef2f7");n.__esModule&&(n=n.default),"string"==typeof n&&(n=[[e.i,n,""]]),n.locals&&(e.exports=n.locals);(0,a("499e").default)("bf834288",n,!0,{sourceMap:!1,shadowMode:!1})},dc66:function(e,t,a){var n=a("137f");n.__esModule&&(n=n.default),"string"==typeof n&&(n=[[e.i,n,""]]),n.locals&&(e.exports=n.locals);(0,a("499e").default)("0421d6dc",n,!0,{sourceMap:!1,shadowMode:!1})},e593:function(e,t,a){"use strict";a.d(t,"c",(function(){return n})),a.d(t,"d",(function(){return i})),a.d(t,"b",(function(){return o})),a.d(t,"a",(function(){return r}));const n=["GB","US","CA","AU","DE","AT","CH","FR","IT","ES","AR","MX","TR","PT","BR","IN","CL","CO","PH","EG","HU"],i=["AR","AU","BR","CA","ES","EG","FR","DE","IN","IT","MX","PO","PL","TR","US","GB"],o={movies:"MOVIE",shows:"SHOW",seasons:"SHOW_SEASON"},r={daily:"DAILY_POPULARITY_SAME_CONTENT_TYPE",weekly:"WEEKLY_POPULARITY_SAME_CONTENT_TYPE",monthly:"MONTHLY_POPULARITY_SAME_CONTENT_TYPE"}},eb87:function(e,t,a){"use strict";a.d(t,"b",(function(){return o})),a.d(t,"a",(function(){return r})),a.d(t,"f",(function(){return s})),a.d(t,"e",(function(){return l})),a.d(t,"d",(function(){return c})),a.d(t,"c",(function(){return u}));var n=a("3654"),i=a("2b0e");const o=Symbol(),r=Symbol();function s(e){e&&Object(i.provide)(o,Object(n.toValue)(e))}function l(e){Object(i.provide)(r,e)}const d=Symbol();function c(e){e&&Object(i.provide)(d,Object(n.toValue)(e))}function u(e){return{placement:Object(i.inject)(d,void 0),clickoutType:e}}},ef2f7:function(e,t,a){(t=a("24fb")(!1)).push([e.i,".title-credit-name[data-v-2d310883]{cursor:pointer;color:#78a6b8}.title-credit-name[data-v-2d310883]:hover{color:#d5d5d5}",""]),e.exports=t},f452:function(e,t,a){"use strict";a.d(t,"a",(function(){return n}));const n=(e,t)=>{const a=/\.0+$|(\.[0-9]*[1-9])0+$/,n=[{value:1,symbol:""},{value:1e3,symbol:"k"},{value:1e6,symbol:"m"},{value:1e9,symbol:"bn"}].slice().reverse().find(t=>e>=t.value);if(n){return(e/n.value).toFixed(t).replace(a,"$1")+n.symbol}return"0"}},feafd:function(e,t,a){"use strict";var n=a("2b0e"),i=a("76f1"),o=a("f058"),r=a("ef50"),s=a("11ca"),l=Object(n.defineComponent)({__name:"SingleRankingDisplay",props:{trend:null,rank:null,trendDifference:null,daysInTop1000:null,withLogo:{type:Boolean,default:!0},withCondensed:{type:Boolean,default:!1},runtime:null,releaseYear:null,hideRank:{type:Boolean,default:!1}},setup(e){const t=e,{t:a}=Object(o.b)(),l=Object(n.computed)(()=>t.trend===i.o.Up?"+"+t.trendDifference:t.trend===i.o.Stable?"—":t.trend===i.o.Down?""+t.trendDifference:"—"),d=Object(n.computed)(()=>t.trend&&!u.value),c=Object(n.computed)(()=>d?{"arrow-container__arrow":!!t.trend,"arrow-container__arrow--up":t.trend===i.o.Up,"arrow-container__arrow--stable":t.trend===i.o.Stable,"arrow-container__arrow--down":t.trend===i.o.Down}:null),u=Object(n.computed)(()=>0===t.daysInTop1000&&t.rank<=1e3||t.trend===i.o.New||t.trendDifference>=5e3),p=Object(n.computed)(()=>t.runtime&&t.releaseYear),f=Object(n.computed)(()=>{const e=t.runtime,{translationKey:n,minutes:i,hours:o}=Object(r.d)(e);return a(n,{minutes:i,hours:o})});return{__sfc:!0,t:a,props:t,ASSETS:"/appassets",padNumber:e=>e.toString().length<2?"0"+e:e,trendDifference:l,showArrow:d,arrowClasses:c,isNew:u,showDetails:p,runtime:f,faCaretUp:s.j}}}),d=(a("6cb4"),a("2877")),c=Object(d.a)(l,(function(){var e=this,t=e._self._c,a=e._self._setupProxy;return t("div",{staticClass:"title-ranking-list"},[e.withLogo&&!e.hideRank?t("img",{staticClass:"title-ranking-list__img",attrs:{loading:"lazy",src:a.ASSETS+"/img/jw-icon.png",alt:"JustWatch Logo"}}):e._e(),e.hideRank?e._e():t("p",{staticClass:"title-ranking-list__rank",class:{"title-ranking-list__rank--condensed":e.withCondensed}},[e._v(" "+e._s(a.padNumber(e.rank))+". ")]),a.showArrow&&!e.hideRank?t("div",{staticClass:"arrow-container",class:{"arrow-container--up":"UP"===e.trend,"arrow-container--stable":"STABLE"===e.trend,"arrow-container--down":"DOWN"===e.trend}},[t("FontAwesomeIcon",{class:a.arrowClasses,attrs:{icon:a.faCaretUp,size:"lg"}}),t("p",[e._v(e._s(a.trendDifference))])],1):a.isNew&&!e.hideRank?t("div",{staticClass:"new"},[e._v(" "+e._s(e.$t("WEBAPP_MENU_NEW"))+" ")]):e._e(),a.showDetails?t("div",{staticClass:"title-ranking-list__details"},[e.hideRank?e._e():t("span",[e._v("·")]),t("p",[e._v(e._s(a.runtime))]),t("span",[e._v("·")]),t("p",[e._v(e._s(a.props.releaseYear))])]):e._e()])}),[],!1,null,"16d238ee",null);t.a=c.exports}}]);
+//# sourceMappingURL=1772821723701_chunk-0f088e4f.e2af6b38.js.map

@@ -1,0 +1,345 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([["spotlight-sport"],{"0adc":function(t,e,o){"use strict";var n=o("2b0e"),a=o("76f1"),i=o("5216"),r=o("140e"),l=o("5fac"),s=o("69cb"),c=o("80c8"),d=o("713d"),p=o("3fea"),u=o("18e5"),m=o("f65f"),f=o("be92"),_=o("1805"),v=o("8a03"),g=o("453d"),b=o("597e"),h=Object(n.defineComponent)({__name:"MultiStepEventEncounter",props:{event:null,listIndex:null,isGlobalPage:{type:Boolean},withCompetitionInHeader:{type:Boolean},additionalContexts:{default:()=>[]}},setup(t){const e=t,{language:o,locales:h,webLocale:x,country:S}=Object(f.d)(Object(v.a)()),{timeZone:O}=Object(f.d)(Object(g.a)()),{xServeTrack:P}=Object(f.d)(Object(_.d)()),y=Object(n.computed)(()=>{var t;if(""===e.event.fullPath||null==e.event.fullPath)return null;const o={path:e.event.fullPath,query:{}},{name:n,number:a}=null===(t=e.event.sportEvent.content)||void 0===t?void 0:t.competitionStage;return n&&(o.query={stage:`${n} ${a||""}`}),o}),C=Object(n.computed)(()=>u.SnowplowSportContext.fromSportEventV2(e.event.sport,a.s.SportEvent,e.event.sportEvent)),w=Object(n.computed)(()=>{var t;return null===(t=e.event)||void 0===t?void 0:t.sport}),E=Object(n.computed)(()=>{var t;return"TENNIS"===w.value&&(null===(t=e.event)||void 0===t?void 0:t.lineItems.length)>2}),T=Object(n.computed)(()=>{var t,o,n,a,i,r,l;return E.value?[{text:`${j(null===(t=e.event)||void 0===t||null===(t=t.lineItems[0])||void 0===t?void 0:t.text)} / ${j(null===(o=e.event)||void 0===o||null===(o=o.lineItems[1])||void 0===o?void 0:o.text)}`},{text:`${j(null===(n=e.event)||void 0===n?void 0:n.lineItems[2].text)} / ${j(null!==(a=null===(i=e.event)||void 0===i||null===(i=i.lineItems[3])||void 0===i?void 0:i.text)&&void 0!==a?a:null===(r=e.event)||void 0===r?void 0:r.lineItems[2].text)}`}]:null===(l=e.event)||void 0===l?void 0:l.lineItems}),A=Object(n.computed)(()=>{var t;return null===(t=e.event)||void 0===t||null===(t=t.sportEvent)||void 0===t||null===(t=t.content)||void 0===t?void 0:t.status}),I=Object(n.computed)(()=>[a.G.Live].includes(A.value)),N=Object(n.computed)(()=>[a.G.Ended,a.G.Closed].includes(A.value)),B=Object(n.computed)(()=>[a.G.Cancelled,a.G.Closed,a.G.Delayed,a.G.Ended,a.G.Live,a.G.Postponed,a.G.Suspended].includes(A.value)),k=Object(n.computed)(()=>e.event.watchNowOffer),L=Object(n.computed)(()=>{var t;return{eventId:e.event.id,isNotificationActive:!(null===(t=e.event.mysportlistEntry)||void 0===t||!t.createdAt)}});function j(t){if(!t)return"";const e=t.split("")[0];return`${t.split(" ").slice(1).join(" ")} ${e}`}const R=Object(n.computed)(()=>{var t;return new c.b(k.value).addContexts(C.value).set("uct_country",S.value).set("uct_buybox",d.a.Sport).set("uct_sport",null===(t=e.event)||void 0===t?void 0:t.sport).setCanary(P.value)});function $(){e.isGlobalPage||m.TrackingHelper.trackEvent("userinteraction",{action:"event_clicked",property:"card-v2",useLastRoute:!0},[C.value,...e.additionalContexts])}return{__sfc:!0,props:e,language:o,locales:h,webLocale:x,country:S,timeZone:O,xServeTrack:P,eventPath:y,sportContext:C,sport:w,isTennisDoubles:E,formattedLineItemNames:T,eventStatus:A,isLive:I,isEnded:N,isNotUpcoming:B,watchNowOffer:k,notifyMePayload:L,shortName:j,formatDate:function(t){return Object(p.b)(t,h.value,x.value,O.value,o.value)},formatTime:function(t){return Object(p.c)(t,h.value,x.value,O.value,o.value)},offerClickoutUrl:R,handleClickOut:function(){null!=k.value&&Object(d.h)(k.value,0,e.listIndex,k.value.sportObjectType,"card-v2",[C.value])},navigateToEvent:function(){if(null==y.value)return;$();const t=Object(b.b)(y.value.path,b.a.SPORTS);window.location.href=t},handleCardClick:$,handleNoOfferNotifierClick:async function(){m.TrackingHelper.trackEvent("userinteraction",{action:"notify_me_clicked",property:"card-v2",useLastRoute:!0},[C.value,...e.additionalContexts])},trackCompetitionClick:function(){const t=new u.SnowplowSportContext(e.event.sport,a.s.SportCompetition),o=m.TrackingHelper.getPageTypeContext(!0);m.TrackingHelper.trackEvent("userinteraction",{action:"competition_clicked",property:"card-v2"},[t,o,...e.additionalContexts])},ProviderIcon:i.a,CompetitorLogo:r.a,NoOfferNotifier:l.a,GameEventStatus:s.a,buildUrlForDomain:b.b,Domain:b.a}}}),x=(o("d17e"),o("2877")),S=Object(x.a)(h,(function(){var t=this,e=t._self._c,o=t._self._setupProxy;return e("div",{staticClass:"encounter"},[e("div",{class:{"encounter-card-link":null!==o.eventPath},on:{click:o.navigateToEvent}},[e("span",{staticClass:"encounter__content"},[e("header",{staticClass:"encounter-header"},[t.withCompetitionInHeader?e("span",{staticClass:"encounter-header__start"},[e("a",{staticClass:"encounter-header--link",attrs:{href:o.buildUrlForDomain(t.event.competition.fullPath,o.Domain.SPORTS)},on:{click:function(t){return t.stopPropagation(),o.trackCompetitionClick.apply(null,arguments)}}},[t._v(" "+t._s(t.event.competition.text)+" ")])]):e("span",{staticClass:"encounter-header__start"},[t._v(" "+t._s(t.event.competitionStageText)+" ")]),e("span",{staticClass:"encounter-header__end"},[o.isNotUpcoming?e(o.GameEventStatus,{attrs:{eventStatus:o.eventStatus}}):e("div",{staticClass:"encounter-header__end__info"},[e("span",[t._v(t._s(o.formatDate(t.event.startAt)))]),e("span",{staticClass:"encounter-header__end__info--time"},[t._v(t._s(o.formatTime(t.event.startAt)))])])],1)]),e("span",{staticClass:"encounter__content__team-logos",class:{"encounter__content__team-logos--tennis-doubles":o.isTennisDoubles}},t._l(t.event.lineItems,(function(t,n){return e(o.CompetitorLogo,{key:n,staticClass:"team-logos__image",attrs:{competitor:t,size:"big"}})})),1),e("span",{staticClass:"encounter__content__team-names"},t._l(o.formattedLineItemNames,(function(o){return e("p",{key:o.text},[t._v(t._s(o.text))])})),0)])]),o.watchNowOffer&&!o.isEnded?e("ClickoutAnchor",{staticClass:"encounter__watch-now",attrs:{rel:"nofollow noopener",href:o.offerClickoutUrl},on:{click:o.handleClickOut}},[e(o.ProviderIcon,{attrs:{providerShortName:o.watchNowOffer.package.shortName}}),e("span",{staticClass:"offer-info"},[e("p",[t._v(t._s(o.isLive?t.$t("SPORTS_WEBAPP_WATCH_LIVE"):t.$t("SPORTS_WEBAPP_WATCH_SOON")))]),e("p",{staticClass:"offer-info--small"},[e("span",{staticClass:"offer-info__monetization"},[t._v(t._s(o.watchNowOffer.monetizationType))]),e("span",{staticClass:"offer-info__quality"},[t._v(t._s(o.watchNowOffer.presentationType))])])])],1):e("span",{staticClass:"encounter__watch-now"},[e(o.NoOfferNotifier,{attrs:{eventStatus:o.eventStatus,notifyMePayload:o.notifyMePayload},on:{click:o.handleNoOfferNotifierClick}})],1)],1)}),[],!1,null,"4a9ae047",null);e.a=S.exports},"0dab":function(t,e,o){var n=o("6a6c");n.__esModule&&(n=n.default),"string"==typeof n&&(n=[[t.i,n,""]]),n.locals&&(t.exports=n.locals);(0,o("499e").default)("123a3a7d",n,!0,{sourceMap:!1,shadowMode:!1})},"0e3e":function(t,e,o){(e=o("24fb")(!1)).push([t.i,".encounter[data-v-4a9ae047]{display:flex;flex-direction:column;justify-content:space-between;min-height:100%;max-height:293px;overflow:hidden;margin-inline-end:12px;width:180px;border-radius:12px;background-color:#171f29}@media(min-width:550px){.encounter[data-v-4a9ae047]{margin-inline-end:16px;width:232px;max-height:345px}}.encounter>div[data-v-4a9ae047]{display:block;flex-shrink:0;flex-grow:0}.encounter>div.encounter-card-link[data-v-4a9ae047]{cursor:pointer}.encounter a[data-v-4a9ae047]{color:#657182}.encounter__content[data-v-4a9ae047]{display:block;padding:16px}@media(min-width:550px){.encounter__content[data-v-4a9ae047]{padding:20px 20px 16px}}.encounter__content .encounter-header[data-v-4a9ae047]{margin:0;padding:0;font-size:12px;font-weight:400;line-height:18px;display:flex;align-items:flex-start;justify-content:space-between;gap:12px;min-height:41px;max-height:41px}@media(min-width:550px){.encounter__content .encounter-header[data-v-4a9ae047]{font-size:16px;line-height:19px}}.encounter__content .encounter-header--link[data-v-4a9ae047]{color:#78a6b8}.encounter__content .encounter-header__start[data-v-4a9ae047]{overflow:hidden;text-overflow:ellipsis;display:-webkit-box;line-clamp:3;-webkit-line-clamp:3;-webkit-box-orient:vertical}.encounter__content .encounter-header__end__info[data-v-4a9ae047]{display:flex;flex-direction:column;white-space:nowrap;color:#657182;flex-grow:1;flex-basis:0;text-align:end}.encounter__content .encounter-header__end__info--time[data-v-4a9ae047]{margin:0;padding:0;font-weight:400;font-size:14px;line-height:20px;letter-spacing:.015em;color:#c6c8cd;font-weight:700}@media(min-width:550px){.encounter__content .encounter-header__end__info--time[data-v-4a9ae047]{font-size:18px;line-height:22px;letter-spacing:unset}}.encounter__content__team-logos[data-v-4a9ae047]{display:flex;justify-content:space-between;margin:20px 0}.encounter__content__team-logos--tennis-doubles[data-v-4a9ae047]{display:grid}.encounter__content__team-logos--tennis-doubles>*[data-v-4a9ae047]{grid-column-start:1;grid-row-start:1}.encounter__content__team-logos--tennis-doubles[data-v-4a9ae047]>:first-child{z-index:2}.encounter__content__team-logos--tennis-doubles[data-v-4a9ae047]>:nth-child(2){z-index:1;margin-inline-start:30px}@media(max-width:550px){.encounter__content__team-logos--tennis-doubles[data-v-4a9ae047]>:nth-child(2){margin-inline-start:20px}}.encounter__content__team-logos--tennis-doubles[data-v-4a9ae047]>:nth-child(3){z-index:2;grid-column-start:2;margin-inline-start:-30px}@media(max-width:550px){.encounter__content__team-logos--tennis-doubles[data-v-4a9ae047]>:nth-child(3){margin-inline-start:-20px}}.encounter__content__team-logos--tennis-doubles[data-v-4a9ae047]>:nth-child(4){z-index:1;grid-column-start:2}@media(min-width:550px){.encounter__content__team-logos[data-v-4a9ae047]{margin:28px 0}}.encounter__content__team-logos .team-logos__image[data-v-4a9ae047]{display:inline-block;width:60px;height:60px}@media(min-width:550px){.encounter__content__team-logos .team-logos__image[data-v-4a9ae047]{width:80px;height:80px}}.encounter__content__team-names p[data-v-4a9ae047]{padding:0;font-weight:400;font-size:14px;line-height:20px;letter-spacing:.015em;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin:0 0 8px;color:#c6c8cd}@media(min-width:550px){.encounter__content__team-names p[data-v-4a9ae047]{font-size:18px;line-height:22px;letter-spacing:unset;margin-bottom:12px}}.encounter__content__team-names p[data-v-4a9ae047]:only-child{white-space:normal}.encounter__watch-now[data-v-4a9ae047]{height:64px!important;display:flex;align-items:center;gap:8px;margin:0;padding:12px 6px 12px 16px;border-radius:12px;background-color:#222c38}.encounter__watch-now[data-v-4a9ae047]:hover{background-color:#283342}.encounter__watch-now--ended[data-v-4a9ae047]{color:#c6c8cd;display:flex;justify-content:space-around;align-items:center;width:-moz-fit-content;width:fit-content;height:-moz-fit-content;height:fit-content;border-radius:500px;background-color:#22313d;padding:5px 15px}.encounter__watch-now .offer-info p[data-v-4a9ae047]{margin:0;padding:0;font-size:12px;font-weight:400;line-height:18px}@media(min-width:550px){.encounter__watch-now .offer-info p[data-v-4a9ae047]{font-size:16px;line-height:19px}}.encounter__watch-now .offer-info p.offer-info--small[data-v-4a9ae047]{font-size:10px;font-weight:700;line-height:16px;letter-spacing:.025em}@media(min-width:550px){.encounter__watch-now .offer-info p.offer-info--small[data-v-4a9ae047]{font-size:12px;font-weight:700;line-height:18px}}.encounter__watch-now .offer-info p[data-v-4a9ae047]:first-child{color:#c6c8cd;margin-bottom:1px}.encounter__watch-now .offer-info__monetization[data-v-4a9ae047]{color:#657182}.encounter__watch-now .offer-info__quality[data-v-4a9ae047]{color:#fbc500;text-transform:uppercase;margin-inline-start:3px}.encounter__watch-now picture[data-v-4a9ae047]{width:40px;height:40px}.encounter__watch-now[data-v-4a9ae047] img.provider-icon.square{width:40px;height:40px;min-width:40px}",""]),t.exports=e},"140e":function(t,e,o){"use strict";var n=o("2b0e"),a=o("062a"),i=o("f8e1"),r=Object(n.defineComponent)({__name:"CompetitorLogo",props:{competitor:null,size:{default:"small"}},setup(t){const e=t,o=Object(n.computed)(()=>"big"===e.size?"competitor_icon":"competitor_small_icon"),r=Object(n.computed)(()=>{var t,a;return n.default.filter("Thumbor")({url:null!==(t=null===(a=e.competitor)||void 0===a?void 0:a.iconUrl)&&void 0!==t?t:"",imageType:o.value,extension:""})}),l=Object(n.computed)(()=>e.competitor.sportCategory===i.b.Player?"/appassets/img/sports/icons/player-placeholder.svg":"/appassets/img/sports/icons/team-placeholder.svg");return{__sfc:!0,props:e,imageProps:{png:{type:"image/png",extension:".png"}},imagePropFilter:["png"],imageProfile:o,logo:r,fallbackIcon:l,PictureComp:a.a}}}),l=(o("fbc8"),o("2877")),s=Object(l.a)(r,(function(){var t,e,o=this._self._c,n=this._self._setupProxy;return null!==(t=this.competitor)&&void 0!==t&&t.iconUrl?o(n.PictureComp,{staticClass:"logo",attrs:{imageUrl:n.logo,imageProfile:n.imageProfile,alt:null===(e=this.competitor)||void 0===e?void 0:e.name,lazy:"small"===this.size,imagePropFilter:n.imagePropFilter,imageProps:n.imageProps}}):o("img",{staticClass:"logo",attrs:{src:n.fallbackIcon}})}),[],!1,null,"6a12b88e",null);e.a=s.exports},"24a7":function(t,e,o){var n=o("e816");n.__esModule&&(n=n.default),"string"==typeof n&&(n=[[t.i,n,""]]),n.locals&&(t.exports=n.locals);(0,o("499e").default)("c831ad58",n,!0,{sourceMap:!1,shadowMode:!1})},"3fea":function(t,e,o){"use strict";o.d(e,"a",(function(){return l})),o.d(e,"b",(function(){return i})),o.d(e,"c",(function(){return r}));const n={day:"2-digit",month:"short"},a={day:"2-digit",month:"long"};function i(t,e,o,i,r,s){return null==t?"":new Intl.DateTimeFormat(r,{..."long"===s?a:n,timeZone:l(e,o,i)}).format(t).replace(","," -")}function r(t,e,o,n,a){return null==t?"":new Intl.DateTimeFormat(a,{hour:"2-digit",minute:"2-digit",timeZone:l(e,o,n)}).format(t)}function l(t,e,o){var n;return null!=o?o:null===(n=t.find(t=>t.webLocale===e))||void 0===n?void 0:n.timezone}},"4a3a":function(t,e,o){"use strict";o.d(e,"a",(function(){return c}));var n=o("71ff"),a=o("ed4f"),i=o("9540"),r=o("5aad");const l=o("5184").a`
+	mutation ToggleMySportsNotification($input: SetInTitleListInput!) {
+		setInMysportlist(input: $input) {
+			title {
+				id
+				... on SingleStepSportEvent {
+					competition {
+						id
+					}
+					mysportlistEntry {
+						createdAt
+					}
+				}
+				... on MultiStepSportEvent {
+					competition {
+						id
+					}
+					mysportlistEntry {
+						createdAt
+					}
+				}
+			}
+		}
+	}
+`;var s=o("4ba1");async function c({eventId:t,isNotificationActive:e},o){o?function(t,e){const{mutate:o,onError:n}=Object(s.b)(l,{variables:{input:{id:t,state:e}}});o(),n(t=>Object(a.captureMessageForSentry)("[GraphQL ToggleMySportsNotification]:",{error:t,where:"Helper: sports-notification-helper"},"error"))}(t,!e):n.ModalHelper.openModal(i.b,{closable:!0,startScreen:r.a.SIGN_UP},{cssClass:"login-modal"})}},"526b":function(t,e,o){"use strict";o.d(e,"a",(function(){return i}));var n=o("5184"),a=o("f0b3");const i=n.a`
+	fragment SportEventV2OverviewPage on Query {
+		sportEventBucketsV2(
+			country: $country
+			first: $first
+			bucketSize: $bucketSize
+			filter: $filter
+			groupBy: $groupBy
+			after: $after
+			timezoneOffset: $timezoneOffset
+			sortBy: $sortBy
+			sortOrder: $sortOrder
+		) {
+			pageInfo {
+				startCursor
+				endCursor
+				hasPreviousPage
+				hasNextPage
+			}
+			edges {
+				key {
+					competitionStage {
+						name
+						number
+					}
+					competition {
+						id
+						sport
+						content(country: $country, language: $language) {
+							name
+							fullPath
+							iconUrl
+						}
+					}
+					sport {
+						type
+					}
+				}
+				node {
+					totalCount
+					pageInfo {
+						startCursor
+						endCursor
+						hasPreviousPage
+						hasNextPage
+					}
+					edges {
+						cursor
+						node {
+							sport
+							...SportEventOffersV2
+						}
+					}
+				}
+			}
+		}
+	}
+	${a.b}
+`},"548a":function(t,e,o){(e=o("24fb")(!1)).push([t.i,".card[data-v-7901b660]{display:flex;flex-direction:column;justify-content:space-around;align-items:center;text-align:center;margin-inline-end:12px;width:180px;height:100%;border-radius:12px;background-color:#1f2a38;padding:16px}@media(max-width:550px){.card[data-v-7901b660]{height:293px}}@media(min-width:550px){.card[data-v-7901b660]{margin-inline-end:16px;width:232px}}.card__sport[data-v-7901b660]{font-size:24px;font-weight:900}@media(max-width:550px){.card__sport[data-v-7901b660]{font-size:20px}}.card__text[data-v-7901b660]{font-size:14px;font-weight:400}.card__see-all[data-v-7901b660]{font-size:20px;font-weight:700}@media(max-width:550px){.card__see-all[data-v-7901b660]{font-size:16px}}.card__icon[data-v-7901b660]{width:60px;height:60px}@media(max-width:550px){.card__icon[data-v-7901b660]{width:40px;height:40px}}.card__providers[data-v-7901b660]{width:100%}.card__providers__icon[data-v-7901b660]{margin-inline-end:10px}.card__providers__icon[data-v-7901b660] .provider-icon{pointer-events:none;display:block;height:50px;-o-object-fit:cover;object-fit:cover;width:100%}@media(max-width:550px){.card__providers__icon[data-v-7901b660] .provider-icon{height:35px}}",""]),t.exports=e},"5fac":function(t,e,o){"use strict";var n=o("2b0e"),a=o("76f1"),i=o("299e"),r=o("11ca"),l=o("4a3a"),s=o("f058"),c=o("453d"),d=o("be92"),p=Object(n.defineComponent)({__name:"NoOfferNotifier",props:{eventStatus:null,notifyMePayload:null,showLabel:{type:Boolean,default:!0}},emits:["click"],setup(t,{emit:e}){const o=t,{tc:p}=Object(s.b)(),{isLoggedIn:u}=Object(d.d)(Object(c.a)()),m=Object(n.computed)(()=>o.notifyMePayload.isNotificationActive),f=[a.G.Ended,a.G.Closed],_=Object(n.computed)(()=>f.includes(o.eventStatus)),v=Object(n.computed)(()=>_.value?p("SPORTS_WEBAPP_NOTIFY_WHEN_HL_AVAIL"):m.value?p("SPORTS_WEBAPP_NOTIFICATIONACTIVE"):p("SPORTS_WEBAPP_NOTIFY_WHEN_AVAIL"));return{__sfc:!0,props:o,emit:e,tc:p,isLoggedIn:u,isNotificationActive:m,endedStatus:f,isEnded:_,buttonLabel:v,notifyMe:async function(t){_.value||(await Object(l.a)(o.notifyMePayload,u.value),e("click",t))},BasicButton:i.default,faBell:r.f}}}),u=(o("cc72"),o("2877")),m=Object(u.a)(p,(function(){var t=this,e=t._self._c,o=t._self._setupProxy;return e("span",{staticClass:"notifier",on:{click:o.notifyMe}},[t._t("default",(function(){return[e(o.BasicButton,{staticClass:"notifier",attrs:{color:o.isNotificationActive?"tertiary":"primary"}},[e("FontAwesomeIcon",{attrs:{icon:o.faBell,size:"lg"}})],1),t.showLabel?e("span",{staticClass:"notifier__text"},[t._v(t._s(o.buttonLabel))]):t._e()]}),null,{buttonLabel:o.buttonLabel})],2)}),[],!1,null,"361aaa50",null);e.a=m.exports},"651e":function(t,e,o){(e=o("24fb")(!1)).push([t.i,".timer[data-v-546e383d]{display:flex;justify-content:space-around;align-items:center;width:-moz-fit-content;width:fit-content;height:-moz-fit-content;height:fit-content;border-radius:500px;background-color:rgba(251,197,0,.2);padding:5px 10px}.timer--cancelled[data-v-546e383d],.timer--delayed[data-v-546e383d],.timer--fulltime[data-v-546e383d]{background-color:#22313d;padding:5px 15px}.timer--cancelled>p[data-v-546e383d],.timer--delayed>p[data-v-546e383d],.timer--fulltime>p[data-v-546e383d]{color:#c6c8cd;font-size:16px;margin:0}@media(max-width:550px){.timer--cancelled>p[data-v-546e383d],.timer--delayed>p[data-v-546e383d],.timer--fulltime>p[data-v-546e383d]{font-size:14px}}.timer__circle[data-v-546e383d]{border-radius:50%;width:10px;height:10px;opacity:.25;background-color:#fbc500;margin-inline-end:7px;animation:pulse-546e383d 1s infinite}.timer__min[data-v-546e383d]{margin:0;font-size:16px}.timer__min--live[data-v-546e383d]{color:#fbc500!important}@media(max-width:550px){.timer__min[data-v-546e383d]{font-size:14px}}@keyframes pulse-546e383d{0%{transform:scale(1);opacity:.25}50%{transform:scale(1.5);opacity:1}to{transform:scale(1);opacity:.25}}",""]),t.exports=e},"69cb":function(t,e,o){"use strict";var n=o("2b0e"),a=o("f058"),i=o("76f1"),r=o("ed4f"),l=Object(n.defineComponent)({__name:"GameEventStatus",props:{eventStatus:null},setup(t){const e=t,{t:o}=Object(a.b)(),l=Object(n.computed)(()=>e.eventStatus===i.G.Live),s=Object(n.computed)(()=>{switch(e.eventStatus){case i.G.Live:return o("SPORTS_WEBAPP_LIVE");case i.G.Started:return o("SPORTS_WEBAPP_STARTED");case i.G.Ended:case i.G.Closed:return o("SPORTS_WEBAPP_ENDED");case i.G.Suspended:return o("SPORTS_WEBAPP_SUSPENDED");case i.G.Interrupted:return o("SPORTS_WEBAPP_INTERRUPTED");case i.G.Delayed:return o("SPORTS_WEBAPP_DELAYED");case i.G.Postponed:return o("SPORTS_WEBAPP_POSTPONED");case i.G.Cancelled:return o("SPORTS_WEBAPP_CANCELLED");default:return Object(r.captureMessageForSentry)("[Cannot set gameStatusContent text]:",{error:new Error(e.eventStatus+" is not a valid event status."),where:"[components/sport/common/chip/GameEventStatus.vue] gameStatusContent()"},"error"),""}});return{__sfc:!0,t:o,props:e,isLive:l,gameStatusContent:s}}}),s=(o("f3b1"),o("2877")),c=Object(s.a)(l,(function(){var t=this,e=t._self._c,o=t._self._setupProxy;return e("div",{staticClass:"timer",class:{"timer--fulltime":!o.isLive}},[o.isLive?e("div",{staticClass:"timer__circle"}):t._e(),e("p",{staticClass:"timer__min",class:{"timer__min--live":o.isLive}},[t._t("default",(function(){return[t._v(" "+t._s(o.gameStatusContent)+" ")]}))],2)])}),[],!1,null,"546e383d",null);e.a=c.exports},"6a6c":function(t,e,o){(e=o("24fb")(!1)).push([t.i,".global-sports[data-v-275ad4dd]{position:relative;display:flex;flex-direction:column;align-items:center;width:85%}@media(max-width:750px){.global-sports[data-v-275ad4dd]{overflow:hidden;width:100%}}.global-sports-hero[data-v-275ad4dd]{position:relative;display:grid;grid-template-columns:.5fr 2fr .5fr;z-index:0;width:100%}@media(max-width:750px){.global-sports-hero[data-v-275ad4dd]{display:block}}.global-sports-hero__column[data-v-275ad4dd]{display:flex;flex-direction:column;justify-content:space-between;margin-bottom:4px}.global-sports-hero__column[data-v-275ad4dd]>:nth-child(2){margin:10px 0}@media(max-width:750px){.global-sports-hero__column[data-v-275ad4dd]{display:none}}.global-sports-hero__content[data-v-275ad4dd]{position:relative;margin:0 10px;border-radius:24px;text-align:center}@media(max-width:750px){.global-sports-hero__content[data-v-275ad4dd]{height:75vh;min-height:620px;margin:0;border-radius:0}}.global-sports-hero__content__text[data-v-275ad4dd]{position:absolute;display:flex;flex-direction:column;padding:40px 20px;width:100%}.global-sports-hero__content__text__heading[data-v-275ad4dd]{margin:0;font-size:32px;color:#eaebee}.global-sports-hero__content__text__subheading[data-v-275ad4dd]{font-size:20px;color:#eaebee}.global-sports-hero__content__image[data-v-275ad4dd]{width:100%}.global-sports-hero__content__image[data-v-275ad4dd] .picture-comp__img{border-radius:24px}@media(max-width:750px){.global-sports-hero__content__image[data-v-275ad4dd] .picture-comp__img{border-radius:0}}.global-sports-hero__gradient[data-v-275ad4dd]{position:absolute;height:100%;width:100%;top:1px;background-image:linear-gradient(180deg,transparent 0,#000)}.global-sports-lower[data-v-275ad4dd]{display:flex;justify-content:space-evenly;align-items:center;text-align:center;width:100%;margin-top:-140px;font-size:18px}@media(max-width:750px){.global-sports-lower[data-v-275ad4dd]{display:none}}@media(min-width:1800px){.global-sports-lower[data-v-275ad4dd]{margin-top:-18%}}.global-sports-lower--mobile[data-v-275ad4dd]{max-width:100%;margin-inline-start:30px;margin-top:-100px}.global-sports-lower--mobile>div>div>a[data-v-275ad4dd]{font-size:16px}@media(max-width:750px){.global-sports-lower--mobile>div>div>a[data-v-275ad4dd]{margin-inline-end:20px}}@media(min-width:750px){.global-sports-lower--mobile[data-v-275ad4dd]{display:none}}@media(max-width:750px){.global-sports-lower--mobile[data-v-275ad4dd]{position:absolute;top:60%}}.global-sports-hero-card[data-v-275ad4dd]{height:33%;display:flex;flex-direction:column;justify-content:space-between;background-color:#171f29;border-radius:8px;padding:15px;overflow:hidden}.global-sports-hero-card__icon[data-v-275ad4dd]{height:50px;width:50px}.global-sports-hero-card__icon[data-v-275ad4dd] .picture-comp__img{border-radius:500px;height:50px;width:50px}.global-sports-hero-card__name[data-v-275ad4dd]{font-size:18px;font-weight:400;color:#657182;margin-bottom:10px}.global-sports-hero-card__count[data-v-275ad4dd]{font-size:20px;font-weight:700;color:#c6c8cd;margin:0}@media(max-width:750px){.global-sports-v2-cards[data-v-275ad4dd]{position:absolute;top:45%}}",""]),t.exports=e},7771:function(t,e,o){"use strict";o("d443")},7795:function(t,e,o){"use strict";o.d(e,"a",(function(){return n}));const n=o("5184").a`
+	fragment SingleStepSportEventParticipants on SingleStepSportEvent {
+		competitors {
+			homeTeam {
+				score
+				winner
+				competitors {
+					id
+					objectId
+					content(country: $country, language: $language) {
+						name
+						iconUrl(format: PNG)
+						fullPath
+					}
+				}
+			}
+			awayTeam {
+				score
+				winner
+				competitors {
+					id
+					objectId
+					content(country: $country, language: $language) {
+						name
+						iconUrl(format: PNG)
+						fullPath
+					}
+				}
+			}
+		}
+	}
+`},"7aa7":function(t,e,o){"use strict";o.d(e,"b",(function(){return a})),o.d(e,"a",(function(){return i}));var n=o("76f1");const a=Symbol("sportProvidersByShortName"),i=[n.I.Football,n.I.AmericanFootball,n.I.Tennis,n.I.Baseball,n.I.Basketball,n.I.IceHockey]},8050:function(t,e,o){var n=o("0e3e");n.__esModule&&(n=n.default),"string"==typeof n&&(n=[[t.i,n,""]]),n.locals&&(t.exports=n.locals);(0,o("499e").default)("20a372ee",n,!0,{sourceMap:!1,shadowMode:!1})},"8bf0":function(t,e,o){var n=o("98ae");n.__esModule&&(n=n.default),"string"==typeof n&&(n=[[t.i,n,""]]),n.locals&&(t.exports=n.locals);(0,o("499e").default)("5d58c5c8",n,!0,{sourceMap:!1,shadowMode:!1})},"98ae":function(t,e,o){(e=o("24fb")(!1)).push([t.i,".global-sports-v2-cards[data-v-304e44f4]{margin-top:30px!important;width:100%;overflow:hidden}@media(max-width:550px){.global-sports-v2-cards[data-v-304e44f4]{padding-inline-start:15px}}",""]),t.exports=e},"9b2a":function(t,e,o){"use strict";o.d(e,"a",(function(){return r}));var n=o("5184"),a=o("7795"),i=o("f0b3");const r=n.a`
+	fragment SingleStepSportEvent on SingleStepSportEvent {
+		__typename
+		id
+		objectType
+		objectId
+		sport
+		content(country: $country, language: $language) {
+			name
+			status
+			startAt
+			endAt
+			fullPath
+			venue {
+				venueID
+				name
+			}
+			competitionStage {
+				name
+				number
+			}
+			pastEvents @include(if: $withPastEvents) {
+				id
+				objectId
+				objectType
+				sport
+				competition {
+					id
+					objectId
+					objectType
+					sport
+					content(country: $country, language: $language) {
+						fullPath
+						name
+					}
+				}
+				competitors {
+					homeTeam {
+						score
+						competitors {
+							id
+							objectId
+							objectType
+							sport
+							content(country: $country, language: $language) {
+								firstName
+								fullPath
+								lastName
+								name
+								iconUrl
+							}
+						}
+					}
+					awayTeam {
+						score
+						competitors {
+							id
+							objectId
+							objectType
+							sport
+							content(country: $country, language: $language) {
+								firstName
+								fullPath
+								lastName
+								name
+								iconUrl
+							}
+						}
+					}
+				}
+				content(country: $country, language: $language) {
+					name
+					startAt
+					season {
+						name
+						seasonID
+					}
+					status
+				}
+			}
+		}
+		mysportlistEntry {
+			createdAt
+		}
+		competition {
+			id
+			objectId
+			sport
+			activeSeason(country: $country, language: $language) {
+				name
+				seasonID
+			}
+			content(country: $country, language: $language) {
+				name
+				fullPath
+				iconUrl
+			}
+		}
+		...SingleStepSportEventParticipants
+		...SportEventOffersV2
+	}
+	${a.a}
+	${i.b}
+`},a1c0:function(t,e,o){var n=o("d44e");n.__esModule&&(n=n.default),"string"==typeof n&&(n=[[t.i,n,""]]),n.locals&&(t.exports=n.locals);(0,o("499e").default)("29aa80e4",n,!0,{sourceMap:!1,shadowMode:!1})},a67c:function(t,e,o){"use strict";o.r(e);var n=o("2b0e"),a=o("1441"),i=o("062a"),r=o("e689"),l=o("5216"),s=o("6815"),c=o("f058"),d=o("4ba1"),p=o("76f1"),u=o("51c1"),m=o("f65f"),f=o("f1c8"),_=o("7190"),v=o("68e7"),g=o("8a03"),b=o("be92"),h=Object(n.defineComponent)({__name:"GlobalSportsHeaderCard",props:{name:null,sportIcon:null,sport:null,additionalContexts:{default:()=>[]}},setup(t){var e;const o=t,i=Object(s.b)(),{tc:r}=Object(c.b)(),{country:h,webLocale:x}=Object(b.d)(Object(g.a)()),{providersByShortName:S}=Object(b.d)(Object(v.a)()),O=Object(n.computed)(()=>({country:h.value,platform:p.u.Web})),{result:P}=Object(d.c)(f.a,O,{enabled:null===(e=i.name)||void 0===e?void 0:e.startsWith("app.home")}),y=Object(n.computed)(()=>{var t;return((null===(t=P.value)||void 0===t?void 0:t.packages)||[]).map(({shortName:t})=>t)}),C=Object(n.computed)(()=>Object(_.a)(o.sport,x.value)),w=Object(n.computed)(()=>({name:"app.sports.subdomain.overview",path:C.value})),E=Object(n.computed)(()=>y.value.map(t=>S.value[t]).filter(t=>null!=t)),T=Object(n.computed)(()=>r("WEBAPP_GLOBAL_"+o.sport));return{__sfc:!0,props:o,route:i,tc:r,country:h,webLocale:x,providersByShortName:S,queryVariables:O,result:P,sportProvidersByShortName:y,overviewFullPath:C,overviewRoute:w,providers:E,sportName:T,handleSeeAllClick:function(){const t=new u.J(o.sport,p.s.Sport);m.TrackingHelper.trackEvent("userinteraction",{action:"sport_clicked",property:"card-v2"},[t,...o.additionalContexts])},HiddenHorizontalScrollbar:a.default,ProviderIcon:l.a}}}),x=(o("7771"),o("2877")),S=Object(x.a)(h,(function(){var t=this,e=t._self._c,o=t._self._setupProxy;return e("div",{staticClass:"card"},[t.sportIcon?e("img",{staticClass:"card__icon",attrs:{src:t.sportIcon,alt:t.name}}):t._e(),e("span",[e("h2",{staticClass:"card__sport"},[t._v(t._s(o.sportName))]),e("p",{staticClass:"card__text"},[t._v(t._s(t.$tc("WEBAPP_GLOBAL_LIVESTREAMS")))]),e("SmartLink",{staticClass:"card__see-all",attrs:{to:o.overviewRoute}},[e("span",{on:{click:o.handleSeeAllClick}},[t._v(t._s(t.$tc("WEBAPP_GLOBAL_SEE_ALL")))])])],1),e("div",{staticClass:"card__providers"},[e(o.HiddenHorizontalScrollbar,{attrs:{disabled:!0}},t._l(o.providers,(function(t){return e(o.ProviderIcon,{key:t.shortName,staticClass:"card__providers__icon",attrs:{providerShortName:t.shortName,lazy:!0}})})),1)],1)])}),[],!1,null,"7901b660",null).exports,O=o("0adc"),P=o("f4ad"),y=o("7aa7"),C=o("1156"),w=o("ed4f"),E=o("41a0"),T=o("b345"),A=o("dce1"),I=Object(n.defineComponent)({__name:"GlobalSportsCards",props:{additionalContexts:{default:()=>[]}},setup(t){const e=t,o=Object(s.b)(),{t:i,tc:r}=Object(c.b)(),{todayDate:l}=Object(A.a)(),{localeObject:f,language:_,locale:v,country:h,webLocale:x}=Object(b.d)(Object(g.a)()),{result:I,onError:N}=Object(d.c)(P.a,()=>({platform:p.u.Web,language:_.value,country:h.value,first:y.a.length,bucketSize:10,groupBy:p.E.Sport,filter:{startAt:{from:l.value.toISOString(),to:null},competitionIds:[],sports:y.a},timezoneOffset:0,withPastEvents:!1,withOffers:!1}),()=>({enabled:"app.home"===o.name,errorPolicy:"all"}));N(t=>{Object(w.captureMessageForSentry)("[GraphQL Get Home Upcoming Sports Events Data]:",{error:t,where:"Component: GlobalSportsV2Cards"},"error"),Object(T.e)({message:r("WEBAPP_ALERT_ERROR_TITLE"),duration:2e3})});const B=Object(n.computed)(()=>{var t,e;const o={};return(null!==(t=null===(e=I.value)||void 0===e?void 0:e.sportEventBucketsV2.edges)&&void 0!==t?t:[]).flatMap(t=>{var e;return null!==(e=t.node.edges)&&void 0!==e?e:[]}).forEach(({node:t})=>{var e,n;return(null!==(n=o[e=t.sport])&&void 0!==n?n:o[e]=[]).push(t)}),o}),k=Object(n.computed)(()=>x.value===C.a.us?[p.I.AmericanFootball,p.I.Basketball,p.I.Baseball,p.I.IceHockey,p.I.Football,p.I.Tennis]:[p.I.Football,p.I.Tennis,p.I.AmericanFootball,p.I.Basketball,p.I.Baseball,p.I.IceHockey]),L=Object(n.computed)(()=>[{name:r("SPORTS_WEBAPP_SPORT_TYPE_AMERICAN_FOOTBALL"),icon:"/appassets/img/sports/icons/sport/american_football.png",sport:p.I.AmericanFootball,events:$(B.value.AMERICAN_FOOTBALL)},{name:r("SPORTS_WEBAPP_SPORT_TYPE_BASKETBALL"),icon:"/appassets/img/sports/icons/sport/basketball.png",sport:p.I.Basketball,events:$(B.value.BASKETBALL)},{name:r("SPORTS_WEBAPP_SPORT_TYPE_BASEBALL"),icon:"/appassets/img/sports/icons/sport/baseball.png",sport:p.I.Baseball,events:$(B.value.BASEBALL)},{name:r("SPORTS_WEBAPP_SPORT_TYPE_ICE_HOCKEY"),icon:"/appassets/img/sports/icons/sport/ice_hockey.png",sport:p.I.IceHockey,events:$(B.value.ICE_HOCKEY)},{name:r("SPORTS_WEBAPP_SPORT_TYPE_FOOTBALL"),icon:"/appassets/img/sports/icons/sport/football.png",sport:p.I.Football,events:$(B.value.FOOTBALL)},{name:r("SPORTS_WEBAPP_SPORT_TYPE_TENNIS"),icon:"/appassets/img/sports/icons/sport/tennis.png",sport:p.I.Tennis,events:$(B.value.TENNIS)}].sort((t,e)=>k.value.indexOf(t.sport)-k.value.indexOf(e.sport)));function j(t,e=new Date){const o=e.toLocaleDateString("en-US",{timeZone:t,timeZoneName:"short"});return new Date(o)}function R(t){const e={live:[],today:[],upcoming:[]};if(0===t.length)return e;const o=t.map(t=>{var e,o;return{id:t.id,lineItems:z(t),fullPath:D(t).fullPath,startAt:new Date(t.content.startAt),localStartAt:j(f.value.timezone,new Date(t.content.startAt)),sport:t.sport,competition:{text:null===(e=t.competition)||void 0===e||null===(e=e.content)||void 0===e?void 0:e.name,fullPath:null===(o=t.competition)||void 0===o||null===(o=o.content)||void 0===o?void 0:o.fullPath},competitionStageText:F(t),offers:null==t?void 0:t.offers,watchNowOffer:t.watchNowOffer,sportEvent:t}}),n=j(f.value.timezone,l.value);return o.forEach(t=>{var o;const a=n.toDateString()===t.localStartAt.toDateString();(null==t||null===(o=t.sportEvent)||void 0===o||null===(o=o.content)||void 0===o?void 0:o.status)===p.G.Live?e.live.push(t):a?e.today.push(t):e.upcoming.push(t)}),e}function $(t=[]){const{live:e,today:o,upcoming:n}=R(t);return e.length>0?e:o.length>0?o:n}function D(t){var e,o;return Object(E.g)(t)&&null!==(e=null===(o=t.parent)||void 0===o?void 0:o.content)&&void 0!==e?e:t.content}function W(t){return{text:t.content.name,iconUrl:t.content.iconUrl,iconBlurHash:t.content.iconBlurHash}}function z(t){var e,o;if(Object(E.g)(t))return[{text:null!==(e=null===(o=t.parent)||void 0===o?void 0:o.content.name)&&void 0!==e?e:""}];const{competitors:n}=t;return[n.homeTeam,n.awayTeam].flatMap(e=>t.sport===p.I.Tennis&&2===e.competitors.length?e.competitors.map(t=>W(t)):W(e.competitors.find(Boolean)))}function F(t){var e;const{name:o,number:n}=(null===(e=t.content)||void 0===e?void 0:e.competitionStage)||{};switch(t.sport){case p.I.FormulaRacing:return[`${null==o?void 0:o.slice(0,1).toUpperCase()}${null==o?void 0:o.slice(1).toLowerCase()}`,n].filter(t=>null!==t).join(" ");default:return"UNDEFINED"!==o&&o?i("SPORTS_WEBAPP_"+o,{value:n}):""}}return{__sfc:!0,props:e,route:o,t:i,tc:r,todayDate:l,localeObject:f,language:_,locale:v,country:h,webLocale:x,sportEvents:I,onError:N,upcomingEvents:B,sportOrder:k,sportCardData:L,changeTimezone:j,getEvents:R,getSportEvents:$,handleCardClick:function(t){const o=u.J.fromSportEventV2(t.sport,p.s.SportEvent,t.sportEvent);m.TrackingHelper.trackEvent("userinteraction",{action:"event_clicked",property:"card-v2"},[o,...e.additionalContexts])},getEventContent:D,competitorToLineItem:W,getLineItems:z,getCompetitionStageText:F,HiddenHorizontalScrollbar:a.default,GlobalSportsHeaderCard:S,MultiStepEventEncounter:O.a}}}),N=(o("ba0a"),Object(x.a)(I,(function(){var t=this,e=t._self._c,o=t._self._setupProxy;return e("div",{staticClass:"global-sports-v2-cards"},[e(o.HiddenHorizontalScrollbar,{attrs:{additionalContexts:t.additionalContexts}},[t._l(o.sportCardData,(function(n,a){return[o.sportCardData[a].events.length>0?e(o.GlobalSportsHeaderCard,{key:a,attrs:{name:n.name,sportIcon:n.icon,sport:n.sport,additionalContexts:t.additionalContexts}}):t._e(),t._l(o.sportCardData[a].events,(function(t,n){return e(o.MultiStepEventEncounter,{key:t.id,attrs:{event:t,locale:o.locale,country:o.country,listIndex:n,withCompetitionInHeader:!0,isGlobalPage:!0},nativeOn:{click:function(e){return o.handleCardClick(t)}}})}))]}))],2)],1)}),[],!1,null,"304e44f4",null).exports);const B=o("5184").a`
+	query GetCompetitionMatchCount(
+		$country: Country!
+		$language: Language!
+		$first: Int!
+		$after: String
+		$filter: SearchSportCompetitionFilter
+		$groupBy: SportEventAggregation!
+		$timezoneOffset: Int!
+	) {
+		sportCompetitionsV2(country: $country, first: $first, after: $after, filter: $filter) {
+			edges {
+				cursor
+				node {
+					id
+					objectId
+					content(country: $country, language: $language) {
+						name
+						iconUrl
+					}
+					sportEventBucketsV2(country: $country, groupBy: $groupBy, timezoneOffset: $timezoneOffset) {
+						edges {
+							node {
+								totalCount
+							}
+						}
+					}
+					sport
+				}
+			}
+			pageInfo {
+				startCursor
+				endCursor
+				hasPreviousPage
+				hasNextPage
+			}
+		}
+	}
+`;var k=o("fe64"),L=o("cc25"),j=Object(n.defineComponent)({__name:"GlobalSports",props:{language:null,country:null,webLocale:null,moduleName:null},setup(t){const e=t,o=Object(s.b)(),{todayDate:l}=Object(A.a)(),f=Object(n.computed)(()=>({country:e.country,first:6,after:"",filter:{activeOn:l.value.toISOString()},language:e.language,groupBy:p.E.Sport,timezoneOffset:0})),v=Object(n.computed)(()=>"app.home"===o.name),{result:g}=Object(d.c)(B,f,{enabled:v}),b=Object(n.computed)(()=>{var t;return null===(t=g.value)||void 0===t||null===(t=t.sportCompetitionsV2)||void 0===t?void 0:t.edges});function h(t){var e,o,n,a,i;return{node:null==t?void 0:t.node,id:null==t||null===(e=t.node)||void 0===e?void 0:e.id,name:null==t||null===(o=t.node)||void 0===o||null===(o=o.content)||void 0===o?void 0:o.name,matchCount:null!==(n=null==t||null===(a=t.node)||void 0===a||null===(a=a.sportEventBucketsV2)||void 0===a||null===(a=a.edges)||void 0===a||null===(a=a[0])||void 0===a||null===(a=a.node)||void 0===a?void 0:a.totalCount)&&void 0!==n?n:0,sport:null==t||null===(i=t.node)||void 0===i?void 0:i.sport}}const x=Object(n.computed)(()=>{var t;return null===(t=b.value)||void 0===t||null===(t=t.slice(0,3))||void 0===t?void 0:t.map(t=>h(t))}),S=Object(n.computed)(()=>{var t;return null===(t=b.value)||void 0===t||null===(t=t.slice(3))||void 0===t?void 0:t.map(t=>h(t))}),O=Object(n.computed)(()=>{switch(e.webLocale){case C.a.us:return[p.I.AmericanFootball,p.I.Football,p.I.Tennis,p.I.Nascar,p.I.FormulaRacing,p.I.Baseball,p.I.Basketball,p.I.IceHockey];default:return[p.I.Football,p.I.Tennis,p.I.FormulaRacing,p.I.AmericanFootball,p.I.Baseball,p.I.Basketball,p.I.IceHockey]}}),{t:P}=Object(c.b)();const y=Object(n.computed)(()=>new u.A("",-1,e.moduleName,"")),w=Object(n.computed)(()=>m.TrackingHelper.getPageTypeContext(!0));const E=Object(n.computed)(()=>({...L.a,callback:t=>{t&&m.TrackingHelper.trackEvent(k.b.MODULE,{action:"impression",nonInteraction:!0},[y.value])}}));return{__sfc:!0,props:e,backdropImage:"/appassets/img/home/global-sports-hero-1-comp.png",route:o,todayDate:l,queryVariables:f,enableQuery:v,competitionMatchCountData:g,competitionMatchCounts:b,toCompetititionColumn:h,leftColumnCompetitions:x,rightColumnCompetitions:S,sportOrder:O,t:P,getMatchCount:function(t,e){return e===p.I.FormulaRacing?P("WEBAPP_GLOBAL_RACES",{count:Math.ceil(t/5)}):e===p.I.Nascar?P("WEBAPP_GLOBAL_RACES",{count:t}):P("WEBAPP_GLOBAL_MATCHES",{count:t})},moduleContext:y,pageTypeContext:w,handleSportClick:function(t){const e=new u.J(t,p.s.SportCompetition);m.TrackingHelper.trackEvent("userinteraction",{action:"sport_clicked",useLastRoute:!0},[e,w.value,y.value])},observeVisibilityOptions:E,HiddenHorizontalScrollbar:a.default,PictureComp:i.a,CompetitionLogo:r.a,GlobalSportsCards:N,getOverviewUrlBySport:_.a}}}),R=(o("ce6a"),Object(x.a)(j,(function(){var t=this,e=t._self._c,o=t._self._setupProxy;return e("div",{directives:[{name:"observe-visibility",rawName:"v-observe-visibility",value:o.observeVisibilityOptions,expression:"observeVisibilityOptions"}],staticClass:"global-sports"},[e("div",{staticClass:"global-sports-hero"},[e("div",{staticClass:"global-sports-hero__column"},t._l(o.leftColumnCompetitions,(function(n){return e("div",{key:n.name,staticClass:"global-sports-hero-card"},[e(o.CompetitionLogo,{staticClass:"global-sports-hero-card__icon",attrs:{competition:n.node}}),e("div",[e("p",{staticClass:"global-sports-hero-card__name"},[t._v(t._s(n.name))]),e("p",{staticClass:"global-sports-hero-card__count"},[t._v(" "+t._s(o.getMatchCount(n.matchCount,n.sport))+" ")])])],1)})),0),e("div",{staticClass:"global-sports-hero__content"},[e(o.PictureComp,{staticClass:"global-sports-hero__content__image",attrs:{imageProfile:"backdrop",imageUrl:o.backdropImage,alt:"",lazy:!1}})],1),e("div",{staticClass:"global-sports-hero__column"},t._l(o.rightColumnCompetitions,(function(n){return e("div",{key:n.name,staticClass:"global-sports-hero-card"},[e(o.CompetitionLogo,{staticClass:"global-sports-hero-card__icon",attrs:{competition:n.node}}),e("div",[e("p",{staticClass:"global-sports-hero-card__name"},[t._v(t._s(n.name))]),e("p",{staticClass:"global-sports-hero-card__count"},[t._v(" "+t._s(o.getMatchCount(n.matchCount,n.sport))+" ")])])],1)})),0),e("div",{staticClass:"global-sports-hero__gradient"})]),e("div",{staticClass:"global-sports-lower"},t._l(o.sportOrder,(function(n){return e("SmartLink",{key:n,attrs:{to:{name:"app.sports.subdomain.overview",path:o.getOverviewUrlBySport(n,t.webLocale)}}},[e("span",{on:{click:function(t){return o.handleSportClick(n)}}},[t._v(" "+t._s(t.$t("WEBAPP_GLOBAL_"+n))+" ")])])})),1),e("div",{staticClass:"global-sports-lower--mobile"},[e(o.HiddenHorizontalScrollbar,{attrs:{fadedEdge:!0,additionalContexts:[o.moduleContext]}},t._l(o.sportOrder,(function(n){return e("SmartLink",{key:n,attrs:{to:{name:"app.sports.subdomain.overview",path:o.getOverviewUrlBySport(n,t.webLocale)}}},[e("span",{on:{click:function(t){return o.handleSportClick(n)}}},[t._v(" "+t._s(t.$t("WEBAPP_GLOBAL_"+n))+" ")])])})),1)],1),e(o.GlobalSportsCards,{attrs:{additionalContexts:[o.moduleContext]}})],1)}),[],!1,null,"275ad4dd",null));e.default=R.exports},ba0a:function(t,e,o){"use strict";o("8bf0")},cc72:function(t,e,o){"use strict";o("a1c0")},ce6a:function(t,e,o){"use strict";o("0dab")},ceef:function(t,e,o){var n=o("651e");n.__esModule&&(n=n.default),"string"==typeof n&&(n=[[t.i,n,""]]),n.locals&&(t.exports=n.locals);(0,o("499e").default)("e304df1e",n,!0,{sourceMap:!1,shadowMode:!1})},d17e:function(t,e,o){"use strict";o("8050")},d443:function(t,e,o){var n=o("548a");n.__esModule&&(n=n.default),"string"==typeof n&&(n=[[t.i,n,""]]),n.locals&&(t.exports=n.locals);(0,o("499e").default)("12630667",n,!0,{sourceMap:!1,shadowMode:!1})},d44e:function(t,e,o){(e=o("24fb")(!1)).push([t.i,".notifier[data-v-361aaa50]{margin:0;padding:0;font-size:12px;font-weight:400;line-height:18px;display:flex;align-items:center;justify-content:center;gap:8px;cursor:pointer}@media(min-width:550px){.notifier[data-v-361aaa50]{font-size:16px;line-height:19px}}.notifier button[data-v-361aaa50]{height:40px;width:40px;border:0;border-radius:6px;flex-shrink:0;cursor:pointer}.notifier__text[data-v-361aaa50]{display:flex;flex-direction:column;color:#c6c8cd}",""]),t.exports=e},e689:function(t,e,o){"use strict";var n=o("2b0e"),a=o("062a"),i=Object(n.defineComponent)({__name:"CompetitionLogo",props:{competition:null},setup(t){var e;const o=t,i=Object(n.computed)(()=>{var t;return null===(t=o.competition)||void 0===t||null===(t=t.content)||void 0===t?void 0:t.iconUrl}),r=Object(n.computed)(()=>{var t;return null===(t=o.competition)||void 0===t||null===(t=t.content)||void 0===t?void 0:t.name});const l=`/appassets/img/sports/icons/sport/${null===(e=o.competition)||void 0===e||null===(e=e.sport)||void 0===e?void 0:e.toLowerCase()}.png`;return{__sfc:!0,props:o,imageUrl:i,competitionName:r,getImageUrl:function(t){return n.default.filter("Thumbor")({url:t,imageType:"competitor_icon"})},fallbackSrc:l,PictureComp:a.a}}}),r=o("2877"),l=Object(r.a)(i,(function(){var t=this._self._c,e=this._self._setupProxy;return e.imageUrl?t(e.PictureComp,{attrs:{imageProfile:"competitor_icon",imageUrl:e.getImageUrl(e.imageUrl),alt:e.competitionName}}):t("img",{attrs:{src:e.fallbackSrc,alt:e.competitionName}})}),[],!1,null,"1d98d5c2",null);e.a=l.exports},e816:function(t,e,o){(e=o("24fb")(!1)).push([t.i,".logo[data-v-6a12b88e]{display:flex;align-items:center;justify-content:center;height:100%;width:100%}",""]),t.exports=e},f0b3:function(t,e,o){"use strict";o.d(e,"a",(function(){return a})),o.d(e,"b",(function(){return i}));var n=o("5184");const a=n.a`
+	fragment SportEventOffer on SportOffer {
+		package {
+			id
+			packageId
+			technicalName
+			clearName
+			shortName
+			monetizationTypes
+		}
+		monetizationType
+		presentationType
+		audioLanguage
+		standardWebURL
+		sportObjectType
+	}
+`,i=n.a`
+	fragment SportEventOffersV2 on SportEventV2 {
+		offerCount(country: $country, platform: $platform, filter: { bestOnly: false })
+		watchNowOffer(country: $country, platform: $platform) {
+			package {
+				id
+				packageId
+				technicalName
+				clearName
+				shortName
+				monetizationTypes
+				iconWide
+			}
+			monetizationType
+			presentationType
+			audioLanguage
+			standardWebURL
+			sportObjectType
+		}
+		offers(country: $country, platform: $platform, filter: { bestOnly: false }) @include(if: $withOffers) {
+			...SportEventOffer
+		}
+	}
+	${a}
+`},f1c8:function(t,e,o){"use strict";o.d(e,"a",(function(){return n}));const n=o("5184").a`
+	query GetSportProvidersByShortNames($country: Country!, $platform: Platform!) {
+		packages(country: $country, platform: $platform, hasSport: true) {
+			packageId
+			shortName
+			clearName
+		}
+	}
+`},f3b1:function(t,e,o){"use strict";o("ceef")},f4ad:function(t,e,o){"use strict";o.d(e,"a",(function(){return r}));var n=o("5184"),a=o("526b"),i=o("9b2a");const r=n.a`
+	query GetSingleStepSportOverview(
+		$country: Country!
+		$language: Language!
+		$first: Int!
+		$bucketSize: Int
+		$filter: SportEventFilter
+		$withPastEvents: Boolean = false
+		$withOffers: Boolean = true
+		$groupBy: SportEventAggregation!
+		$platform: Platform!
+		$after: String
+		$timezoneOffset: Int!
+		$sortBy: SportEventSorting! = START_AT
+		$sortOrder: SortOrder! = ASC
+	) {
+		...SportEventV2OverviewPage
+		sportEventBucketsV2(
+			country: $country
+			first: $first
+			bucketSize: $bucketSize
+			filter: $filter
+			groupBy: $groupBy
+			after: $after
+			timezoneOffset: $timezoneOffset
+			sortBy: $sortBy
+			sortOrder: $sortOrder
+		) {
+			edges {
+				node {
+					edges {
+						node {
+							...SingleStepSportEvent
+						}
+					}
+				}
+			}
+		}
+	}
+	${a.a}
+	${i.a}
+`},f8e1:function(t,e,o){"use strict";o.d(e,"a",(function(){return r})),o.d(e,"b",(function(){return l})),o.d(e,"c",(function(){return c})),o.d(e,"f",(function(){return u})),o.d(e,"d",(function(){return f})),o.d(e,"e",(function(){return _})),o.d(e,"g",(function(){return v}));var n=o("7190"),a=o("76f1"),i=o("b3dc");const r=t=>t,l={Player:"player",Team:"team"},s={[a.D.Undefined]:r("SPORTS_WEBAPP_UNDEFINED"),[a.D.MatchDay]:r("SPORTS_WEBAPP_MATCH_DAY"),[a.D.Final]:r("SPORTS_WEBAPP_FINAL"),[a.D.Semifinal]:r("SPORTS_WEBAPP_SEMIFINAL"),[a.D.Quarterfinal]:r("SPORTS_WEBAPP_ROUND_OF_8"),[a.D.RoundOf_8]:r("SPORTS_WEBAPP_ROUND_OF_8"),[a.D.RoundOf_16]:r("SPORTS_WEBAPP_ROUND_OF_16"),[a.D.RoundOf_32]:r("SPORTS_WEBAPP_ROUND_OF_32"),[a.D.RoundOf_64]:r("SPORTS_WEBAPP_ROUND_OF_64"),[a.D.RoundOf_128]:r("SPORTS_WEBAPP_ROUND_OF_128"),[a.D.QualificationFinal]:r("SPORTS_WEBAPP_QUALIFICATION_FINAL"),[a.D.QualificationRound_2]:r("SPORTS_WEBAPP_QUALIFICATION_ROUND_2"),[a.D.QualificationRound_1]:r("SPORTS_WEBAPP_QUALIFICATION_ROUND_1"),[a.D.Qualification]:r("SPORTS_WEBAPP_QUALIFICATION"),[a.D.PlayoffRound]:r("SPORTS_WEBAPP_PLAYOFF_ROUND"),[a.D.Race]:r("SPORTS_WEBAPP_RACE"),[a.D.Qualifying]:r("SPORTS_WEBAPP_QUALIFYING"),[a.D.Practice]:r("SPORTS_WEBAPP_PRACTICE"),[a.D.Sprint]:r("SPORTS_WEBAPP_SPRINT"),[a.D.AmericanFootballConferenceChampionship]:r("SPORTS_WEBAPP_AMERICAN_FOOTBALL_CONFERENCE_CHAMPIONSHIP"),[a.D.AmericanFootballConferenceDivisionalRound]:r("SPORTS_WEBAPP_AMERICAN_FOOTBALL_CONFERENCE_DIVISIONAL_ROUND"),[a.D.AmericanFootballConferenceWildCardRound]:r("SPORTS_WEBAPP_AMERICAN_FOOTBALL_CONFERENCE_WILD_CARD_ROUND"),[a.D.NationalFootballConferenceChampionship]:r("SPORTS_WEBAPP_NATIONAL_FOOTBALL_CONFERENCE_CHAMPIONSHIP"),[a.D.NationalFootballConferenceDivisionalRound]:r("SPORTS_WEBAPP_NATIONAL_FOOTBALL_CONFERENCE_DIVISIONAL_ROUND"),[a.D.NationalFootballConferenceWildCardRound]:r("SPORTS_WEBAPP_NATIONAL_FOOTBALL_CONFERENCE_WILD_CARD_ROUND"),[a.D.SuperBowl]:r("SPORTS_WEBAPP_SUPER_BOWL")};function c(t,e=!1,o=l.Team){var n,a,i,r,s,c;const d=t.competitors.homeTeam.competitors[0].content,p={name:d.name,iconUrl:null!==(n=d.iconUrl)&&void 0!==n?n:void 0,score:null!==(a=t.competitors.homeTeam.score)&&void 0!==a?a:void 0,fullPath:null!==(i=d.fullPath)&&void 0!==i?i:void 0,sportCategory:o},u=t.competitors.awayTeam.competitors[0].content,m={name:u.name,iconUrl:null!==(r=u.iconUrl)&&void 0!==r?r:void 0,score:null!==(s=t.competitors.awayTeam.score)&&void 0!==s?s:void 0,fullPath:null!==(c=u.fullPath)&&void 0!==c?c:void 0,sportCategory:o};return e?{start:[m],end:[p],isSwitched:e}:{start:[p],end:[m],isSwitched:e}}function d(t,e=!1){var o,n,a,i;const[l]=null!==(o=null===(n=t.competitors)||void 0===n?void 0:n.homeTeam.competitors.map(t=>t.content.name))&&void 0!==o?o:"",[s]=null!==(a=null===(i=t.competitors)||void 0===i?void 0:i.awayTeam.competitors.map(t=>t.content.name))&&void 0!==a?a:"";return{key:r(e?"SPORTS_WEBAPP_TEAM_AT":"SPORTS_WEBAPP_TEAM_VS"),params:{homeTeam:l,awayTeam:s}}}function p(t,e){const{name:o,number:n=1}=t;return o===a.D.Undefined||null==o?"":e(s[o],{value:n}).toString()}function u(t){return{eventType:r("SPORTS_WEBAPP_MATCHES"),getCompetitionHeading:function(t,e){var o;const n=p(t.competitionStage,e),a=null===(o=t.competition)||void 0===o?void 0:o.content.name;return""===n?null!=a?a:"":`${a} - ${n}`},icon:`/appassets/img/sports/icons/sport/${t.toLowerCase()}.png`,getUrl:e=>Object(n.a)(t,e),pageType:i.a.SportOverview,sportType:t,getEventTitleParams:d}}const m=`https://www.${JW_CONFIG.DOMAIN}/sports`;function f(t){return{eventType:r("SPORTS_WEBAPP_MATCHES"),getStageHeading:(t,e)=>p(t,e)||e("SPORTS_WEBAPP_MATCHES").toString(),iconSrcset:function(t){return null==t?[]:[`${m}/competition/${t.id}.png`,`${m}/competition/${t.id}@2x.png 2x`]},getOverviewUrl:e=>Object(n.a)(t,e),pageType:i.a.SportCompetition,sportType:t,getEventTitleParams:d}}function _(t){return{eventType:r("SPORTS_WEBAPP_MATCHES"),getEventTitleParams:d,getStageHeading:p,pageType:i.a.SportEvent,sportType:t}}function v(t){return{eventType:r("SPORTS_WEBAPP_MATCHES"),getEventTitleParams:d,getStageHeading:p,getOverviewUrl:e=>Object(n.a)(t,e),pageType:i.a.SportTeam,sportType:t}}},fbc8:function(t,e,o){"use strict";o("24a7")}}]);
+//# sourceMappingURL=1772821723701_spotlight-sport.4f7969e0.js.map

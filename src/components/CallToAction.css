@@ -1,0 +1,140 @@
+.cta-section {
+  padding: 80px 20px 100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Subtle red glow in background matching the theme */
+.cta-section::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 60%;
+  height: 60%;
+  background: radial-gradient(circle, rgba(204, 0, 0, 0.08) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.cta-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  max-width: 800px;
+  position: relative;
+  z-index: 1;
+}
+
+.cta-logo {
+  margin-bottom: 32px;
+}
+
+.cta-logo img {
+  height: 48px;
+  width: auto;
+  display: block;
+}
+
+.cta-heading {
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  font-family: var(--font-display);
+  font-weight: 700;
+  color: #FFFFFF;
+  line-height: 1.1;
+  margin: 0;
+  margin-bottom: 40px;
+  letter-spacing: 0.5px;
+}
+
+.cta-heading .gradient-text {
+  font-family: var(--font-primary);
+  font-weight: 500 !important;
+  font-size: clamp(0.9rem, 1.8vw, 1.1rem) !important;
+  line-height: 1.5;
+  margin-top: 16px !important;
+  display: inline-block;
+  letter-spacing: normal;
+  opacity: 0.9;
+}
+
+.cta-stores {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.cta-store-btn {
+  display: block;
+  transition: all var(--transition-normal);
+}
+
+.cta-store-btn img {
+  height: 44px;
+  width: auto;
+  border-radius: 6px;
+  transition: opacity var(--transition-fast), transform var(--transition-fast);
+}
+
+.cta-store-btn:hover {
+  transform: translateY(-3px);
+  filter: drop-shadow(0 8px 16px rgba(255, 255, 255, 0.15));
+}
+
+.cta-store-btn:hover img {
+  opacity: 0.9;
+}
+
+@media (max-width: 1024px) {
+  .cta-section {
+    padding: 64px 20px 84px;
+  }
+
+  .cta-logo {
+    margin-bottom: 24px;
+  }
+
+  .cta-logo img {
+    height: 42px;
+  }
+
+  .cta-heading {
+    margin-bottom: 30px;
+  }
+}
+
+@media (max-width: 767px) {
+  .cta-section {
+    padding: 48px 16px 64px;
+  }
+
+  .cta-section::before {
+    width: 92%;
+    height: 92%;
+  }
+
+  .cta-heading {
+    font-size: clamp(1.55rem, 7vw, 2.2rem);
+    margin-bottom: 24px;
+  }
+
+  .cta-heading .gradient-text {
+    font-size: clamp(0.78rem, 3.4vw, 0.92rem) !important;
+    margin-top: 12px !important;
+  }
+
+  .cta-stores {
+    gap: 10px;
+  }
+
+  .cta-store-btn img {
+    height: 38px;
+  }
+}

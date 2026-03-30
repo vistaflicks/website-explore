@@ -1,0 +1,31 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([["chunk-d2243bec"],{"438b":function(t,e,i){"use strict";i("ab90")},a875:function(t,e,i){var r=i("ad00");r.__esModule&&(r=r.default),"string"==typeof r&&(r=[[t.i,r,""]]),r.locals&&(t.exports=r.locals);(0,i("499e").default)("02cef93e",r,!0,{sourceMap:!1,shadowMode:!1})},aa73:function(t,e,i){"use strict";i.r(e);var r=i("2b0e"),a=i("1441"),l=i("ba9f"),o=Object(r.defineComponent)({__name:"TitleCreditsPortrait",props:{portraitUrl:null,name:null},setup:t=>({__sfc:!0,NO_PORTRAIT_URL:"/appassets/img/no-actor-transparent.png"})}),n=(i("438b"),i("2877")),s=Object(n.a)(o,(function(){var t,e=this._self._c,i=this._self._setupProxy;return e("div",{class:{portrait:!!this.portraitUrl}},[e("img",{attrs:{fetchpriority:"low",loading:"lazy",src:null!==(t=this.portraitUrl)&&void 0!==t?t:i.NO_PORTRAIT_URL,alt:this.name}})])}),[],!1,null,"6a0811ca",null).exports,c=i("5184"),d=i("c27b");const u=c.a`
+	query GetAllCredits($fullPath: String!, $country: Country!, $language: Language!) {
+		urlV2(fullPath: $fullPath) {
+			id
+			node {
+				id
+				... on MovieOrShow {
+					content(country: $country, language: $language) {
+						... on MovieOrShowContent {
+							credits(role: ACTOR) {
+								...Credit
+							}
+						}
+					}
+				}
+				... on Season {
+					show {
+						id
+						content(country: $country, language: $language) {
+							credits(role: ACTOR) {
+								...Credit
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	${d.a}
+`;var p=i("4ba1"),_=i("f058"),v=i("8a03"),f=i("e30e"),h=i("299e"),g=i("be92"),b=Object(r.defineComponent)({__name:"TitleCredits",props:{title:null,role:{default:""}},setup(t){const e=t,{country:i,language:o}=Object(g.d)(Object(v.a)()),{activeRoute:n}=Object(g.d)(Object(f.a)()),{t:c}=Object(_.b)(),d=Object(r.computed)(()=>{var t,i,r;return"Season"===e.title.__typename?null!==(i=null===(r=e.title.show)||void 0===r?void 0:r.content.credits)&&void 0!==i?i:[]:null!==(t=e.title.content.credits)&&void 0!==t?t:[]}),b=Object(r.ref)(d.value.length<20),{result:m}=Object(p.c)(u,()=>({fullPath:n.value.path,country:i.value,language:o.value}),()=>({enabled:b.value,errorPolicy:"all"})),w=Object(r.computed)(()=>{var t;const e=null===(t=m.value)||void 0===t?void 0:t.urlV2.node;var i,r,a,l;return"Season"===(null==e?void 0:e.__typename)?null!==(i=null===(r=e.show)||void 0===r?void 0:r.content.credits)&&void 0!==i?i:[]:("Movie"===(null==e?void 0:e.__typename)||"Show"===(null==e?void 0:e.__typename))&&null!==(a=null===(l=e.content)||void 0===l?void 0:l.credits)&&void 0!==a?a:[]}),x=Object(r.computed)(()=>{var t;return(null===(t=w.value)||void 0===t?void 0:t.length)>0?w.value:d.value}),y=Object(r.computed)(()=>e.role?x.value.filter(t=>t.role===e.role):x.value);return{__sfc:!0,props:e,country:i,language:o,activeRoute:n,t:c,propsCredits:d,hasLoadedMore:b,result:m,allCredits:w,credits:x,filteredCredits:y,loadMore:async function(){b.value=!0},HiddenHorizontalScrollbar:a.default,TitleCreditName:l.a,TitleCreditsPortrait:s,BasicButton:h.default}}}),m=(i("b646"),Object(n.a)(b,(function(){var t=this,e=t._self._c,i=t._self._setupProxy;return e("div",{directives:[{name:"show",rawName:"v-show",value:i.filteredCredits.length>0,expression:"filteredCredits.length > 0"}]},[e("div",{staticClass:"detail-infos__subheading"},[e("h3",{staticClass:"detail-infos__subheading--label"},[t._t("default")],2)]),e(i.HiddenHorizontalScrollbar,{staticClass:"title-credits"},[t._l(i.filteredCredits,(function(r,a){var l;return e("div",{key:r.personId+"-"+a,staticClass:"title-credits__actor"},[e("div",{staticClass:"title-credits__actor--img"},[e(i.TitleCreditsPortrait,{attrs:{portraitUrl:null!==(l=r.portraitUrl)&&void 0!==l?l:void 0,name:r.name}})],1),e("div",[r?e(i.TitleCreditName,{attrs:{credit:r}}):t._e(),r.characterName?e("div",{staticClass:"title-credits__actor--role"},[e("div",{staticClass:"title-credits__actor--role--name"},[e("strong",{attrs:{title:r.characterName}},[t._v(t._s(r.characterName))])])]):t._e()],1)])})),e("div",{staticClass:"title-credits__actor title-credits__actor--empty"},[i.hasLoadedMore?t._e():e(i.BasicButton,{attrs:{color:"ghost"},on:{click:i.loadMore}},[t._v(t._s(i.t("WEBAPP_LOAD_MORE"))+" ")])],1)],2)],1)}),[],!1,null,null,null));e.default=m.exports},ab90:function(t,e,i){var r=i("ee05");r.__esModule&&(r=r.default),"string"==typeof r&&(r=[[t.i,r,""]]),r.locals&&(t.exports=r.locals);(0,i("499e").default)("45b6d4ba",r,!0,{sourceMap:!1,shadowMode:!1})},ad00:function(t,e,i){(e=i("24fb")(!1)).push([t.i,".title-credits{margin-bottom:15px;padding-bottom:5px;color:#b9bdcc}.title-credits .hidden-horizontal-scrollbar__items{align-items:normal}.title-credits__actor{margin-inline-start:15px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;background-color:#101720;padding:16px;border-radius:8px;max-width:200px;width:200px;line-height:200%;text-align:center}.title-credits__actor--empty{background-color:transparent}.title-credits__actor:first-child{margin-inline-start:0}.platform-android .title-credits__actor,.title-credits__actor .platform-ios{margin-inline-start:15px!important}.title-credits__actor--img{height:88px;width:88px}.title-credits__actor--name{display:block;width:130px;text-overflow:ellipsis;overflow:hidden}.title-credits__actor--role{white-space:nowrap;max-width:130px}.title-credits__actor--role,.title-credits__actor--role--name{overflow:hidden;text-overflow:ellipsis}",""]),t.exports=e},b646:function(t,e,i){"use strict";i("a875")},ee05:function(t,e,i){(e=i("24fb")(!1)).push([t.i,".portrait[data-v-6a0811ca]{border-radius:50%;height:100%;width:100%;overflow:hidden;display:flex;align-items:center;justify-content:center}",""]),t.exports=e}}]);
+//# sourceMappingURL=1772821723701_chunk-d2243bec.8d6f69a8.js.map

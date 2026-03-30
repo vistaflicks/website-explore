@@ -1,0 +1,78 @@
+/* ─── Banner Row ─────────────────────────── */
+.banner-section {
+  padding: 20px 30px 20px;
+  max-width: var(--container-max);
+  margin: 0 auto;
+}
+
+.banner-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.banner-card {
+  position: relative;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  aspect-ratio: 21/9;
+  background-size: cover;
+  background-position: center;
+  cursor: pointer;
+  transition: transform var(--transition-fast);
+}
+
+.banner-card:hover {
+  transform: scale(1.02);
+}
+
+.banner-card__overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent 30%, rgba(0, 0, 0, 0.8) 100%);
+}
+
+.banner-card__title {
+  position: absolute;
+  bottom: 20px;
+  left: 24px;
+  right: 24px;
+  font-size: 18px;
+  font-weight: 700;
+  color: white;
+  z-index: 2;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+}
+
+@media (max-width: 1024px) {
+  .banner-section {
+    padding: 18px 20px 18px;
+  }
+
+  .banner-row {
+    gap: 14px;
+  }
+
+  .banner-card__title {
+    font-size: 16px;
+    left: 18px;
+    right: 18px;
+    bottom: 16px;
+  }
+}
+
+@media (max-width: 767px) {
+  .banner-section {
+    padding: 16px 20px 24px;
+  }
+
+  .banner-row {
+    grid-template-columns: 1fr;
+  }
+
+  .banner-card__title {
+    font-size: 15px;
+    bottom: 14px;
+    left: 16px;
+  }
+}
