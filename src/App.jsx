@@ -4,6 +4,7 @@ import Hero from "./components/Hero";
 import FilterPanel from "./components/FilterPanel";
 import PosterGrid from "./components/PosterGrid";
 import ContentCarousel from "./components/ContentCarousel";
+import OTTSection from "./components/OTTSection";
 import BannerRow from "./components/BannerRow";
 import NetflixSpotlight from "./components/NetflixSpotlight";
 import Footer from "./components/Footer";
@@ -15,7 +16,14 @@ import {
 import { buildApiUrl } from "./config/api";
 
 const buildWebsiteContentUrl = (scope) =>
-  buildApiUrl("/api/v1/website/exploreSequencer/website-content", { scope });
+  buildApiUrl("/api/v1/website/exploreSequencer/website-content", {
+    scope,
+    page: -1,
+    populate: "movieSequence.id",
+  });
+const GROUPED_BY_GENRE_API = buildApiUrl("/api/v1/website/content/grouped-by-genre", {
+  limitPerGenre: 15,
+});
 const CONTENT_DISTRIBUTORS_API = buildApiUrl(
   "/api/v1/website/content/contentDistributors",
   {
@@ -30,47 +38,87 @@ const categoryDescFallbacks = movieCategories.reduce((acc, category) => {
   return acc;
 }, {});
 
-const capitalizeFirstLetter = (value = "") => {
-  const text = String(value).trim();
-  if (!text) return "";
-  return text.charAt(0).toUpperCase() + text.slice(1);
+const normalizeGenre = (text = "") =>
+  String(text)
+    .toLowerCase()
+    .replace(/[^a-z0-9]/g, "");
+
+const getGenreFromCategory = (categoryTitle = "") => {
+  const match = String(categoryTitle).match(/\bin\s+(.+)$/i);
+  return match?.[1]?.trim() || "";
 };
 
-const mapResultsToCategories = (results) => {
-  if (!Array.isArray(results)) return [];
+const mapResultsToCategories = (sequencerResults, genreResults) => {
+  if (!Array.isArray(sequencerResults)) return [];
 
-  return results
-    .filter((item) => item && Array.isArray(item.movieSequence))
-    .sort(
-      (a, b) =>
-        (a.position ?? Number.MAX_SAFE_INTEGER) -
-        (b.position ?? Number.MAX_SAFE_INTEGER),
-    )
+  const genreMap = (genreResults || []).reduce((acc, item) => {
+    if (item.genreName) {
+      acc[normalizeGenre(item.genreName)] = item.movies || [];
+    }
+    return acc;
+  }, {});
+
+  const uniqueCategories = [];
+  const seenTitles = new Set();
+
+  const sortedSequencer = [...sequencerResults].sort(
+    (a, b) =>
+      (a.position ?? Number.MAX_SAFE_INTEGER) -
+      (b.position ?? Number.MAX_SAFE_INTEGER),
+  );
+
+  sortedSequencer.forEach((item) => {
+    if (!item || !item.categoryName) return;
+    const title = item.categoryName.trim();
+    if (seenTitles.has(title.toLowerCase())) return;
+
+    seenTitles.add(title.toLowerCase());
+    uniqueCategories.push(item);
+  });
+
+  return uniqueCategories
     .map((item) => {
-      const movies = (item.movieSequence || [])
-        .map((movie, index) => {
-          const movieData =
-            movie?.id && typeof movie.id === "object" ? movie.id : {};
+      const categoryName = item.categoryName || "";
+      const inferredGenre = normalizeGenre(getGenreFromCategory(categoryName));
+      const dynamicMovies = genreMap[inferredGenre];
 
+      const manualMovies = (item.movieSequence || [])
+        .map((m, index) => {
+          const movieData = m?.id && typeof m.id === "object" ? m.id : {};
           return {
             ...movieData,
-            rank: movie?.position ?? index + 1,
-            title: movieData?.title || movie?.title || "",
+            rank: m?.position ?? index + 1,
+            title: movieData?.title || m?.title || "",
             poster:
               movieData?.posterPath ||
               movieData?.poster ||
-              movie?.posterPath ||
+              m?.posterPath ||
               "",
           };
         })
         .filter((movie) => Boolean(movie?.title || movie?.poster));
 
+      let movies = [];
+
+      if (manualMovies.length > 0) {
+        // Use manual sequencer list if available
+        movies = manualMovies;
+      } else if (dynamicMovies && dynamicMovies.length > 0) {
+        // Fallback to dynamic genre-based movies
+        movies = dynamicMovies.map((movie, index) => ({
+          ...movie,
+          rank: index + 1,
+          poster: movie.posterPath || "",
+        }));
+      }
+
       return {
-        title: capitalizeFirstLetter(item.categoryName || ""),
+        id: item.id || item._id || categoryName,
+        title: categoryName,
         desc:
           item.description ||
           item.desc ||
-          categoryDescFallbacks[item.categoryName] ||
+          categoryDescFallbacks[categoryName] ||
           "",
         movies,
       };
@@ -82,6 +130,7 @@ const mapResultsToCategories = (results) => {
         category.movies.length > 0,
     );
 };
+
 
 const mapResultsToBanners = (results) => {
   if (!Array.isArray(results)) return [];
@@ -97,6 +146,8 @@ const mapResultsToBanners = (results) => {
   }));
 };
 
+const BLOCKED_PLATFORMS = ['mxplayer', 'jiocinema', 'altbalaji', 'hungama', 'sunnxt', 'sonyliv'];
+
 const mapContentDistributorPlatforms = (items) => {
   if (!Array.isArray(items)) return [];
 
@@ -110,13 +161,14 @@ const mapContentDistributorPlatforms = (items) => {
       (typeof ottApp === "object" ? ottApp?.id || ottApp?._id : ottApp) || "";
     if (!id) return;
 
+    const name = (typeof ottApp === "object" ? ottApp?.name : "") || item?.name || "Platform";
+    const normalizedName = name.toLowerCase().replace(/[\s\-_]/g, '');
+    if (BLOCKED_PLATFORMS.some((b) => normalizedName.includes(b))) return;
+
     if (!unique.has(id)) {
       unique.set(id, {
         id,
-        name:
-          (typeof ottApp === "object" ? ottApp?.name : "") ||
-          item?.name ||
-          "Platform",
+        name,
         src: typeof ottApp === "object" ? ottApp?.icon || "" : "",
       });
     }
@@ -146,20 +198,9 @@ const getApiTotalResults = (payload) => {
   return Number.isFinite(parsed) && parsed >= 0 ? parsed : null;
 };
 
-const resolveScopeFromIp = async () => {
-  try {
-    const res = await fetch("https://ipapi.co/json/");
-    const data = await res.json();
-
-    return data?.country === "IN" ? "local" : "global";
-  } catch {
-    const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-    return timeZone === "Asia/Kolkata" ? "local" : "global";
-  }
-};
-
 export default function App() {
-  const [categories, setCategories] = useState(movieCategories);
+  const [categories, setCategories] = useState([]);
+  const [ottCategories, setOttCategories] = useState([]);
   const [bannerCards, setBannerCards] = useState(fallbackBannerCards);
   const [posterFilters, setPosterFilters] = useState({
     contentTypeId: "",
@@ -178,25 +219,45 @@ export default function App() {
 
     const loadWebsiteContent = async () => {
       try {
-        const scope = await resolveScopeFromIp(controller.signal);
+        const [genreRes, seqRes, ottRes] = await Promise.all([
+          fetch(GROUPED_BY_GENRE_API, { signal: controller.signal }),
+          fetch(buildWebsiteContentUrl("local"), { signal: controller.signal }),
+          fetch(buildWebsiteContentUrl("ott"), { signal: controller.signal }),
+        ]);
+
         if (controller.signal.aborted) return;
 
-        const response = await fetch(buildWebsiteContentUrl(scope), {
-          signal: controller.signal,
-        });
-        if (!response.ok) return;
-
-        const payload = await response.json();
-        const results = payload?.data?.results;
-        const mapped = mapResultsToCategories(results);
-        const mappedBanners = mapResultsToBanners(results);
-
-        if (mapped.length > 0) {
-          setCategories(mapped);
+        let genreResults = [];
+        if (genreRes.ok) {
+          const payload = await genreRes.json();
+          genreResults = payload?.data?.results || [];
         }
 
-        if (mappedBanners.length > 0) {
-          setBannerCards(mappedBanners);
+        if (seqRes.ok) {
+          const payload = await seqRes.json();
+          const sequencerResults = getApiResults(payload);
+
+          const mappedCategories = mapResultsToCategories(
+            sequencerResults,
+            genreResults,
+          );
+          const mappedBanners = mapResultsToBanners(sequencerResults);
+
+          if (mappedCategories.length > 0) {
+            setCategories(mappedCategories);
+          }
+          if (mappedBanners.length > 0) {
+            setBannerCards(mappedBanners);
+          }
+        }
+
+        if (ottRes.ok) {
+          const payload = await ottRes.json();
+          const ottResults = getApiResults(payload);
+          const mappedOtt = mapResultsToCategories(ottResults, []);
+          if (mappedOtt.length > 0) {
+            setOttCategories(mappedOtt);
+          }
         }
       } catch (error) {
         // Keep existing fallback UI data if API call fails.
@@ -251,51 +312,91 @@ export default function App() {
       ),
     [categories],
   );
-  const topCategories = useMemo(
-    () => visibleCategories.slice(0, 2),
-    [visibleCategories],
-  );
-  const remainingCategories = useMemo(
-    () => visibleCategories.slice(2),
-    [visibleCategories],
-  );
 
   return (
     <>
-      {/* <Header /> */}
+      <Header />
       <Hero providers={streamingPlatforms} />
 
       <section id="popular-reels-section">
-        {visibleCategories.length > 0 ? (
-          <div className="popular-reels-section__heading-wrap">
-            <h2 className="popular-reels-section__heading">
-              Popular OTT Platforms, Popular Movies
-            </h2>
-          </div>
-        ) : null}
+        {(() => {
+          let hasRenderedNetflix = false;
+          let hasRenderedAmazon = false;
+          
+          return visibleCategories.map((cat) => {
+            const catTitle = cat.title.toLowerCase();
+            const isTrending = catTitle.includes('trending');
+            const isSciFi = catTitle.includes('sci-fi');
+            
+            const netflixCat = ottCategories.find(oc => oc.title.toLowerCase().includes('netflix'));
+            const amazonCat = ottCategories.find(oc => oc.title.toLowerCase().includes('amazon'));
+            
+            const netflixPlatform = streamingPlatforms.find(p => p.name.toLowerCase().includes('netflix'));
+            const amazonPlatform = streamingPlatforms.find(p => p.name.toLowerCase().includes('amazon'));
 
-        {topCategories.map((cat) => (
-          <ContentCarousel
-            key={cat.title}
-            title={cat.title}
-            desc={cat.desc}
-            movies={cat.movies}
-          />
-        ))}
+            return (
+              <div key={cat.id}>
+                <ContentCarousel
+                  title={cat.title}
+                  desc={cat.desc}
+                  movies={cat.movies}
+                />
+                
+                {isTrending && netflixCat && !hasRenderedNetflix && (
+                  (() => {
+                    hasRenderedNetflix = true;
+                    return (
+                      <OTTSection
+                        key={netflixCat.id}
+                        title={netflixCat.title}
+                        movies={netflixCat.movies}
+                        platformLogoSrc={netflixPlatform?.src || null}
+                      />
+                    );
+                  })()
+                )}
 
-        <BannerRow bannerCards={bannerCards} />
-
-        <NetflixSpotlight />
-
-        {remainingCategories.map((cat) => (
-          <ContentCarousel
-            key={cat.title}
-            title={cat.title}
-            desc={cat.desc}
-            movies={cat.movies}
-          />
-        ))}
+                {isSciFi && amazonCat && !hasRenderedAmazon && (
+                  (() => {
+                    hasRenderedAmazon = true;
+                    return (
+                      <OTTSection
+                        key={amazonCat.id}
+                        title={amazonCat.title}
+                        movies={amazonCat.movies}
+                        platformLogoSrc={amazonPlatform?.src || null}
+                      />
+                    );
+                  })()
+                )}
+              </div>
+            );
+          });
+        })()}
       </section>
+
+      {ottCategories.length > 0 && (
+        <section id="ott-section">
+          {ottCategories
+            .filter(cat => {
+              const lowerTitle = cat.title.toLowerCase();
+              return !lowerTitle.includes('netflix') && !lowerTitle.includes('amazon');
+            })
+            .map((cat) => {
+              const matchedPlatform = streamingPlatforms.find((p) =>
+                cat.title.toLowerCase().includes(p.name.toLowerCase())
+              );
+              return (
+                <OTTSection
+                  key={cat.id}
+                  title={cat.title}
+                  movies={cat.movies}
+                  platformLogoSrc={matchedPlatform?.src || null}
+                />
+              );
+            })}
+        </section>
+      )}
 
       <FilterPanel
         onFiltersChange={setPosterFilters}

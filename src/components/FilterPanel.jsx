@@ -54,6 +54,8 @@ const mapImdbMinOptions = (items) => {
   }))
 }
 
+const BLOCKED_PLATFORMS = ['mxplayer', 'jiocinema', 'altbalaji', 'hungama', 'sunnxt', 'sonyliv'];
+
 const mapContentDistributorPlatforms = (items) => {
   if (!Array.isArray(items)) return []
 
@@ -67,13 +69,14 @@ const mapContentDistributorPlatforms = (items) => {
       (typeof ottApp === 'object' ? ottApp?.id || ottApp?._id : ottApp) || ''
     if (!id) return
 
+    const name = (typeof ottApp === 'object' ? ottApp?.name : '') || item?.name || 'Platform'
+    const normalizedName = name.toLowerCase().replace(/[\s\-_]/g, '')
+    if (BLOCKED_PLATFORMS.some((b) => normalizedName.includes(b))) return
+
     if (!unique.has(id)) {
       unique.set(id, {
         id,
-        name:
-          (typeof ottApp === 'object' ? ottApp?.name : '') ||
-          item?.name ||
-          'Platform',
+        name,
         src: typeof ottApp === 'object' ? ottApp?.icon || '' : '',
       })
     }

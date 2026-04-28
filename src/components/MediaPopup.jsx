@@ -63,12 +63,12 @@ const getCast = (item) => {
 
         const castImage = normalizeCastAvatar(
           member?.avatar ||
-            member?.image ||
-            member?.profilePath ||
-            castRef?.avatar ||
-            castRef?.image ||
-            castRef?.profilePath ||
-            "",
+          member?.image ||
+          member?.profilePath ||
+          castRef?.avatar ||
+          castRef?.image ||
+          castRef?.profilePath ||
+          "",
         );
 
         return {
@@ -143,12 +143,14 @@ export default function MediaPopup({
   hasNext = false,
   prevLabel = "Previous",
   nextLabel = "Next",
+  isPromo = false,
 }) {
   const [reels, setReels] = useState([]);
   const [activeReelIndex, setActiveReelIndex] = useState(0);
   const [isLoadingReels, setIsLoadingReels] = useState(false);
   const [isVideoPlaying, setIsVideoPlaying] = useState(true);
   const [readyReels, setReadyReels] = useState({});
+  const [videoErrors, setVideoErrors] = useState({});
   const [showPlaybackControl, setShowPlaybackControl] = useState(false);
   const [showScrollHint, setShowScrollHint] = useState(true);
   const [isDownloadSlideActive, setIsDownloadSlideActive] = useState(false);
@@ -207,6 +209,7 @@ export default function MediaPopup({
       setActiveReelIndex(0);
       setIsLoadingReels(false);
       setReadyReels({});
+      setVideoErrors({});
       setIsDownloadSlideActive(false);
       setShowScrollHint(true);
       hasInteractedRef.current = false;
@@ -236,6 +239,7 @@ export default function MediaPopup({
         setReels(mappedReels);
         setActiveReelIndex(0);
         setReadyReels({});
+        setVideoErrors({});
         setIsDownloadSlideActive(false);
         setShowScrollHint(true);
         hasInteractedRef.current = false;
@@ -243,6 +247,7 @@ export default function MediaPopup({
         setReels([]);
         setActiveReelIndex(0);
         setReadyReels({});
+        setVideoErrors({});
         setIsDownloadSlideActive(false);
         setShowScrollHint(true);
         hasInteractedRef.current = false;
@@ -254,7 +259,7 @@ export default function MediaPopup({
     loadReels();
 
     return () => controller.abort();
-  }, [isOpen, contentId]);
+  }, [isOpen, contentId, isPromo]);
 
   const startAutoplay = (video) => {
     if (!video) return;
@@ -307,6 +312,7 @@ export default function MediaPopup({
       });
       setIsDownloadSlideActive(false);
       setShowScrollHint(true);
+      setVideoErrors({});
       hasInteractedRef.current = false;
       return;
     }
@@ -317,6 +323,7 @@ export default function MediaPopup({
       });
       setIsVideoPlaying(false);
       setShowPlaybackControl(false);
+      setVideoErrors({});
       return;
     }
 
@@ -328,12 +335,12 @@ export default function MediaPopup({
       }
     });
 
-    if (activeVideo && reelVideoUrl) {
+    if (activeVideo && reelVideoUrl && !isPromo) {
       setIsVideoPlaying(true);
       startAutoplay(activeVideo);
     }
     setShowPlaybackControl(false);
-  }, [isOpen, activeReelIndex, reelVideoUrl, isDownloadSlideActive]);
+  }, [isOpen, activeReelIndex, reelVideoUrl, isDownloadSlideActive, isPromo]);
 
   useEffect(
     () => () => {
@@ -409,7 +416,7 @@ export default function MediaPopup({
       video
         .play()
         .then(() => setIsVideoPlaying(true))
-        .catch(() => {});
+        .catch(() => { });
       return;
     }
 
@@ -437,6 +444,19 @@ export default function MediaPopup({
   };
 
   useEffect(() => {
+    if (isPromo && swiperRef.current) {
+      if (reels.length > 0) {
+        setIsDownloadSlideActive(true);
+        swiperRef.current.slideTo(downloadSlideIndex, 0);
+      } else {
+        // If no reels, we still want to show the download slide if it's the extra one
+        setIsDownloadSlideActive(true);
+        swiperRef.current.slideTo(0, 0);
+      }
+    }
+  }, [isPromo, downloadSlideIndex, reels.length]);
+
+  useEffect(() => {
     if (!navTransitionDirection) return undefined;
     if (navTransitionTimerRef.current) {
       clearTimeout(navTransitionTimerRef.current);
@@ -457,7 +477,7 @@ export default function MediaPopup({
 
   return (
     <div
-      className="media-popup"
+      className={`media-popup${isPromo ? " media-popup--promo" : ""}`}
       role="dialog"
       aria-modal="true"
       aria-labelledby="media-popup-title"
@@ -466,7 +486,7 @@ export default function MediaPopup({
       }}
     >
       <div
-        className={`media-popup__panel${showNoReelsLayout ? " media-popup__panel--no-reels" : ""}${navTransitionDirection ? ` media-popup__panel--transition-${navTransitionDirection}` : ""}`}
+        className={`media-popup__panel${isPromo ? " media-popup__panel--promo" : ""}${showNoReelsLayout ? " media-popup__panel--no-reels" : ""}${navTransitionDirection ? ` media-popup__panel--transition-${navTransitionDirection}` : ""}`}
         onMouseDown={(event) => event.stopPropagation()}
       >
         <button
@@ -495,7 +515,49 @@ export default function MediaPopup({
           }}
         >
           <div className="media-popup__media-stage">
-            {isLoadingReels ? (
+            {isPromo ? (
+              <div
+                className="media-popup__download-slide"
+                onClick={(event) => event.stopPropagation()}
+              >
+
+                <p className="media-popup__download-title">
+                  Enjoy more on Vista Reels app
+                </p>
+                <p className="media-popup__download-subtitle">
+                  Discover, like, save and share seamlessly in the app.
+                </p>
+                <div className="media-popup__download-stores">
+                  <a
+                    href={PLAY_STORE_URL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="media-popup__download-store"
+                  >
+                    <img
+                      src="/assets/Group-9076-2.svg"
+                      alt="Get it on Google Play"
+                    />
+                  </a>
+                  <a
+                    href={APP_STORE_URL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="media-popup__download-store"
+                  >
+                    <img
+                      src="/assets/Group-9577.svg"
+                      alt="Download on the App Store"
+                    />
+                  </a>
+                </div>
+                <img
+                  className="media-popup__download-frame"
+                  src="/assets/Download-frame.png"
+                  alt="Vista Reels app preview"
+                />
+              </div>
+            ) : isLoadingReels ? (
               <div className="media-popup__poster-placeholder">
                 <div
                   className="media-popup__loader"
@@ -508,225 +570,202 @@ export default function MediaPopup({
               </div>
             ) : reelVideoUrl ? (
               <>
-              <Swiper
-                className="media-popup__reel-swiper"
-                direction="vertical"
-                modules={[Mousewheel]}
-                mousewheel={
-                  canSlideReels
-                    ? {
+                <Swiper
+                  className="media-popup__reel-swiper"
+                  direction="vertical"
+                  modules={[Mousewheel]}
+                  mousewheel={
+                    canSlideReels
+                      ? {
                         forceToAxis: true,
                         thresholdDelta: WHEEL_SWITCH_THRESHOLD,
                         sensitivity: 0.6,
                         releaseOnEdges: false,
                       }
-                    : false
-                }
-                speed={REEL_SWITCH_SPEED_MS}
-                slidesPerView={1}
-                spaceBetween={0}
-                nested
-                preventClicks
-                preventClicksPropagation
-                allowTouchMove={canSlideReels}
-                onSwiper={(swiper) => {
-                  swiperRef.current = swiper;
-                  if (swiper.activeIndex !== activeReelIndex) {
-                    swiper.slideTo(activeReelIndex, 0);
+                      : false
                   }
-                }}
-                onSlideChange={(swiper) => {
-                  markReelInteraction();
-                  const isDownload = swiper.activeIndex === downloadSlideIndex;
-                  setIsDownloadSlideActive(isDownload);
-                  if (!isDownload) {
-                    setActiveReelIndex(swiper.activeIndex);
-                  }
-                }}
-              >
-                {reels.map((reel, index) => (
-                  <SwiperSlide
-                    className="media-popup__reel-slide"
-                    key={reel?._id || reel?.id || `${index}-${reel.videoUrl}`}
-                  >
-                    <video
-                      ref={(node) => {
-                        if (node) videoRefs.current[index] = node;
-                        else delete videoRefs.current[index];
-                      }}
-                      className={`media-popup__reel-video${readyReels[index] ? " media-popup__reel-video--ready" : ""}`}
-                      src={reel.videoUrl}
-                      playsInline
-                      preload={index === activeReelIndex ? "auto" : "metadata"}
-                      onLoadedData={(event) => {
-                        setReadyReels((prev) =>
-                          prev[index] ? prev : { ...prev, [index]: true },
-                        );
-                        if (index === activeReelIndex) {
-                          startAutoplay(event.currentTarget);
-                        }
-                      }}
-                      onEnded={() => {
-                        if (index === activeReelIndex) goToNextReel();
-                      }}
-                      onPause={() => {
-                        if (index === activeReelIndex) {
-                          setIsVideoPlaying(false);
-                        }
-                      }}
-                      onPlay={() => {
-                        if (index === activeReelIndex) {
-                          setIsVideoPlaying(true);
-                        }
-                      }}
-                    />
-                  </SwiperSlide>
-                ))}
-                <SwiperSlide className="media-popup__reel-slide">
-                  <div
-                    className="media-popup__download-slide"
-                    onClick={(event) => event.stopPropagation()}
-                  >
-                    <button
-                      type="button"
-                      className="media-popup__download-slide-close"
-                      onClick={closeDownloadSlide}
-                      aria-label="Back to reels"
-                    >
-                      <svg
-                        className="media-popup__close-icon"
-                        viewBox="0 0 20 20"
-                        aria-hidden="true"
-                      >
-                        <path d="M5 5l10 10M15 5L5 15" />
-                      </svg>
-                    </button>
-                    <p className="media-popup__download-title">
-                      Enjoy more on Vista Reels app
-                    </p>
-                    <p className="media-popup__download-subtitle">
-                      Discover, like, save and share seamlessly in the app.
-                    </p>
-                    <div className="media-popup__download-stores">
-                      <a
-                        href={PLAY_STORE_URL}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="media-popup__download-store"
-                      >
-                        <img
-                          src="/assets/Group-9076-2.svg"
-                          alt="Get it on Google Play"
-                        />
-                      </a>
-                      <a
-                        href={APP_STORE_URL}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="media-popup__download-store"
-                      >
-                        <img
-                          src="/assets/Group-9577.svg"
-                          alt="Download on the App Store"
-                        />
-                      </a>
-                    </div>
-                    <img
-                      className="media-popup__download-frame"
-                      src="/assets/Download-frame.png"
-                      alt="Vista Reels app preview"
-                    />
-                  </div>
-                </SwiperSlide>
-              </Swiper>
-              {showScrollHint && !isDownloadSlideActive && reels.length > 1 ? (
-                <div className="media-popup__scroll-hint">
-                  <span className="media-popup__scroll-hint-arrow">↑↓</span>
-                  <span>Swipe or scroll to browse reels</span>
-                </div>
-              ) : null}
-              {!isDownloadSlideActive ? (
-                <div
-                  className="media-popup__action-rail"
-                  onClick={(event) => event.stopPropagation()}
+                  speed={REEL_SWITCH_SPEED_MS}
+                  slidesPerView={1}
+                  spaceBetween={0}
+                  nested
+                  preventClicks
+                  preventClicksPropagation
+                  allowTouchMove={canSlideReels}
+                  onSwiper={(swiper) => {
+                    swiperRef.current = swiper;
+                    if (swiper.activeIndex !== activeReelIndex) {
+                      swiper.slideTo(activeReelIndex, 0);
+                    }
+                  }}
+                  onSlideChange={(swiper) => {
+                    markReelInteraction();
+                    const isDownload = swiper.activeIndex === downloadSlideIndex;
+                    setIsDownloadSlideActive(isDownload);
+                    if (!isDownload) {
+                      setActiveReelIndex(swiper.activeIndex);
+                    }
+                  }}
                 >
-                  <button
-                    type="button"
-                    className="media-popup__action-btn"
-                    onClick={openDownloadSlide}
-                    aria-label="Like reel"
-                  >
-                    <span className="media-popup__action-icon" aria-hidden="true">
-                      <svg viewBox="0 0 24 24">
-                        <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.27 2 8.5A4.5 4.5 0 0 1 6.5 4C8.24 4 9.91 4.81 11 6.08 12.09 4.81 13.76 4 15.5 4A4.5 4.5 0 0 1 20 8.5c0 3.77-3.4 6.86-8.55 11.54z" />
-                      </svg>
-                    </span>
-                  </button>
-                  <button
-                    type="button"
-                    className="media-popup__action-btn"
-                    onClick={openDownloadSlide}
-                    aria-label="Share reel"
-                  >
-                    <span className="media-popup__action-icon" aria-hidden="true">
-                      <svg viewBox="0 0 24 24">
-                        <path d="M22 2L11 13" />
-                        <path d="M22 2l-7 20-4-9-9-4z" />
-                      </svg>
-                    </span>
-                  </button>
-                  <button
-                    type="button"
-                    className="media-popup__action-btn"
-                    onClick={openDownloadSlide}
-                    aria-label="Save reel"
-                  >
-                    <span className="media-popup__action-icon" aria-hidden="true">
-                      <svg viewBox="0 0 24 24">
-                        <path d="M6 3h12a1 1 0 0 1 1 1v17l-7-4-7 4V4a1 1 0 0 1 1-1z" />
-                      </svg>
-                    </span>
-                  </button>
-                </div>
-              ) : null}
-              <button
-                type="button"
-                className={`media-popup__play-toggle${showPlaybackControl && !isDownloadSlideActive ? " media-popup__play-toggle--visible" : ""}`}
-                onClick={(event) => {
-                  event.stopPropagation();
-                  revealPlaybackControl();
-                  toggleVideoPlayback();
-                }}
-                aria-label={
-                  isVideoPlaying ? "Pause reel video" : "Play reel video"
-                }
-              >
-                {isVideoPlaying ? (
-                  <span
-                    className="media-popup__pause-icon"
-                    aria-hidden="true"
-                  />
-                ) : (
-                  <span className="media-popup__play-icon" aria-hidden="true" />
+                  {reels.map((reel, index) => (
+                    <SwiperSlide
+                      className="media-popup__reel-slide"
+                      key={reel?._id || reel?.id || `${index}-${reel.videoUrl}`}
+                    >
+                      <div className="media-popup__reel-media">
+                        <video
+                          ref={(node) => {
+                            if (node) videoRefs.current[index] = node;
+                            else delete videoRefs.current[index];
+                          }}
+                          className={`media-popup__reel-video${readyReels[index] ? " media-popup__reel-video--ready" : ""}`}
+                          src={reel.videoUrl}
+                          playsInline
+                          preload={index === activeReelIndex ? "auto" : "metadata"}
+                          onCanPlay={(event) => {
+                            setReadyReels((prev) =>
+                              prev[index] ? prev : { ...prev, [index]: true },
+                            );
+                            if (index === activeReelIndex) {
+                              startAutoplay(event.currentTarget);
+                            }
+                          }}
+                          onLoadedData={(event) => {
+                            setReadyReels((prev) =>
+                              prev[index] ? prev : { ...prev, [index]: true },
+                            );
+                            if (index === activeReelIndex) {
+                              startAutoplay(event.currentTarget);
+                            }
+                          }}
+                          onError={() => {
+                            setVideoErrors((prev) => ({ ...prev, [index]: true }));
+                          }}
+                          onEnded={() => {
+                            if (index === activeReelIndex) goToNextReel();
+                          }}
+                          onPause={() => {
+                            if (index === activeReelIndex) {
+                              setIsVideoPlaying(false);
+                            }
+                          }}
+                          onPlay={() => {
+                            if (index === activeReelIndex) {
+                              setIsVideoPlaying(true);
+                            }
+                          }}
+                        />
+
+                        {videoErrors[index] ? (
+                          <img
+                            className="media-popup__reel-error-poster"
+                            src={reel?.thumbnailUrl || poster || ""}
+                            alt={selectedItem?.title || "Video unavailable"}
+                          />
+                        ) : null}
+                      </div>
+                    </SwiperSlide>
+                  ))}
+                  <SwiperSlide className="media-popup__reel-slide">
+                    <div
+                      className="media-popup__download-slide"
+                      onClick={(event) => event.stopPropagation()}
+                    >
+                      <button
+                        type="button"
+                        className="media-popup__download-slide-close"
+                        onClick={closeDownloadSlide}
+                        aria-label="Back to reels"
+                      >
+                        <svg
+                          className="media-popup__close-icon"
+                          viewBox="0 0 20 20"
+                          aria-hidden="true"
+                        >
+                          <path d="M5 5l10 10M15 5L5 15" />
+                        </svg>
+                      </button>
+                      <p className="media-popup__download-title">
+                        Enjoy more on Vista Reels app
+                      </p>
+                      <p className="media-popup__download-subtitle">
+                        Discover, like, save and share seamlessly in the app.
+                      </p>
+                      <div className="media-popup__download-stores">
+                        <a
+                          href={PLAY_STORE_URL}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="media-popup__download-store"
+                        >
+                          <img
+                            src="/assets/Group-9076-2.svg"
+                            alt="Get it on Google Play"
+                          />
+                        </a>
+                        <a
+                          href={APP_STORE_URL}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="media-popup__download-store"
+                        >
+                          <img
+                            src="/assets/Group-9577.svg"
+                            alt="Download on the App Store"
+                          />
+                        </a>
+                      </div>
+                      <img
+                        className="media-popup__download-frame"
+                        src="/assets/Download-frame.png"
+                        alt="Vista Reels app preview"
+                      />
+                    </div>
+                  </SwiperSlide>
+                </Swiper>
+                {showScrollHint && !isDownloadSlideActive && reels.length > 1 ? (
+                  <div className="media-popup__scroll-hint">
+                    <span className="media-popup__scroll-hint-arrow">↑↓</span>
+                    <span>Swipe or scroll to browse reels</span>
+                  </div>
+                ) : null}
+                <button
+                  type="button"
+                  className={`media-popup__play-toggle${showPlaybackControl && !isDownloadSlideActive ? " media-popup__play-toggle--visible" : ""}`}
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    revealPlaybackControl();
+                    toggleVideoPlayback();
+                  }}
+                  aria-label={
+                    isVideoPlaying ? "Pause reel video" : "Play reel video"
+                  }
+                >
+                  {isVideoPlaying ? (
+                    <span
+                      className="media-popup__pause-icon"
+                      aria-hidden="true"
+                    />
+                  ) : (
+                    <span className="media-popup__play-icon" aria-hidden="true" />
+                  )}
+                </button>
+                {!isPromo && (
+                  <div className="media-popup__reel-info">
+                    <div className="media-popup__reel-info-avatar">
+                      {poster ? (
+                        <img src={poster} alt={selectedItem.title || "Selected title"} />
+                      ) : (
+                        <span>{getInitials(selectedItem.title || "Vista Reels")}</span>
+                      )}
+                    </div>
+                    <div className="media-popup__reel-info-copy">
+                      <p className="media-popup__reel-info-title">
+                        {selectedItem.title || "Untitled"}
+                      </p>
+                      <p className="media-popup__reel-info-overview">{plot}</p>
+                    </div>
+                  </div>
                 )}
-              </button>
-              {!isDownloadSlideActive ? (
-                <div className="media-popup__reel-info">
-                  <div className="media-popup__reel-info-avatar">
-                    {poster ? (
-                      <img src={poster} alt={selectedItem.title || "Selected title"} />
-                    ) : (
-                      <span>{getInitials(selectedItem.title || "Vista Reels")}</span>
-                    )}
-                  </div>
-                  <div className="media-popup__reel-info-copy">
-                    <p className="media-popup__reel-info-title">
-                      {selectedItem.title || "Untitled"}
-                    </p>
-                    <p className="media-popup__reel-info-overview">{plot}</p>
-                  </div>
-                </div>
-              ) : null}
               </>
             ) : poster ? (
               <img
@@ -741,129 +780,189 @@ export default function MediaPopup({
             )}
           </div>
 
-          <div className="media-popup__nav">
-            <button
-              type="button"
-              className="media-popup__nav-btn media-popup__nav-btn--ghost"
-              onClick={handlePrevClick}
-              disabled={!hasPrev}
-            >
-              {prevLabel}
-            </button>
-            <button
-              type="button"
-              className="media-popup__nav-btn media-popup__nav-btn--solid"
-              onClick={handleNextClick}
-              disabled={!hasNext}
-            >
-              {nextLabel}
-            </button>
-          </div>
+          {!isPromo && (
+            <div className="media-popup__nav">
+              <button
+                type="button"
+                className="media-popup__nav-btn media-popup__nav-btn--ghost"
+                onClick={handlePrevClick}
+                disabled={!hasPrev}
+              >
+                {prevLabel}
+              </button>
+              <button
+                type="button"
+                className="media-popup__nav-btn media-popup__nav-btn--solid"
+                onClick={handleNextClick}
+                disabled={!hasNext}
+              >
+                {nextLabel}
+              </button>
+            </div>
+          )}
         </div>
 
-        <div className="media-popup__details">
-          <div className="media-popup__details-stage">
-            {showNoReelsLayout ? (
-              <div className="media-popup__details-poster">
-                {poster ? (
-                  <img
-                    src={poster}
-                    alt={selectedItem.title || "Selected title"}
-                  />
-                ) : (
-                  <div className="media-popup__details-poster-fallback">
-                    {getInitials(selectedItem.title || "Vista Reels")}
+        {!isPromo && (
+          <div className="media-popup__details">
+            <div className="media-popup__details-stage">
+              {showNoReelsLayout ? (
+                <div className="media-popup__details-poster">
+                  {poster ? (
+                    <img
+                      src={poster}
+                      alt={selectedItem.title || "Selected title"}
+                    />
+                  ) : (
+                    <div className="media-popup__details-poster-fallback">
+                      {getInitials(selectedItem.title || "Vista Reels")}
+                    </div>
+                  )}
+                </div>
+              ) : null}
+
+              <div className="media-popup__title-wrap">
+                <h3 className="media-popup__title" id="media-popup-title">
+                  {selectedItem.title || "Untitled"}
+                </h3>
+              </div>
+
+              <div
+                className="media-popup__meta-line"
+                aria-label={metaParts.join(" • ")}
+              >
+                {metaParts.map((part, index) => (
+                  <div className="media-popup__meta-item" key={`${index}-${part}`}>
+                    {index > 0 ? <span className="media-popup__meta-dot" /> : null}
+                    <span>{part}</span>
                   </div>
+                ))}
+              </div>
+
+              {selectedItem.imdbRatingLabel && selectedItem.imdbRatingLabel !== "N/A" && (
+                <div className="media-popup__rating-badge">
+                  <svg className="media-popup__rating-star" viewBox="0 0 24 24">
+                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="currentColor" />
+                  </svg>
+                  <span>{selectedItem.imdbRatingLabel}</span>
+                </div>
+              )}
+
+              {selectedItem.director && (
+                <p className="media-popup__director">
+                  Directed by <strong>{selectedItem.director}</strong>
+                </p>
+              )}
+
+              <div className="media-popup__divider" />
+
+              <section className="media-popup__section">
+                <h4 className="media-popup__section-title">Movie Plot</h4>
+                <p className="media-popup__plot">{plot}</p>
+              </section>
+
+              {Array.isArray(selectedItem.ottPlatforms) && selectedItem.ottPlatforms.length > 0 && (
+                <>
+                  <div className="media-popup__divider" />
+                  <section className="media-popup__section">
+                    <h4 className="media-popup__section-title">Watch Now On</h4>
+                    <div className="media-popup__ott-list">
+                      {selectedItem.ottPlatforms.map((ott, idx) => (
+                        <a
+                          key={idx}
+                          href={ott.link}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className={`media-popup__ott-btn ${idx === 0 ? 'media-popup__ott-btn--solid' : 'media-popup__ott-btn--outline'}`}
+                          onClick={(e) => e.stopPropagation()}
+                        >
+                          <span>{ott.name?.toUpperCase()}</span>
+                        </a>
+                      ))}
+                    </div>
+                  </section>
+                </>
+              )}
+
+              <div className="media-popup__divider" />
+
+              <div className="media-popup__taxonomy">
+                <section className="media-popup__section">
+                  <h4 className="media-popup__section-title">Genres</h4>
+                  <div className="media-popup__genre-list">
+                    {genres.map((genre) => (
+                      <span
+                        className="media-popup__genre-chip first-letter"
+                        key={genre}
+                      >
+                        {genre}
+                      </span>
+                    ))}
+                  </div>
+                </section>
+
+                {Array.isArray(selectedItem.languages) && selectedItem.languages.length > 0 && (
+                  <section className="media-popup__section">
+                    <h4 className="media-popup__section-title">Audio Languages</h4>
+                    <div className="media-popup__genre-list">
+                      {selectedItem.languages.map((lang) => (
+                        <span className="media-popup__genre-chip" key={lang}>
+                          {lang}
+                        </span>
+                      ))}
+                    </div>
+                  </section>
                 )}
               </div>
-            ) : null}
 
-            <h3 className="media-popup__title" id="media-popup-title">
-              {selectedItem.title || "Untitled"}
-            </h3>
+              <div className="media-popup__divider" />
 
-            <div
-              className="media-popup__meta-line"
-              aria-label={metaParts.join(" • ")}
-            >
-              {metaParts.map((part, index) => (
-                <div className="media-popup__meta-item" key={`${index}-${part}`}>
-                  {index > 0 ? <span className="media-popup__meta-dot" /> : null}
-                  <span>{part}</span>
-                </div>
-              ))}
-            </div>
-            <div className="media-popup__divider" />
-
-            <section className="media-popup__section">
-              <h4 className="media-popup__section-title">Movie Plot</h4>
-              <p className="media-popup__plot">{plot}</p>
-            </section>
-
-            <div className="media-popup__divider" />
-
-            <section className="media-popup__section">
-              <h4 className="media-popup__section-title">Genres</h4>
-              <div className="media-popup__genre-list">
-                {genres.map((genre) => (
-                  <span
-                    className="media-popup__genre-chip first-letter"
-                    key={genre}
-                  >
-                    {genre}
-                  </span>
-                ))}
-              </div>
-            </section>
-
-            <div className="media-popup__divider" />
-
-            <section className="media-popup__section">
-              <h4 className="media-popup__section-title">Cast</h4>
-              <div className="media-popup__cast-list">
-                {cast.map((member) => (
-                  <div className="media-popup__cast-item" key={member.name}>
-                    <div className="media-popup__cast-avatar-wrap">
-                      {member.image ? (
-                        <img
-                          className="media-popup__cast-avatar"
-                          src={member.image}
-                          alt={member.name}
-                        />
-                      ) : (
-                        <div className="media-popup__cast-avatar media-popup__cast-avatar--fallback">
-                          {getInitials(member.name)}
-                        </div>
-                      )}
+              <section className="media-popup__section">
+                <h4 className="media-popup__section-title">Cast</h4>
+                <div className="media-popup__cast-list">
+                  {cast.map((member) => (
+                    <div className="media-popup__cast-item" key={member.name}>
+                      <div className="media-popup__cast-avatar-wrap">
+                        {member.image ? (
+                          <img
+                            className="media-popup__cast-avatar"
+                            src={member.image}
+                            alt={member.name}
+                          />
+                        ) : (
+                          <div className="media-popup__cast-avatar media-popup__cast-avatar--fallback">
+                            {getInitials(member.name)}
+                          </div>
+                        )}
+                      </div>
+                      <span className="media-popup__cast-name">{member.name}</span>
                     </div>
-                    <span className="media-popup__cast-name">{member.name}</span>
-                  </div>
-                ))}
-              </div>
-            </section>
+                  ))}
+                </div>
+              </section>
 
-            {showNoReelsLayout ? (
-              <div className="media-popup__details-nav">
-                <button
-                  type="button"
-                  className="media-popup__nav-btn media-popup__nav-btn--ghost"
-                  onClick={handlePrevClick}
-                  disabled={!hasPrev}
-                >
-                  {prevLabel}
-                </button>
-                <button
-                  type="button"
-                  className="media-popup__nav-btn media-popup__nav-btn--solid"
-                  onClick={handleNextClick}
-                  disabled={!hasNext}
-                >
-                  {nextLabel}
-                </button>
-              </div>
-            ) : null}
+              {showNoReelsLayout ? (
+                <div className="media-popup__details-nav">
+                  <button
+                    type="button"
+                    className="media-popup__nav-btn media-popup__nav-btn--ghost"
+                    onClick={handlePrevClick}
+                    disabled={!hasPrev}
+                  >
+                    {prevLabel}
+                  </button>
+                  <button
+                    type="button"
+                    className="media-popup__nav-btn media-popup__nav-btn--solid"
+                    onClick={handleNextClick}
+                    disabled={!hasNext}
+                  >
+                    {nextLabel}
+                  </button>
+                </div>
+              ) : null}
+            </div>
           </div>
-        </div>
+        )}
       </div>
     </div>
   );

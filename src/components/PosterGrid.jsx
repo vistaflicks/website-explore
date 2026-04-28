@@ -12,9 +12,9 @@ const CONTENT_BASE_QUERY_PARAMS = {
   page: 1,
   limit: CONTENT_ITEMS_PER_PAGE,
   fields:
-    'title,posterPath,backdropPath,releaseDate,runtime,overview,genres,cast,rating,type,status,imdbRating,avgUserRating,watchForFree,watchForFreeLinks,ottAvailability,imdbLink,seasonCount',
+    'title,posterPath,backdropPath,releaseDate,runtime,overview,genres,cast,rating,type,status,imdbRating,avgUserRating,watchForFree,watchForFreeLinks,ottAvailability,imdbLink,seasonCount,director,language,subtitle,keywords,destinationLink',
   populate:
-    'genres:name;type:name;imdbRating:name;rating:name,shortName;cast-id:name,profilePath,avatar;ottAvailability-id:name',
+    'genres:name;type:name;imdbRating:name;rating:name,shortName;cast-id:name,profilePath,avatar;ottAvailability-id:name,image;language:name;subtitle:name',
 }
 
 const buildContentUrl = (filters = {}, pagination = {}) => {
@@ -241,11 +241,16 @@ const mapCast = (cast) => {
 
 const mapContentToPoster = (content, index) => {
   const fallbackPoster = dummyPosters[index % dummyPosters.length]
+  // MediaPopup reel API expects Mongo ObjectId (24-hex). We pass it as `contentId`
+  // so MediaPopup doesn't have to guess from `id` (which might be tmdbId/number).
+  const contentId =
+    content?.id || content?._id || content?.contentId || ""
 
   return {
     id: content?.id || content?.tmdbId || `${index + 1}`,
     title: content?.title || 'Untitled',
     poster: content?.posterPath || fallbackPoster.poster,
+    contentId,
     platform: getPlatform(content),
     genre: getPrimaryGenre(content?.genres),
     year: getYear(content?.releaseDate),
@@ -260,12 +265,21 @@ const mapContentToPoster = (content, index) => {
     certification: getCertification(content),
     releaseDateText: formatReleaseDate(content?.releaseDate),
     backdrop: content?.backdropPath || '',
+    director: content?.director || '',
+    languages: Array.isArray(content?.language) ? content.language.map(l => typeof l === 'object' ? l.name : l) : [],
+    subtitles: Array.isArray(content?.subtitle) ? content.subtitle.map(s => typeof s === 'object' ? s.name : s) : [],
+    ottPlatforms: Array.isArray(content?.ottAvailability) ? content.ottAvailability.map(ott => ({
+      name: getValueName(ott?.id),
+      image: ott?.id?.image || '',
+      link: ott?.destinationLink || content?.destinationLink || ''
+    })).filter(o => o.name) : [],
+    imdbRatingLabel: getValueName(content?.imdbRating),
   }
 }
 
 export default function PosterGrid({ filters, onTotalResultsChange }) {
   const [hoveredId, setHoveredId] = useState(null)
-  const [posters, setPosters] = useState(dummyPosters)
+  const [posters, setPosters] = useState([])
   const [selectedPoster, setSelectedPoster] = useState(null)
   const [currentPage, setCurrentPage] = useState(1)
   const [totalPages, setTotalPages] = useState(1)
@@ -414,36 +428,7 @@ export default function PosterGrid({ filters, onTotalResultsChange }) {
               <span className="poster-grid__platform">{item.platform}</span>
 
               {/* Hover overlay */}
-              <div className="poster-grid__overlay">
-                {item.watchLink ? (
-                  <a
-                    href={item.watchLink}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="poster-grid__play-btn"
-                    aria-label={`Play ${item.title}`}
-                    onClick={(event) => event.stopPropagation()}
-                  >
-                    <svg viewBox="0 0 24 24" width="28" height="28">
-                      <path d="M8 5v14l11-7z" fill="white" />
-                    </svg>
-                  </a>
-                ) : (
-                  <button
-                    type="button"
-                    className="poster-grid__play-btn"
-                    aria-label={`Open details for ${item.title}`}
-                    onClick={(event) => {
-                      event.stopPropagation()
-                      setSelectedPoster(item)
-                    }}
-                  >
-                    <svg viewBox="0 0 24 24" width="28" height="28">
-                      <path d="M8 5v14l11-7z" fill="white" />
-                    </svg>
-                  </button>
-                )}
-              </div>
+              <div className="poster-grid__overlay" />
             </div>
 
             {/* Card info */}

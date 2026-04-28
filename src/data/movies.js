@@ -22,15 +22,12 @@ export const heroSlides = [
 
 // ─── Provider Logos ──────────────────────────
 export const providerLogos = [
-  { name: 'Netflix', src: '/assets/providers/d94dafd6f62ba00a07a7d5a51a01f49aa57e66b8.png' },
+  { name: 'Netflix', src: '/assets/providers/Mask-group-4.png' },
   { name: 'Prime Video', src: '/assets/providers/fdecad6007515e6cb05b264e157182d1d6c33216.png' },
   { name: 'Disney+', src: '/assets/providers/Mask-group-4.png' },
   { name: 'Hotstar', src: '/assets/providers/Mask-group-5.png' },
-  { name: 'Jio Cinema', src: '/assets/providers/Mask-group-6.png' },
   { name: 'Zee5', src: '/assets/providers/Frame-1000003932-1.png' },
-  { name: 'SonyLIV', src: '/assets/providers/adf8feccf3df33cdaa1500ea0b9939196709838e.png' },
   { name: 'Voot', src: '/assets/providers/b9374b1d26f2762033cb948e5fa646739036e549.png' },
-  { name: 'MX Player', src: '/assets/providers/Mask-group-12.png' },
   { name: 'Apple TV+', src: '/assets/providers/Mask-group.png' },
 ]
 

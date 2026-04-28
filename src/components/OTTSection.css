@@ -1,0 +1,238 @@
+.ott-section {
+  padding: 32px 0 48px;
+  margin: 16px auto;
+  position: relative;
+  max-width: var(--container-max, 1440px);
+  border-radius: 24px;
+}
+
+.ott-section__header-container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 0 30px 24px;
+}
+
+.ott-platform-box {
+  width: 52px;
+  height: 52px;
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.ott-platform-logo {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+}
+
+.ott-platform-badge {
+  font-size: 0.8rem;
+  font-weight: 900;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  text-align: center;
+}
+
+.ott-section__title {
+  color: #fff;
+  font-size: 1.6rem;
+  font-weight: 700;
+  margin: 0;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+}
+
+/* Carousel */
+.ott-carousel {
+  position: relative;
+  padding: 0 30px;
+}
+
+.ott-carousel__track {
+  display: flex;
+  gap: 12px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  padding-bottom: 4px;
+}
+
+.ott-carousel__track::-webkit-scrollbar {
+  display: none;
+}
+
+/* Poster cards */
+.ott-poster-card {
+  flex: 0 0 auto;
+  width: 200px;
+  scroll-snap-align: start;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.ott-poster-card:hover {
+  transform: scale(1.04);
+}
+
+.ott-poster-card__img-wrapper {
+  border-radius: 8px;
+  overflow: hidden;
+  aspect-ratio: 2 / 3;
+  background: #1e1e1e;
+}
+
+.ott-poster-card__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.ott-poster-card__placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
+  color: #666;
+  font-size: 0.75rem;
+  text-align: center;
+  word-break: break-word;
+}
+
+/* Navigation arrows */
+.ott-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10;
+  background: rgba(0, 0, 0, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 50%;
+  width: 42px;
+  height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.2s, opacity 0.2s;
+}
+
+.ott-arrow:hover {
+  background: rgba(0, 0, 0, 0.95);
+}
+
+.ott-arrow.prev {
+  left: 8px;
+}
+
+.ott-arrow.next {
+  right: 8px;
+}
+
+.ott-poster-card--promo {
+  min-width: 380px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  cursor: default;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  overflow: hidden;
+  transition: transform 0.3s ease;
+}
+
+.ott-poster-card--promo:hover {
+  transform: translateY(-8px);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.ott-poster-card__promo-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 16px;
+}
+
+.ott-promo-img {
+  width: 140px;
+  height: auto;
+  filter: drop-shadow(0 10px 20px rgba(0,0,0,0.5));
+}
+
+.ott-promo-text h4 {
+  color: #fff;
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin: 0 0 8px;
+}
+
+.ott-promo-text p {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.85rem;
+  line-height: 1.4;
+  margin: 0;
+}
+
+.ott-promo-badges {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.ott-promo-badges img {
+  height: 28px;
+  width: auto;
+  opacity: 0.9;
+  transition: opacity 0.2s;
+}
+
+.ott-promo-badges img:hover {
+  opacity: 1;
+}
+
+.ott-arrow svg {
+  width: 10px;
+  height: 17px;
+}
+
+@media (max-width: 600px) {
+  .ott-section__header-container {
+    padding: 0 16px 20px;
+    gap: 12px;
+  }
+
+  .ott-platform-box {
+    width: 44px;
+    height: 44px;
+  }
+
+  .ott-platform-logo {
+    width: 28px;
+    height: 28px;
+  }
+
+  .ott-carousel {
+    padding: 0 16px;
+  }
+
+  .ott-poster-card {
+    width: 120px;
+  }
+
+  .ott-section__title {
+    font-size: 1.1rem;
+  }
+}
