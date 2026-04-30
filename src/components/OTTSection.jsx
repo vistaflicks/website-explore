@@ -24,7 +24,7 @@ const detectPlatform = (title = '') => {
   return null
 }
 
-export default function OTTSection({ title, movies, platformLogoSrc }) {
+export default function OTTSection({ title, desc, movies, platformLogoSrc }) {
   const trackRef = useRef(null)
   const [showPrev, setShowPrev] = useState(false)
   const [showNext, setShowNext] = useState(true)
@@ -115,7 +115,10 @@ export default function OTTSection({ title, movies, platformLogoSrc }) {
               </span>
             ) : null}
           </div>
-          <h3 className="ott-section__title">{title}</h3>
+          <div className="ott-section__heading-text">
+            <h3 className="ott-section__title">{title}</h3>
+            {desc ? <p className="ott-section__desc">{desc}</p> : null}
+          </div>
         </div>
 
         <div className="ott-carousel">

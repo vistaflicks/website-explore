@@ -140,7 +140,6 @@ export default function ContentCarousel({ title, desc, movies }) {
               tabIndex={0}
               aria-label={`Open details for ${m.title}`}
             >
-              <div className="movie-card__rank">{m.rank || index + 1}</div>
               <div className="movie-card__poster-wrapper">
                 <img
                   className="movie-card__poster"
@@ -148,6 +147,12 @@ export default function ContentCarousel({ title, desc, movies }) {
                   alt={m.title}
                   loading="lazy"
                 />
+                <div className="movie-card__shade" aria-hidden="true" />
+                <div className="movie-card__play" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M8 5v14l11-7z" />
+                  </svg>
+                </div>
               </div>
               <p className="movie-card__title">{m.title}</p>
             </div>

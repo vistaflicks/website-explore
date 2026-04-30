@@ -33,10 +33,58 @@ const CONTENT_DISTRIBUTORS_API = buildApiUrl(
   },
 );
 
-const categoryDescFallbacks = movieCategories.reduce((acc, category) => {
-  acc[category.title] = category.desc;
-  return acc;
-}, {});
+// Curated short descriptions for every category we expect to render.
+// Keys are matched case-insensitively and ignore punctuation/whitespace,
+// so admin entries like "Best in Sci-Fi" / "Best in Sci Fi" / "best in scifi"
+// all resolve to the same description.
+const CATEGORY_DESCRIPTIONS = {
+  "Popular in Action":
+    "Discover high-impact action titles and see where you can stream them instantly.",
+  "Best in Thriller":
+    "Top suspense picks with streaming availability at your fingertips.",
+  "Best in Comedy":
+    "Must-watch comedies and the platforms streaming them now.",
+  "Best in Romance":
+    "Fan-favorite love stories and where to stream them.",
+  "Best in Drama":
+    "Powerful, character-driven stories streaming across your favorite platforms.",
+  "Best in Horror":
+    "Spine-chilling picks that keep you up at night, ready to stream.",
+  "Best in Sci-Fi":
+    "Mind-bending sci-fi adventures with streaming availability built in.",
+  "New Arrivals":
+    "Fresh releases just added — start streaming the latest titles today.",
+  "Trending Globally":
+    "Worldwide hits everyone is watching — see where to catch them.",
+  "Trending in Vista Reels":
+    "What's hot on Vista Reels right now — the titles everyone's talking about.",
+  "Best picks from Netflix for you":
+    "Hand-picked Netflix originals and exclusives streaming this season.",
+  "Best picks from Amazon for you":
+    "Top Prime Video picks curated for what's worth watching tonight.",
+};
+
+const normalizeKey = (text = "") =>
+  String(text).toLowerCase().replace(/[^a-z0-9]/g, "");
+
+const categoryDescByKey = Object.entries(CATEGORY_DESCRIPTIONS).reduce(
+  (acc, [title, desc]) => {
+    acc[normalizeKey(title)] = desc;
+    return acc;
+  },
+  {},
+);
+
+// Also mix in any descriptions still defined in data/movies.js so manual edits
+// to that file remain authoritative if someone wants to override.
+movieCategories.forEach((category) => {
+  if (category?.title && category?.desc) {
+    categoryDescByKey[normalizeKey(category.title)] = category.desc;
+  }
+});
+
+const lookupCategoryDesc = (title) =>
+  categoryDescByKey[normalizeKey(title)] || "";
 
 const normalizeGenre = (text = "") =>
   String(text)
@@ -48,8 +96,180 @@ const getGenreFromCategory = (categoryTitle = "") => {
   return match?.[1]?.trim() || "";
 };
 
-const mapResultsToCategories = (sequencerResults, genreResults) => {
+// ─── Real-data completeness gate ────────────────────────────────
+// A movie is renderable only when ALL of the following are present:
+//   • IMDB rating (imdbRatingLabel / imdbRating)
+//   • Description (overview / plot / description)
+//   • At least one OTT platform with a real destination link
+//   • Genres (non-empty array)
+//   • Audio languages (non-empty array)
+//   • Cast (non-empty array)
+const isNonEmptyString = (value) =>
+  typeof value === "string" && value.trim().length > 0;
+
+const isNonEmptyArray = (value) => Array.isArray(value) && value.length > 0;
+
+const hasImdbRating = (movie) => {
+  if (isNonEmptyString(movie?.imdbRatingLabel)) return true;
+  const r = movie?.imdbRating;
+  if (isNonEmptyString(r)) return true;
+  if (r && typeof r === "object") {
+    if (isNonEmptyString(r.name)) return true;
+    if (typeof r.min === "number" || typeof r.max === "number") return true;
+  }
+  if (typeof movie?.rating === "number" && movie.rating > 0) return true;
+  return false;
+};
+
+const hasDescription = (movie) =>
+  isNonEmptyString(movie?.overview) ||
+  isNonEmptyString(movie?.plot) ||
+  isNonEmptyString(movie?.description);
+
+const hasGenres = (movie) =>
+  isNonEmptyArray(movie?.genres) &&
+  movie.genres.some((g) =>
+    isNonEmptyString(typeof g === "string" ? g : g?.name),
+  );
+
+const hasAudioLanguages = (movie) => {
+  const langs =
+    movie?.languages || movie?.audioLanguages || movie?.language || [];
+  return (
+    isNonEmptyArray(langs) &&
+    langs.some((l) => isNonEmptyString(typeof l === "string" ? l : l?.name))
+  );
+};
+
+const hasCast = (movie) =>
+  isNonEmptyArray(movie?.cast) &&
+  movie.cast.some((c) =>
+    isNonEmptyString(
+      typeof c === "string" ? c : c?.name || c?.id?.name || c?.actorName,
+    ),
+  );
+
+// A real OTT link must be a proper external http(s) URL.
+// Reject "#", "/", empty strings, javascript:, mailto:, relative paths, etc.
+const isValidExternalUrl = (value) => {
+  if (!isNonEmptyString(value)) return false;
+  const trimmed = value.trim();
+  if (trimmed === "#" || trimmed === "/" || trimmed.startsWith("#")) return false;
+  // Must start with http:// or https://
+  if (!/^https?:\/\//i.test(trimmed)) return false;
+  // Must have a real host (more than just "http://")
+  try {
+    const url = new URL(trimmed);
+    if (!url.hostname || url.hostname.length < 3) return false;
+    // Reject localhost / 127.0.0.1 placeholders
+    if (
+      url.hostname === "localhost" ||
+      url.hostname === "127.0.0.1" ||
+      url.hostname.endsWith(".local")
+    ) {
+      return false;
+    }
+    return true;
+  } catch (err) {
+    return false;
+  }
+};
+
+const hasRealOttLink = (movie) => {
+  const platforms = movie?.ottPlatforms || movie?.ottAvailability || [];
+  if (!isNonEmptyArray(platforms)) return false;
+  return platforms.some((p) => {
+    if (!p || typeof p !== "object") return false;
+    return (
+      isValidExternalUrl(p.link) ||
+      isValidExternalUrl(p.destinationLink) ||
+      isValidExternalUrl(p.destination_link)
+    );
+  });
+};
+
+const hasCompleteRealData = (movie) =>
+  Boolean(movie) &&
+  hasImdbRating(movie) &&
+  hasDescription(movie) &&
+  hasRealOttLink(movie) &&
+  hasGenres(movie) &&
+  hasAudioLanguages(movie) &&
+  hasCast(movie);
+
+// Reduce a platform name to its core brand so variants of the same
+// service collapse together. Examples:
+//   "Lionsgate Play"                    → "lionsgateplay"
+//   "Lionsgate Play Apple TV Channel"   → "lionsgateplay"
+//   "Lionsgate Play Amazon Channel"     → "lionsgateplay"
+//   "Amazon Prime Video"                → "amazonprimevideo"
+//   "Amazon Prime Video With Ads"       → "amazonprimevideo"
+const normalizePlatformName = (name) => {
+  if (!isNonEmptyString(name)) return "";
+  return name
+    .toLowerCase()
+    // Strip distribution-channel suffixes & marketing variants
+    .replace(
+      /\b(apple\s*tv\s*channel|apple\s*tv\+?|amazon\s*channel|prime\s*video\s*channel|roku\s*channel|youtube\s*channel|with\s*ads|ad\s*supported|ad-supported|free\s*with\s*ads|premium|basic|standard|ultra|free|hd|4k)\b/g,
+      "",
+    )
+    .replace(/\bchannel\b/g, "")
+    .replace(/[^a-z0-9]/g, "")
+    .trim();
+};
+
+// Strip broken OTT entries (no real link) AND deduplicate by platform brand
+// so the same provider never appears twice in "Watch Now On".
+const sanitizeMovieOttPlatforms = (movie) => {
+  if (!movie || typeof movie !== "object") return movie;
+  const platforms = movie.ottPlatforms || movie.ottAvailability || [];
+  if (!Array.isArray(platforms)) return movie;
+
+  const seenBrands = new Set();
+  const seenLinks = new Set();
+  const cleaned = [];
+
+  platforms.forEach((p) => {
+    if (!p || typeof p !== "object") return;
+    const rawLink = p.link || p.destinationLink || p.destination_link || "";
+    if (!isValidExternalUrl(rawLink)) return;
+
+    const link = rawLink.trim();
+    // Drop exact-duplicate URLs even if names differ
+    if (seenLinks.has(link)) return;
+
+    // Drop variants that resolve to the same brand
+    const brandKey = normalizePlatformName(p.name) || link;
+    if (brandKey && seenBrands.has(brandKey)) return;
+
+    seenLinks.add(link);
+    if (brandKey) seenBrands.add(brandKey);
+    cleaned.push({ ...p, link });
+  });
+
+  return { ...movie, ottPlatforms: cleaned };
+};
+
+// strict=true  → require all six real-data fields (used for Local scope rows)
+// strict=false → only require a title/poster + a valid OTT link (used for
+//                OTT scope curated rows like "Best picks from Netflix for you"
+//                where the admin trusts the provider feed and metadata may be
+//                sparser).
+const mapResultsToCategories = (
+  sequencerResults,
+  genreResults,
+  { strict = true } = {},
+) => {
   if (!Array.isArray(sequencerResults)) return [];
+
+  const movieGate = (movie) => {
+    if (!movie || (!movie.title && !movie.poster)) return false;
+    if (strict) return hasCompleteRealData(movie);
+    // Lenient (OTT-curated picks): only require something to render.
+    // Broken/missing OTT links are sanitized out of `ottPlatforms`, so the
+    // popup just hides the Watch Now On block when no real link exists.
+    return true;
+  };
 
   const genreMap = (genreResults || []).reduce((acc, item) => {
     if (item.genreName) {
@@ -96,7 +316,10 @@ const mapResultsToCategories = (sequencerResults, genreResults) => {
               "",
           };
         })
-        .filter((movie) => Boolean(movie?.title || movie?.poster));
+        // Sanitize OTT platforms first (drop bad/missing links + dedupe brand),
+        // THEN gate per the configured strictness.
+        .map(sanitizeMovieOttPlatforms)
+        .filter(movieGate);
 
       let movies = [];
 
@@ -104,12 +327,15 @@ const mapResultsToCategories = (sequencerResults, genreResults) => {
         // Use manual sequencer list if available
         movies = manualMovies;
       } else if (dynamicMovies && dynamicMovies.length > 0) {
-        // Fallback to dynamic genre-based movies
-        movies = dynamicMovies.map((movie, index) => ({
-          ...movie,
-          rank: index + 1,
-          poster: movie.posterPath || "",
-        }));
+        // Fallback to dynamic genre-based movies — same sanitize + gate
+        movies = dynamicMovies
+          .map((movie, index) => ({
+            ...movie,
+            rank: index + 1,
+            poster: movie.posterPath || movie.poster || "",
+          }))
+          .map(sanitizeMovieOttPlatforms)
+          .filter(movieGate);
       }
 
       return {
@@ -118,7 +344,7 @@ const mapResultsToCategories = (sequencerResults, genreResults) => {
         desc:
           item.description ||
           item.desc ||
-          categoryDescFallbacks[categoryName] ||
+          lookupCategoryDesc(categoryName) ||
           "",
         movies,
       };
@@ -254,7 +480,12 @@ export default function App() {
         if (ottRes.ok) {
           const payload = await ottRes.json();
           const ottResults = getApiResults(payload);
-          const mappedOtt = mapResultsToCategories(ottResults, []);
+          // OTT scope (Netflix / Amazon "best picks for you") uses lenient
+          // gating: any movie with a working destination link is shown, even
+          // if some metadata fields are sparse.
+          const mappedOtt = mapResultsToCategories(ottResults, [], {
+            strict: false,
+          });
           if (mappedOtt.length > 0) {
             setOttCategories(mappedOtt);
           }
@@ -320,19 +551,63 @@ export default function App() {
 
       <section id="popular-reels-section">
         {(() => {
-          let hasRenderedNetflix = false;
-          let hasRenderedAmazon = false;
-          
-          return visibleCategories.map((cat) => {
+          const netflixCat = ottCategories.find((oc) =>
+            oc.title.toLowerCase().includes("netflix"),
+          );
+          const amazonCat = ottCategories.find((oc) =>
+            oc.title.toLowerCase().includes("amazon"),
+          );
+          const netflixPlatform = streamingPlatforms.find((p) =>
+            p.name.toLowerCase().includes("netflix"),
+          );
+          const amazonPlatform = streamingPlatforms.find((p) =>
+            p.name.toLowerCase().includes("amazon"),
+          );
+
+          const renderNetflix = () =>
+            netflixCat &&
+            Array.isArray(netflixCat.movies) &&
+            netflixCat.movies.length > 0 ? (
+              <OTTSection
+                key={`netflix-${netflixCat.id}`}
+                title={netflixCat.title}
+                desc={
+                  netflixCat.desc || lookupCategoryDesc(netflixCat.title)
+                }
+                movies={netflixCat.movies}
+                platformLogoSrc={netflixPlatform?.src || null}
+              />
+            ) : null;
+
+          const renderAmazon = () =>
+            amazonCat &&
+            Array.isArray(amazonCat.movies) &&
+            amazonCat.movies.length > 0 ? (
+              <OTTSection
+                key={`amazon-${amazonCat.id}`}
+                title={amazonCat.title}
+                desc={amazonCat.desc || lookupCategoryDesc(amazonCat.title)}
+                movies={amazonCat.movies}
+                platformLogoSrc={amazonPlatform?.src || null}
+              />
+            ) : null;
+
+          let renderedNetflix = false;
+          let renderedAmazon = false;
+
+          const rows = visibleCategories.map((cat) => {
             const catTitle = cat.title.toLowerCase();
-            const isTrending = catTitle.includes('trending');
-            const isSciFi = catTitle.includes('sci-fi');
-            
-            const netflixCat = ottCategories.find(oc => oc.title.toLowerCase().includes('netflix'));
-            const amazonCat = ottCategories.find(oc => oc.title.toLowerCase().includes('amazon'));
-            
-            const netflixPlatform = streamingPlatforms.find(p => p.name.toLowerCase().includes('netflix'));
-            const amazonPlatform = streamingPlatforms.find(p => p.name.toLowerCase().includes('amazon'));
+            const isTrending = catTitle.includes("trending");
+            const isSciFi = catTitle.includes("sci-fi");
+
+            let attachedSection = null;
+            if (isTrending && !renderedNetflix) {
+              attachedSection = renderNetflix();
+              renderedNetflix = true;
+            } else if (isSciFi && !renderedAmazon) {
+              attachedSection = renderAmazon();
+              renderedAmazon = true;
+            }
 
             return (
               <div key={cat.id}>
@@ -341,37 +616,24 @@ export default function App() {
                   desc={cat.desc}
                   movies={cat.movies}
                 />
-                
-                {isTrending && netflixCat && !hasRenderedNetflix && (
-                  (() => {
-                    hasRenderedNetflix = true;
-                    return (
-                      <OTTSection
-                        key={netflixCat.id}
-                        title={netflixCat.title}
-                        movies={netflixCat.movies}
-                        platformLogoSrc={netflixPlatform?.src || null}
-                      />
-                    );
-                  })()
-                )}
-
-                {isSciFi && amazonCat && !hasRenderedAmazon && (
-                  (() => {
-                    hasRenderedAmazon = true;
-                    return (
-                      <OTTSection
-                        key={amazonCat.id}
-                        title={amazonCat.title}
-                        movies={amazonCat.movies}
-                        platformLogoSrc={amazonPlatform?.src || null}
-                      />
-                    );
-                  })()
-                )}
+                {attachedSection}
               </div>
             );
           });
+
+          // Fallback: if the anchor category (Trending / Sci-Fi) didn't make
+          // it into visibleCategories, still render the OTT picks at the end
+          // so they aren't dropped entirely.
+          if (!renderedNetflix) {
+            const fallback = renderNetflix();
+            if (fallback) rows.push(<div key="netflix-fallback">{fallback}</div>);
+          }
+          if (!renderedAmazon) {
+            const fallback = renderAmazon();
+            if (fallback) rows.push(<div key="amazon-fallback">{fallback}</div>);
+          }
+
+          return rows;
         })()}
       </section>
 
@@ -390,6 +652,7 @@ export default function App() {
                 <OTTSection
                   key={cat.id}
                   title={cat.title}
+                  desc={cat.desc || lookupCategoryDesc(cat.title)}
                   movies={cat.movies}
                   platformLogoSrc={matchedPlatform?.src || null}
                 />

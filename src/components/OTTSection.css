@@ -40,6 +40,12 @@
   text-align: center;
 }
 
+.ott-section__heading-text {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
 .ott-section__title {
   color: #fff;
   font-size: 1.6rem;
@@ -47,6 +53,15 @@
   margin: 0;
   line-height: 1.2;
   letter-spacing: -0.01em;
+}
+
+.ott-section__desc {
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 13.5px;
+  line-height: 1.5;
+  letter-spacing: -0.05px;
+  margin: 0;
+  max-width: 64ch;
 }
 
 /* Carousel */

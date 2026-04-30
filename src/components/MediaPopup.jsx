@@ -149,6 +149,8 @@ export default function MediaPopup({
   const [activeReelIndex, setActiveReelIndex] = useState(0);
   const [isLoadingReels, setIsLoadingReels] = useState(false);
   const [isVideoPlaying, setIsVideoPlaying] = useState(true);
+  // Reels start muted by default; user toggles sound with the speaker button.
+  const [isMuted, setIsMuted] = useState(true);
   const [readyReels, setReadyReels] = useState({});
   const [videoErrors, setVideoErrors] = useState({});
   const [showPlaybackControl, setShowPlaybackControl] = useState(false);
@@ -264,15 +266,17 @@ export default function MediaPopup({
   const startAutoplay = (video) => {
     if (!video) return;
 
-    // Try autoplay with sound first; fall back to muted playback if blocked.
-    video.muted = false;
-    video.defaultMuted = false;
+    // Reels default to muted so autoplay always succeeds. Sound is enabled
+    // explicitly when the user taps the speaker toggle.
+    video.muted = isMuted;
+    video.defaultMuted = isMuted;
     video.volume = 1;
 
     video
       .play()
       .then(() => setIsVideoPlaying(true))
       .catch(() => {
+        // Last-resort: force-mute and retry, in case the browser still blocks.
         video.muted = true;
         video.defaultMuted = true;
         video
@@ -342,6 +346,20 @@ export default function MediaPopup({
     setShowPlaybackControl(false);
   }, [isOpen, activeReelIndex, reelVideoUrl, isDownloadSlideActive, isPromo]);
 
+  // Keep all mounted videos synced with the current mute preference.
+  useEffect(() => {
+    Object.values(videoRefs.current).forEach((video) => {
+      if (!video) return;
+      video.muted = isMuted;
+      video.defaultMuted = isMuted;
+    });
+  }, [isMuted, reels.length]);
+
+  // Reset to muted whenever the popup is reopened.
+  useEffect(() => {
+    if (isOpen) setIsMuted(true);
+  }, [isOpen]);
+
   useEffect(
     () => () => {
       if (playbackControlTimerRef.current) {
@@ -409,8 +427,9 @@ export default function MediaPopup({
     const video = videoRefs.current[activeReelIndex];
     if (!video) return;
 
-    video.muted = false;
-    video.defaultMuted = false;
+    // Respect the user's current mute preference rather than forcing unmute.
+    video.muted = isMuted;
+    video.defaultMuted = isMuted;
 
     if (video.paused) {
       video
@@ -422,6 +441,27 @@ export default function MediaPopup({
 
     video.pause();
     setIsVideoPlaying(false);
+  };
+
+  const toggleMute = () => {
+    setIsMuted((prev) => {
+      const next = !prev;
+      Object.values(videoRefs.current).forEach((video) => {
+        if (!video) return;
+        video.muted = next;
+        video.defaultMuted = next;
+      });
+      // If unmuting and the active reel is paused, kick it to play so sound
+      // starts immediately on the user's gesture.
+      const activeVideo = videoRefs.current[activeReelIndex];
+      if (activeVideo && !next && activeVideo.paused && !isDownloadSlideActive) {
+        activeVideo
+          .play()
+          .then(() => setIsVideoPlaying(true))
+          .catch(() => {});
+      }
+      return next;
+    });
   };
 
   const triggerNavTransition = (direction, callback) => {
@@ -749,6 +789,7 @@ export default function MediaPopup({
                     <span className="media-popup__play-icon" aria-hidden="true" />
                   )}
                 </button>
+
                 {!isPromo && (
                   <div className="media-popup__reel-info">
                     <div className="media-popup__reel-info-avatar">
@@ -782,6 +823,47 @@ export default function MediaPopup({
 
           {!isPromo && (
             <div className="media-popup__nav">
+              {reelVideoUrl ? (
+                <button
+                  type="button"
+                  className="media-popup__mute-toggle"
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    toggleMute();
+                  }}
+                  aria-label={isMuted ? "Unmute video" : "Mute video"}
+                  aria-pressed={!isMuted}
+                >
+                  {isMuted ? (
+                    <svg
+                      className="media-popup__mute-icon"
+                      viewBox="0 0 24 24"
+                      aria-hidden="true"
+                    >
+                      <path d="M11 5 6 9H3a1 1 0 0 0-1 1v4a1 1 0 0 0 1 1h3l5 4V5z" />
+                      <path
+                        d="M16.5 9.5l5 5M21.5 9.5l-5 5"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                      />
+                    </svg>
+                  ) : (
+                    <svg
+                      className="media-popup__mute-icon"
+                      viewBox="0 0 24 24"
+                      aria-hidden="true"
+                    >
+                      <path d="M11 5 6 9H3a1 1 0 0 0-1 1v4a1 1 0 0 0 1 1h3l5 4V5z" />
+                      <path
+                        d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"
+                        fill="none"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                      />
+                    </svg>
+                  )}
+                </button>
+              ) : null}
               <button
                 type="button"
                 className="media-popup__nav-btn media-popup__nav-btn--ghost"
@@ -860,28 +942,76 @@ export default function MediaPopup({
                 <p className="media-popup__plot">{plot}</p>
               </section>
 
-              {Array.isArray(selectedItem.ottPlatforms) && selectedItem.ottPlatforms.length > 0 && (
-                <>
-                  <div className="media-popup__divider" />
-                  <section className="media-popup__section">
-                    <h4 className="media-popup__section-title">Watch Now On</h4>
-                    <div className="media-popup__ott-list">
-                      {selectedItem.ottPlatforms.map((ott, idx) => (
-                        <a
-                          key={idx}
-                          href={ott.link}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className={`media-popup__ott-btn ${idx === 0 ? 'media-popup__ott-btn--solid' : 'media-popup__ott-btn--outline'}`}
-                          onClick={(e) => e.stopPropagation()}
-                        >
-                          <span>{ott.name?.toUpperCase()}</span>
-                        </a>
-                      ))}
-                    </div>
-                  </section>
-                </>
-              )}
+              {(() => {
+                const normalizeBrand = (name) => {
+                  if (typeof name !== "string" || !name.trim()) return "";
+                  return name
+                    .toLowerCase()
+                    .replace(
+                      /\b(apple\s*tv\s*channel|apple\s*tv\+?|amazon\s*channel|prime\s*video\s*channel|roku\s*channel|youtube\s*channel|with\s*ads|ad\s*supported|ad-supported|free\s*with\s*ads|premium|basic|standard|ultra|free|hd|4k)\b/g,
+                      "",
+                    )
+                    .replace(/\bchannel\b/g, "")
+                    .replace(/[^a-z0-9]/g, "")
+                    .trim();
+                };
+
+                const seenBrands = new Set();
+                const seenLinks = new Set();
+                const validOttPlatforms = (
+                  Array.isArray(selectedItem.ottPlatforms)
+                    ? selectedItem.ottPlatforms
+                    : []
+                ).filter((ott) => {
+                  if (!ott || typeof ott !== "object") return false;
+                  const link = (ott.link || "").trim();
+                  if (!link || link === "#" || link.startsWith("#")) return false;
+                  if (!/^https?:\/\//i.test(link)) return false;
+                  try {
+                    const parsed = new URL(link);
+                    if (
+                      !parsed.hostname ||
+                      parsed.hostname === "localhost" ||
+                      parsed.hostname === "127.0.0.1"
+                    ) {
+                      return false;
+                    }
+                  } catch {
+                    return false;
+                  }
+                  if (seenLinks.has(link)) return false;
+                  const brand = normalizeBrand(ott.name) || link;
+                  if (brand && seenBrands.has(brand)) return false;
+                  seenLinks.add(link);
+                  if (brand) seenBrands.add(brand);
+                  return true;
+                });
+
+                if (validOttPlatforms.length === 0) return null;
+
+                return (
+                  <>
+                    <div className="media-popup__divider" />
+                    <section className="media-popup__section">
+                      <h4 className="media-popup__section-title">Watch Now On</h4>
+                      <div className="media-popup__ott-list">
+                        {validOttPlatforms.map((ott, idx) => (
+                          <a
+                            key={idx}
+                            href={ott.link}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className={`media-popup__ott-btn ${idx === 0 ? 'media-popup__ott-btn--solid' : 'media-popup__ott-btn--outline'}`}
+                            onClick={(e) => e.stopPropagation()}
+                          >
+                            <span>{ott.name?.toUpperCase()}</span>
+                          </a>
+                        ))}
+                      </div>
+                    </section>
+                  </>
+                );
+              })()}
 
               <div className="media-popup__divider" />
 
