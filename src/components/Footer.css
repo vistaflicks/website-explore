@@ -39,13 +39,20 @@
   display: flex;
   flex-direction: column;
   gap: 14px;
+  align-items: flex-start;
 }
 
-.footer__brand-logo {
+/* Higher-specificity rule so the logo stays left-aligned even if a stale
+   production bundle still ships the old centering rules. The desktop default
+   is left-align; the mobile @media block below intentionally re-centers it. */
+.footer .footer__brand .footer__brand-logo,
+.footer__brand .footer__brand-logo {
   height: 46px;
   width: auto;
   display: block;
-  align-self: flex-start;
+  align-self: flex-start !important;
+  margin-left: 0 !important;
+  margin-right: auto !important;
 }
 
 .footer__tagline {
