@@ -12,10 +12,8 @@ export default function Footer() {
           <div className="footer__brand">
             <img className="footer__brand-logo" src="/assets/Group-4-1.svg" alt="Vista Reels" />
             <p className="footer__tagline">
-              Your streaming guide for movies, TV shows & more.
-              Discover what's streaming across all your favorite platforms — all in one place.
+              Your streaming guide for movies, TV shows, micro dramas & more. Discover what’s streaming across all your favorite platforms, all in one place.
             </p>
-
             <div className="footer__india-logos">
               <img src="/assets/gov-login-img.png" alt="Government of India" className="footer__gov-logo" />
               <img src="/assets/make-in-india-logo-png_seeklogo-379725.png" alt="Make in India" className="footer__make-in-india-logo" />

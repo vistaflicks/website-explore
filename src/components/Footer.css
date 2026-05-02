@@ -45,7 +45,9 @@
   height: 46px;
   width: auto;
   display: block;
+  align-self: flex-start;
   margin-left: 0;
+  margin-right: auto;
 }
 
 .footer__tagline {
