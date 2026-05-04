@@ -6,12 +6,10 @@ import "swiper/css";
 import "./MediaPopup.css";
 
 const FALLBACK_GENRES = ["Crime", "Drama", "Mystery", "Romance", "Thriller"];
-const FALLBACK_CAST = [
-  { name: "Hrithik Roshan" },
-  { name: "Abhay Deol" },
-  { name: "Farhan Akhtar" },
-  { name: "Katrina Kaif" },
-];
+// FALLBACK_CAST is intentionally empty: when a title has no cast in the DB
+// (kids shows, concerts, animation, documentaries, etc.), we'd rather hide
+// the Cast section entirely than display unrelated placeholder actors.
+const FALLBACK_CAST = [];
 const PLAY_STORE_URL =
   "https://play.google.com/store/apps/details?id=com.vistareels.app";
 const APP_STORE_URL = "https://apps.apple.com/in/app/vista-reel/id6746562815";
@@ -935,8 +933,6 @@ export default function MediaPopup({
                 </p>
               )}
 
-              <div className="media-popup__divider" />
-
               <section className="media-popup__section">
                 <h4 className="media-popup__section-title">Movie Plot</h4>
                 <p className="media-popup__plot">{plot}</p>
@@ -991,7 +987,6 @@ export default function MediaPopup({
 
                 return (
                   <>
-                    <div className="media-popup__divider" />
                     <section className="media-popup__section">
                       <h4 className="media-popup__section-title">Watch Now On</h4>
                       <div className="media-popup__ott-list">
@@ -1012,8 +1007,6 @@ export default function MediaPopup({
                   </>
                 );
               })()}
-
-              <div className="media-popup__divider" />
 
               <div className="media-popup__taxonomy">
                 <section className="media-popup__section">
@@ -1044,31 +1037,33 @@ export default function MediaPopup({
                 )}
               </div>
 
-              <div className="media-popup__divider" />
-
-              <section className="media-popup__section">
-                <h4 className="media-popup__section-title">Cast</h4>
-                <div className="media-popup__cast-list">
-                  {cast.map((member) => (
-                    <div className="media-popup__cast-item" key={member.name}>
-                      <div className="media-popup__cast-avatar-wrap">
-                        {member.image ? (
-                          <img
-                            className="media-popup__cast-avatar"
-                            src={member.image}
-                            alt={member.name}
-                          />
-                        ) : (
-                          <div className="media-popup__cast-avatar media-popup__cast-avatar--fallback">
-                            {getInitials(member.name)}
+              {cast.length > 0 && (
+                <>
+                  <section className="media-popup__section">
+                    <h4 className="media-popup__section-title">Cast</h4>
+                    <div className="media-popup__cast-list">
+                      {cast.map((member) => (
+                        <div className="media-popup__cast-item" key={member.name}>
+                          <div className="media-popup__cast-avatar-wrap">
+                            {member.image ? (
+                              <img
+                                className="media-popup__cast-avatar"
+                                src={member.image}
+                                alt={member.name}
+                              />
+                            ) : (
+                              <div className="media-popup__cast-avatar media-popup__cast-avatar--fallback">
+                                {getInitials(member.name)}
+                              </div>
+                            )}
                           </div>
-                        )}
-                      </div>
-                      <span className="media-popup__cast-name">{member.name}</span>
+                          <span className="media-popup__cast-name">{member.name}</span>
+                        </div>
+                      ))}
                     </div>
-                  ))}
-                </div>
-              </section>
+                  </section>
+                </>
+              )}
 
               {showNoReelsLayout ? (
                 <div className="media-popup__details-nav">

@@ -780,8 +780,28 @@
 }
 
 /* ----- Sections ----- */
+/* The previous markup put a `.media-popup__divider` line between every
+   section which contributed both a 1px horizontal rule AND ~34px of
+   vertical spacing (margin-top:18 + margin-bottom:16). The dividers were
+   removed visually, so we recreate the gap here with margin-top on each
+   section / taxonomy row that follows another block. */
 .media-popup__section {
   margin-bottom: 0;
+  margin-top: 28px;
+}
+
+.media-popup__section:first-child {
+  margin-top: 0;
+}
+
+/* Sections that live inside the two-column taxonomy grid sit side-by-side
+   so they should not stack with extra top margin. */
+.media-popup__taxonomy > .media-popup__section {
+  margin-top: 0;
+}
+
+.media-popup__taxonomy {
+  margin-top: 28px;
 }
 
 .media-popup__section-title {
